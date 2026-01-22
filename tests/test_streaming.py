@@ -5,13 +5,13 @@ from typing import Iterator, AsyncIterator
 import httpx
 import pytest
 
-from evermemosclient import Evermemosclient, AsyncEvermemosclient
-from evermemosclient._streaming import Stream, AsyncStream, ServerSentEvent
+from evermemos import EverMemOsClient, AsyncEverMemOsClient
+from evermemos._streaming import Stream, AsyncStream, ServerSentEvent
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
-async def test_basic(sync: bool, client: Evermemosclient, async_client: AsyncEvermemosclient) -> None:
+async def test_basic(sync: bool, client: EverMemOsClient, async_client: AsyncEverMemOsClient) -> None:
     def body() -> Iterator[bytes]:
         yield b"event: completion\n"
         yield b'data: {"foo":true}\n'
@@ -28,7 +28,7 @@ async def test_basic(sync: bool, client: Evermemosclient, async_client: AsyncEve
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
-async def test_data_missing_event(sync: bool, client: Evermemosclient, async_client: AsyncEvermemosclient) -> None:
+async def test_data_missing_event(sync: bool, client: EverMemOsClient, async_client: AsyncEverMemOsClient) -> None:
     def body() -> Iterator[bytes]:
         yield b'data: {"foo":true}\n'
         yield b"\n"
@@ -44,7 +44,7 @@ async def test_data_missing_event(sync: bool, client: Evermemosclient, async_cli
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
-async def test_event_missing_data(sync: bool, client: Evermemosclient, async_client: AsyncEvermemosclient) -> None:
+async def test_event_missing_data(sync: bool, client: EverMemOsClient, async_client: AsyncEverMemOsClient) -> None:
     def body() -> Iterator[bytes]:
         yield b"event: ping\n"
         yield b"\n"
@@ -60,7 +60,7 @@ async def test_event_missing_data(sync: bool, client: Evermemosclient, async_cli
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
-async def test_multiple_events(sync: bool, client: Evermemosclient, async_client: AsyncEvermemosclient) -> None:
+async def test_multiple_events(sync: bool, client: EverMemOsClient, async_client: AsyncEverMemOsClient) -> None:
     def body() -> Iterator[bytes]:
         yield b"event: ping\n"
         yield b"\n"
@@ -83,7 +83,7 @@ async def test_multiple_events(sync: bool, client: Evermemosclient, async_client
 @pytest.mark.asyncio
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
 async def test_multiple_events_with_data(
-    sync: bool, client: Evermemosclient, async_client: AsyncEvermemosclient
+    sync: bool, client: EverMemOsClient, async_client: AsyncEverMemOsClient
 ) -> None:
     def body() -> Iterator[bytes]:
         yield b"event: ping\n"
@@ -109,7 +109,7 @@ async def test_multiple_events_with_data(
 @pytest.mark.asyncio
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
 async def test_multiple_data_lines_with_empty_line(
-    sync: bool, client: Evermemosclient, async_client: AsyncEvermemosclient
+    sync: bool, client: EverMemOsClient, async_client: AsyncEverMemOsClient
 ) -> None:
     def body() -> Iterator[bytes]:
         yield b"event: ping\n"
@@ -133,7 +133,7 @@ async def test_multiple_data_lines_with_empty_line(
 @pytest.mark.asyncio
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
 async def test_data_json_escaped_double_new_line(
-    sync: bool, client: Evermemosclient, async_client: AsyncEvermemosclient
+    sync: bool, client: EverMemOsClient, async_client: AsyncEverMemOsClient
 ) -> None:
     def body() -> Iterator[bytes]:
         yield b"event: ping\n"
@@ -151,7 +151,7 @@ async def test_data_json_escaped_double_new_line(
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
-async def test_multiple_data_lines(sync: bool, client: Evermemosclient, async_client: AsyncEvermemosclient) -> None:
+async def test_multiple_data_lines(sync: bool, client: EverMemOsClient, async_client: AsyncEverMemOsClient) -> None:
     def body() -> Iterator[bytes]:
         yield b"event: ping\n"
         yield b"data: {\n"
@@ -171,8 +171,8 @@ async def test_multiple_data_lines(sync: bool, client: Evermemosclient, async_cl
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
 async def test_special_new_line_character(
     sync: bool,
-    client: Evermemosclient,
-    async_client: AsyncEvermemosclient,
+    client: EverMemOsClient,
+    async_client: AsyncEverMemOsClient,
 ) -> None:
     def body() -> Iterator[bytes]:
         yield b'data: {"content":" culpa"}\n'
@@ -202,8 +202,8 @@ async def test_special_new_line_character(
 @pytest.mark.parametrize("sync", [True, False], ids=["sync", "async"])
 async def test_multi_byte_character_multiple_chunks(
     sync: bool,
-    client: Evermemosclient,
-    async_client: AsyncEvermemosclient,
+    client: EverMemOsClient,
+    async_client: AsyncEverMemOsClient,
 ) -> None:
     def body() -> Iterator[bytes]:
         yield b'data: {"content":"'
@@ -243,8 +243,8 @@ def make_event_iterator(
     content: Iterator[bytes],
     *,
     sync: bool,
-    client: Evermemosclient,
-    async_client: AsyncEvermemosclient,
+    client: EverMemOsClient,
+    async_client: AsyncEverMemOsClient,
 ) -> Iterator[ServerSentEvent] | AsyncIterator[ServerSentEvent]:
     if sync:
         return Stream(cast_to=object, client=client, response=httpx.Response(200, content=content))._iter_events()

@@ -13,8 +13,8 @@ from ._client import (
     AsyncClient,
     AsyncStream,
     RequestOptions,
-    Evermemosclient,
-    AsyncEvermemosclient,
+    EverMemOsClient,
+    AsyncEverMemOsClient,
 )
 from ._models import BaseModel
 from ._version import __title__, __version__
@@ -31,7 +31,7 @@ from ._exceptions import (
     APIConnectionError,
     AuthenticationError,
     InternalServerError,
-    EvermemosclientError,
+    EverMemOsClientError,
     PermissionDeniedError,
     UnprocessableEntityError,
     APIResponseValidationError,
@@ -51,7 +51,7 @@ __all__ = [
     "not_given",
     "Omit",
     "omit",
-    "EvermemosclientError",
+    "EverMemOsClientError",
     "APIError",
     "APIStatusError",
     "APITimeoutError",
@@ -71,8 +71,8 @@ __all__ = [
     "AsyncClient",
     "Stream",
     "AsyncStream",
-    "Evermemosclient",
-    "AsyncEvermemosclient",
+    "EverMemOsClient",
+    "AsyncEverMemOsClient",
     "file_from_path",
     "BaseModel",
     "DEFAULT_TIMEOUT",
@@ -91,12 +91,12 @@ _setup_logging()
 # Update the __module__ attribute for exported symbols so that
 # error messages point to this module instead of the module
 # it was originally defined in, e.g.
-# evermemosclient._exceptions.NotFoundError -> evermemosclient.NotFoundError
+# evermemos._exceptions.NotFoundError -> evermemos.NotFoundError
 __locals = locals()
 for __name in __all__:
     if not __name.startswith("__"):
         try:
-            __locals[__name].__module__ = "evermemosclient"
+            __locals[__name].__module__ = "evermemos"
         except (TypeError, AttributeError):
             # Some of our exported symbols are builtins which we can't set attributes for.
             pass

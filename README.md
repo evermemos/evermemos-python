@@ -1,9 +1,9 @@
-# Evermemosclient Python API library
+# Ever Mem Os Client Python API library
 
 <!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/evermemosclient.svg?label=pypi%20(stable))](https://pypi.org/project/evermemosclient/)
+[![PyPI version](https://img.shields.io/pypi/v/evermemos.svg?label=pypi%20(stable))](https://pypi.org/project/evermemos/)
 
-The Evermemosclient Python library provides convenient access to the Evermemosclient REST API from any Python 3.9+
+The Ever Mem Os Client Python library provides convenient access to the Ever Mem Os Client REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -21,7 +21,7 @@ pip install git+ssh://git@github.com/stainless-sdks/evermemosclient-python.git
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install evermemosclient`
+> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install evermemos`
 
 ## Usage
 
@@ -29,10 +29,10 @@ The full API of this library can be found in [api.md](api.md).
 
 ```python
 import os
-from evermemosclient import Evermemosclient
+from evermemos import EverMemOsClient
 
-client = Evermemosclient(
-    api_key=os.environ.get("EVERMEMOSCLIENT_API_KEY"),  # This is the default and can be omitted
+client = EverMemOsClient(
+    api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
 )
 
 memory = client.v1.memories.create(
@@ -46,20 +46,20 @@ print(memory.message)
 
 While you can provide an `api_key` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `EVERMEMOSCLIENT_API_KEY="My API Key"` to your `.env` file
+to add `EVERMEMOS_API_KEY="My API Key"` to your `.env` file
 so that your API Key is not stored in source control.
 
 ## Async usage
 
-Simply import `AsyncEvermemosclient` instead of `Evermemosclient` and use `await` with each API call:
+Simply import `AsyncEverMemOsClient` instead of `EverMemOsClient` and use `await` with each API call:
 
 ```python
 import os
 import asyncio
-from evermemosclient import AsyncEvermemosclient
+from evermemos import AsyncEverMemOsClient
 
-client = AsyncEvermemosclient(
-    api_key=os.environ.get("EVERMEMOSCLIENT_API_KEY"),  # This is the default and can be omitted
+client = AsyncEverMemOsClient(
+    api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
 )
 
 
@@ -86,7 +86,7 @@ You can enable this by installing `aiohttp`:
 
 ```sh
 # install from this staging repo
-pip install 'evermemosclient[aiohttp] @ git+ssh://git@github.com/stainless-sdks/evermemosclient-python.git'
+pip install 'evermemos[aiohttp] @ git+ssh://git@github.com/stainless-sdks/evermemosclient-python.git'
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -94,13 +94,13 @@ Then you can enable it by instantiating the client with `http_client=DefaultAioH
 ```python
 import os
 import asyncio
-from evermemosclient import DefaultAioHttpClient
-from evermemosclient import AsyncEvermemosclient
+from evermemos import DefaultAioHttpClient
+from evermemos import AsyncEverMemOsClient
 
 
 async def main() -> None:
-    async with AsyncEvermemosclient(
-        api_key=os.environ.get("EVERMEMOSCLIENT_API_KEY"),  # This is the default and can be omitted
+    async with AsyncEverMemOsClient(
+        api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         memory = await client.v1.memories.create(
@@ -126,18 +126,18 @@ Typed requests and responses provide autocomplete and documentation within your 
 
 ## Handling errors
 
-When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `evermemosclient.APIConnectionError` is raised.
+When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `evermemos.APIConnectionError` is raised.
 
 When the API returns a non-success status code (that is, 4xx or 5xx
-response), a subclass of `evermemosclient.APIStatusError` is raised, containing `status_code` and `response` properties.
+response), a subclass of `evermemos.APIStatusError` is raised, containing `status_code` and `response` properties.
 
-All errors inherit from `evermemosclient.APIError`.
+All errors inherit from `evermemos.APIError`.
 
 ```python
-import evermemosclient
-from evermemosclient import Evermemosclient
+import evermemos
+from evermemos import EverMemOsClient
 
-client = Evermemosclient()
+client = EverMemOsClient()
 
 try:
     client.v1.memories.create(
@@ -146,12 +146,12 @@ try:
         message_id="msg_001",
         sender="user_001",
     )
-except evermemosclient.APIConnectionError as e:
+except evermemos.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
-except evermemosclient.RateLimitError as e:
+except evermemos.RateLimitError as e:
     print("A 429 status code was received; we should back off a bit.")
-except evermemosclient.APIStatusError as e:
+except evermemos.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
@@ -179,10 +179,10 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from evermemosclient import Evermemosclient
+from evermemos import EverMemOsClient
 
 # Configure the default for all requests:
-client = Evermemosclient(
+client = EverMemOsClient(
     # default is 2
     max_retries=0,
 )
@@ -202,16 +202,16 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
 
 ```python
-from evermemosclient import Evermemosclient
+from evermemos import EverMemOsClient
 
 # Configure the default for all requests:
-client = Evermemosclient(
+client = EverMemOsClient(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = Evermemosclient(
+client = EverMemOsClient(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
@@ -234,10 +234,10 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `EVERMEMOSCLIENT_LOG` to `info`.
+You can enable logging by setting the environment variable `EVER_MEM_OS_CLIENT_LOG` to `info`.
 
 ```shell
-$ export EVERMEMOSCLIENT_LOG=info
+$ export EVER_MEM_OS_CLIENT_LOG=info
 ```
 
 Or to `debug` for more verbose logging.
@@ -259,9 +259,9 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from evermemosclient import Evermemosclient
+from evermemos import EverMemOsClient
 
-client = Evermemosclient()
+client = EverMemOsClient()
 response = client.v1.memories.with_raw_response.create(
     content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
@@ -274,9 +274,9 @@ memory = response.parse()  # get the object that `v1.memories.create()` would ha
 print(memory.message)
 ```
 
-These methods return an [`APIResponse`](https://github.com/stainless-sdks/evermemosclient-python/tree/main/src/evermemosclient/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/stainless-sdks/evermemosclient-python/tree/main/src/evermemos/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/evermemosclient-python/tree/main/src/evermemosclient/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/evermemosclient-python/tree/main/src/evermemos/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -343,10 +343,10 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from evermemosclient import Evermemosclient, DefaultHttpxClient
+from evermemos import EverMemOsClient, DefaultHttpxClient
 
-client = Evermemosclient(
-    # Or use the `EVERMEMOSCLIENT_BASE_URL` env var
+client = EverMemOsClient(
+    # Or use the `EVER_MEM_OS_CLIENT_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
         proxy="http://my.test.proxy.example.com",
@@ -366,9 +366,9 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from evermemosclient import Evermemosclient
+from evermemos import EverMemOsClient
 
-with Evermemosclient() as client:
+with EverMemOsClient() as client:
   # make requests here
   ...
 
@@ -394,8 +394,8 @@ If you've upgraded to the latest version but aren't seeing any new features you 
 You can determine the version that is being used at runtime with:
 
 ```py
-import evermemosclient
-print(evermemosclient.__version__)
+import evermemos
+print(evermemos.__version__)
 ```
 
 ## Requirements

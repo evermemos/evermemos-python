@@ -7,9 +7,9 @@ from typing import Any, cast
 
 import pytest
 
+from evermemos import EverMemOsClient, AsyncEverMemOsClient
 from tests.utils import assert_matches_type
-from evermemosclient import Evermemosclient, AsyncEvermemosclient
-from evermemosclient.types.v1 import (
+from evermemos.types.v1 import (
     MemoryListResponse,
     MemoryCreateResponse,
     MemoryDeleteResponse,
@@ -24,7 +24,7 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_create(self, client: Evermemosclient) -> None:
+    def test_method_create(self, client: EverMemOsClient) -> None:
         memory = client.v1.memories.create(
             content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
@@ -35,7 +35,7 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_create_with_all_params(self, client: Evermemosclient) -> None:
+    def test_method_create_with_all_params(self, client: EverMemOsClient) -> None:
         memory = client.v1.memories.create(
             content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
@@ -51,7 +51,7 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_create(self, client: Evermemosclient) -> None:
+    def test_raw_response_create(self, client: EverMemOsClient) -> None:
         response = client.v1.memories.with_raw_response.create(
             content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
@@ -66,7 +66,7 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_create(self, client: Evermemosclient) -> None:
+    def test_streaming_response_create(self, client: EverMemOsClient) -> None:
         with client.v1.memories.with_streaming_response.create(
             content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
@@ -83,13 +83,13 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_list(self, client: Evermemosclient) -> None:
+    def test_method_list(self, client: EverMemOsClient) -> None:
         memory = client.v1.memories.list()
         assert_matches_type(MemoryListResponse, memory, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_list(self, client: Evermemosclient) -> None:
+    def test_raw_response_list(self, client: EverMemOsClient) -> None:
         response = client.v1.memories.with_raw_response.list()
 
         assert response.is_closed is True
@@ -99,7 +99,7 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_list(self, client: Evermemosclient) -> None:
+    def test_streaming_response_list(self, client: EverMemOsClient) -> None:
         with client.v1.memories.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -111,13 +111,13 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_delete(self, client: Evermemosclient) -> None:
+    def test_method_delete(self, client: EverMemOsClient) -> None:
         memory = client.v1.memories.delete()
         assert_matches_type(MemoryDeleteResponse, memory, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_delete_with_all_params(self, client: Evermemosclient) -> None:
+    def test_method_delete_with_all_params(self, client: EverMemOsClient) -> None:
         memory = client.v1.memories.delete(
             event_id="507f1f77bcf86cd799439011",
             group_id="group_456",
@@ -127,7 +127,7 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_delete(self, client: Evermemosclient) -> None:
+    def test_raw_response_delete(self, client: EverMemOsClient) -> None:
         response = client.v1.memories.with_raw_response.delete()
 
         assert response.is_closed is True
@@ -137,7 +137,7 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_delete(self, client: Evermemosclient) -> None:
+    def test_streaming_response_delete(self, client: EverMemOsClient) -> None:
         with client.v1.memories.with_streaming_response.delete() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -149,13 +149,13 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_search(self, client: Evermemosclient) -> None:
+    def test_method_search(self, client: EverMemOsClient) -> None:
         memory = client.v1.memories.search()
         assert_matches_type(MemorySearchResponse, memory, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_search(self, client: Evermemosclient) -> None:
+    def test_raw_response_search(self, client: EverMemOsClient) -> None:
         response = client.v1.memories.with_raw_response.search()
 
         assert response.is_closed is True
@@ -165,7 +165,7 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_search(self, client: Evermemosclient) -> None:
+    def test_streaming_response_search(self, client: EverMemOsClient) -> None:
         with client.v1.memories.with_streaming_response.search() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -183,7 +183,7 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_create(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_create(self, async_client: AsyncEverMemOsClient) -> None:
         memory = await async_client.v1.memories.create(
             content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
@@ -194,7 +194,7 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_create_with_all_params(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_create_with_all_params(self, async_client: AsyncEverMemOsClient) -> None:
         memory = await async_client.v1.memories.create(
             content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
@@ -210,7 +210,7 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_create(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_raw_response_create(self, async_client: AsyncEverMemOsClient) -> None:
         response = await async_client.v1.memories.with_raw_response.create(
             content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
@@ -225,7 +225,7 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_create(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_streaming_response_create(self, async_client: AsyncEverMemOsClient) -> None:
         async with async_client.v1.memories.with_streaming_response.create(
             content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
@@ -242,13 +242,13 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_list(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_list(self, async_client: AsyncEverMemOsClient) -> None:
         memory = await async_client.v1.memories.list()
         assert_matches_type(MemoryListResponse, memory, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_raw_response_list(self, async_client: AsyncEverMemOsClient) -> None:
         response = await async_client.v1.memories.with_raw_response.list()
 
         assert response.is_closed is True
@@ -258,7 +258,7 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_streaming_response_list(self, async_client: AsyncEverMemOsClient) -> None:
         async with async_client.v1.memories.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -270,13 +270,13 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_delete(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_delete(self, async_client: AsyncEverMemOsClient) -> None:
         memory = await async_client.v1.memories.delete()
         assert_matches_type(MemoryDeleteResponse, memory, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_delete_with_all_params(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_delete_with_all_params(self, async_client: AsyncEverMemOsClient) -> None:
         memory = await async_client.v1.memories.delete(
             event_id="507f1f77bcf86cd799439011",
             group_id="group_456",
@@ -286,7 +286,7 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_delete(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_raw_response_delete(self, async_client: AsyncEverMemOsClient) -> None:
         response = await async_client.v1.memories.with_raw_response.delete()
 
         assert response.is_closed is True
@@ -296,7 +296,7 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_delete(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_streaming_response_delete(self, async_client: AsyncEverMemOsClient) -> None:
         async with async_client.v1.memories.with_streaming_response.delete() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -308,13 +308,13 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_search(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_search(self, async_client: AsyncEverMemOsClient) -> None:
         memory = await async_client.v1.memories.search()
         assert_matches_type(MemorySearchResponse, memory, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_search(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_raw_response_search(self, async_client: AsyncEverMemOsClient) -> None:
         response = await async_client.v1.memories.with_raw_response.search()
 
         assert response.is_closed is True
@@ -324,7 +324,7 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_search(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_streaming_response_search(self, async_client: AsyncEverMemOsClient) -> None:
         async with async_client.v1.memories.with_streaming_response.search() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

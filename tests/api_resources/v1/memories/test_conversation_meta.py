@@ -7,9 +7,9 @@ from typing import Any, cast
 
 import pytest
 
+from evermemos import EverMemOsClient, AsyncEverMemOsClient
 from tests.utils import assert_matches_type
-from evermemosclient import Evermemosclient, AsyncEvermemosclient
-from evermemosclient.types.v1.memories import (
+from evermemos.types.v1.memories import (
     ConversationMetaCreateResponse,
     ConversationMetaUpdateResponse,
 )
@@ -22,7 +22,7 @@ class TestConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_create(self, client: Evermemosclient) -> None:
+    def test_method_create(self, client: EverMemOsClient) -> None:
         conversation_meta = client.v1.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
@@ -37,7 +37,7 @@ class TestConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_create_with_all_params(self, client: Evermemosclient) -> None:
+    def test_method_create_with_all_params(self, client: EverMemOsClient) -> None:
         conversation_meta = client.v1.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
@@ -70,7 +70,7 @@ class TestConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_create(self, client: Evermemosclient) -> None:
+    def test_raw_response_create(self, client: EverMemOsClient) -> None:
         response = client.v1.memories.conversation_meta.with_raw_response.create(
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
@@ -89,7 +89,7 @@ class TestConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_create(self, client: Evermemosclient) -> None:
+    def test_streaming_response_create(self, client: EverMemOsClient) -> None:
         with client.v1.memories.conversation_meta.with_streaming_response.create(
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
@@ -110,13 +110,13 @@ class TestConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_update(self, client: Evermemosclient) -> None:
+    def test_method_update(self, client: EverMemOsClient) -> None:
         conversation_meta = client.v1.memories.conversation_meta.update()
         assert_matches_type(ConversationMetaUpdateResponse, conversation_meta, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_update_with_all_params(self, client: Evermemosclient) -> None:
+    def test_method_update_with_all_params(self, client: EverMemOsClient) -> None:
         conversation_meta = client.v1.memories.conversation_meta.update(
             default_timezone="Asia/Shanghai",
             description="Updated description",
@@ -137,7 +137,7 @@ class TestConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_raw_response_update(self, client: Evermemosclient) -> None:
+    def test_raw_response_update(self, client: EverMemOsClient) -> None:
         response = client.v1.memories.conversation_meta.with_raw_response.update()
 
         assert response.is_closed is True
@@ -147,7 +147,7 @@ class TestConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_streaming_response_update(self, client: Evermemosclient) -> None:
+    def test_streaming_response_update(self, client: EverMemOsClient) -> None:
         with client.v1.memories.conversation_meta.with_streaming_response.update() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -165,7 +165,7 @@ class TestAsyncConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_create(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_create(self, async_client: AsyncEverMemOsClient) -> None:
         conversation_meta = await async_client.v1.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
@@ -180,7 +180,7 @@ class TestAsyncConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_create_with_all_params(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_create_with_all_params(self, async_client: AsyncEverMemOsClient) -> None:
         conversation_meta = await async_client.v1.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
@@ -213,7 +213,7 @@ class TestAsyncConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_create(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_raw_response_create(self, async_client: AsyncEverMemOsClient) -> None:
         response = await async_client.v1.memories.conversation_meta.with_raw_response.create(
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
@@ -232,7 +232,7 @@ class TestAsyncConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_create(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_streaming_response_create(self, async_client: AsyncEverMemOsClient) -> None:
         async with async_client.v1.memories.conversation_meta.with_streaming_response.create(
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
@@ -253,13 +253,13 @@ class TestAsyncConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_update(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_update(self, async_client: AsyncEverMemOsClient) -> None:
         conversation_meta = await async_client.v1.memories.conversation_meta.update()
         assert_matches_type(ConversationMetaUpdateResponse, conversation_meta, path=["response"])
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_update_with_all_params(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_method_update_with_all_params(self, async_client: AsyncEverMemOsClient) -> None:
         conversation_meta = await async_client.v1.memories.conversation_meta.update(
             default_timezone="Asia/Shanghai",
             description="Updated description",
@@ -280,7 +280,7 @@ class TestAsyncConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_raw_response_update(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_raw_response_update(self, async_client: AsyncEverMemOsClient) -> None:
         response = await async_client.v1.memories.conversation_meta.with_raw_response.update()
 
         assert response.is_closed is True
@@ -290,7 +290,7 @@ class TestAsyncConversationMeta:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_streaming_response_update(self, async_client: AsyncEvermemosclient) -> None:
+    async def test_streaming_response_update(self, async_client: AsyncEverMemOsClient) -> None:
         async with async_client.v1.memories.conversation_meta.with_streaming_response.update() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

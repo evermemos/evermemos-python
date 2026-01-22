@@ -7,9 +7,9 @@ import pytest
 import pydantic
 from pydantic import Field
 
-from evermemosclient._utils import PropertyInfo
-from evermemosclient._compat import PYDANTIC_V1, parse_obj, model_dump, model_json
-from evermemosclient._models import DISCRIMINATOR_CACHE, BaseModel, construct_type
+from evermemos._utils import PropertyInfo
+from evermemos._compat import PYDANTIC_V1, parse_obj, model_dump, model_json
+from evermemos._models import DISCRIMINATOR_CACHE, BaseModel, construct_type
 
 
 class BasicModel(BaseModel):

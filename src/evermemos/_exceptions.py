@@ -18,11 +18,11 @@ __all__ = [
 ]
 
 
-class EvermemosclientError(Exception):
+class EverMemOsClientError(Exception):
     pass
 
 
-class APIError(EvermemosclientError):
+class APIError(EverMemOsClientError):
     message: str
     request: httpx.Request
 
