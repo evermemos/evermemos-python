@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.1 (2026-01-24)
+
+Full Changelog: [v0.1.0...v0.1.1](https://github.com/evermemos/evermemos-python/compare/v0.1.0...v0.1.1)
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([7eaddea](https://github.com/evermemos/evermemos-python/commit/7eaddead5a7269ce2f5b71bd54169bd831a18366))
+
 ## 0.1.0 (2026-01-22)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/evermemos/evermemos-python/compare/v0.0.1...v0.1.0)
