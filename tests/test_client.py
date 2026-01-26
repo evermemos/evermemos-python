@@ -19,12 +19,12 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from evermemos import EverMemOsClient, AsyncEverMemOsClient, APIResponseValidationError
-from evermemos._types import Omit
-from evermemos._utils import asyncify
-from evermemos._models import BaseModel, FinalRequestOptions
-from evermemos._exceptions import APIStatusError, APITimeoutError, EverMemOsClientError, APIResponseValidationError
-from evermemos._base_client import (
+from EverMemOS import EverMemOS, AsyncEverMemOS, APIResponseValidationError
+from EverMemOS._types import Omit
+from EverMemOS._utils import asyncify
+from EverMemOS._models import BaseModel, FinalRequestOptions
+from EverMemOS._exceptions import APIStatusError, EverMemOSError, APITimeoutError, APIResponseValidationError
+from EverMemOS._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
     BaseClient,
@@ -103,7 +103,7 @@ async def _make_async_iterator(iterable: Iterable[T], counter: Optional[Counter]
         yield item
 
 
-def _get_open_connections(client: EverMemOsClient | AsyncEverMemOsClient) -> int:
+def _get_open_connections(client: EverMemOS | AsyncEverMemOS) -> int:
     transport = client._client._transport
     assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
 
@@ -111,9 +111,9 @@ def _get_open_connections(client: EverMemOsClient | AsyncEverMemOsClient) -> int
     return len(pool._requests)
 
 
-class TestEverMemOsClient:
+class TestEverMemOS:
     @pytest.mark.respx(base_url=base_url)
-    def test_raw_response(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_raw_response(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         respx_mock.post("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
 
         response = client.post("/foo", cast_to=httpx.Response)
@@ -122,7 +122,7 @@ class TestEverMemOsClient:
         assert response.json() == {"foo": "bar"}
 
     @pytest.mark.respx(base_url=base_url)
-    def test_raw_response_for_binary(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_raw_response_for_binary(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         respx_mock.post("/foo").mock(
             return_value=httpx.Response(200, headers={"Content-Type": "application/binary"}, content='{"foo": "bar"}')
         )
@@ -132,7 +132,7 @@ class TestEverMemOsClient:
         assert isinstance(response, httpx.Response)
         assert response.json() == {"foo": "bar"}
 
-    def test_copy(self, client: EverMemOsClient) -> None:
+    def test_copy(self, client: EverMemOS) -> None:
         copied = client.copy()
         assert id(copied) != id(client)
 
@@ -140,7 +140,7 @@ class TestEverMemOsClient:
         assert copied.api_key == "another My API Key"
         assert client.api_key == "My API Key"
 
-    def test_copy_default_options(self, client: EverMemOsClient) -> None:
+    def test_copy_default_options(self, client: EverMemOS) -> None:
         # options that have a default are overridden correctly
         copied = client.copy(max_retries=7)
         assert copied.max_retries == 7
@@ -157,7 +157,7 @@ class TestEverMemOsClient:
         assert isinstance(client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = EverMemOsClient(
+        client = EverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
@@ -192,7 +192,7 @@ class TestEverMemOsClient:
         client.close()
 
     def test_copy_default_query(self) -> None:
-        client = EverMemOsClient(
+        client = EverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
@@ -229,7 +229,7 @@ class TestEverMemOsClient:
 
         client.close()
 
-    def test_copy_signature(self, client: EverMemOsClient) -> None:
+    def test_copy_signature(self, client: EverMemOS) -> None:
         # ensure the same parameters that can be passed to the client are defined in the `.copy()` method
         init_signature = inspect.signature(
             # mypy doesn't like that we access the `__init__` property.
@@ -246,7 +246,7 @@ class TestEverMemOsClient:
             assert copy_param is not None, f"copy() signature is missing the {name} param"
 
     @pytest.mark.skipif(sys.version_info >= (3, 10), reason="fails because of a memory leak that started from 3.12")
-    def test_copy_build_request(self, client: EverMemOsClient) -> None:
+    def test_copy_build_request(self, client: EverMemOS) -> None:
         options = FinalRequestOptions(method="get", url="/foo")
 
         def build_request(options: FinalRequestOptions) -> None:
@@ -286,10 +286,10 @@ class TestEverMemOsClient:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "evermemos/_legacy_response.py",
-                        "evermemos/_response.py",
+                        "EverMemOS/_legacy_response.py",
+                        "EverMemOS/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "evermemos/_compat.py",
+                        "EverMemOS/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -308,7 +308,7 @@ class TestEverMemOsClient:
                     print(frame)
             raise AssertionError()
 
-    def test_request_timeout(self, client: EverMemOsClient) -> None:
+    def test_request_timeout(self, client: EverMemOS) -> None:
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
         assert timeout == DEFAULT_TIMEOUT
@@ -318,7 +318,7 @@ class TestEverMemOsClient:
         assert timeout == httpx.Timeout(100.0)
 
     def test_client_timeout_option(self) -> None:
-        client = EverMemOsClient(
+        client = EverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
@@ -331,7 +331,7 @@ class TestEverMemOsClient:
     def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
-            client = EverMemOsClient(
+            client = EverMemOS(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -343,7 +343,7 @@ class TestEverMemOsClient:
 
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
-            client = EverMemOsClient(
+            client = EverMemOS(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -355,7 +355,7 @@ class TestEverMemOsClient:
 
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = EverMemOsClient(
+            client = EverMemOS(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -368,7 +368,7 @@ class TestEverMemOsClient:
     async def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             async with httpx.AsyncClient() as http_client:
-                EverMemOsClient(
+                EverMemOS(
                     base_url=base_url,
                     api_key=api_key,
                     _strict_response_validation=True,
@@ -376,14 +376,14 @@ class TestEverMemOsClient:
                 )
 
     def test_default_headers_option(self) -> None:
-        test_client = EverMemOsClient(
+        test_client = EverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = test_client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        test_client2 = EverMemOsClient(
+        test_client2 = EverMemOS(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
@@ -400,17 +400,17 @@ class TestEverMemOsClient:
         test_client2.close()
 
     def test_validate_headers(self) -> None:
-        client = EverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = EverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(EverMemOsClientError):
+        with pytest.raises(EverMemOSError):
             with update_env(**{"EVERMEMOS_API_KEY": Omit()}):
-                client2 = EverMemOsClient(base_url=base_url, api_key=None, _strict_response_validation=True)
+                client2 = EverMemOS(base_url=base_url, api_key=None, _strict_response_validation=True)
             _ = client2
 
     def test_default_query_option(self) -> None:
-        client = EverMemOsClient(
+        client = EverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"query_param": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -429,7 +429,7 @@ class TestEverMemOsClient:
 
         client.close()
 
-    def test_request_extra_json(self, client: EverMemOsClient) -> None:
+    def test_request_extra_json(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -463,7 +463,7 @@ class TestEverMemOsClient:
         data = json.loads(request.content.decode("utf-8"))
         assert data == {"foo": "bar", "baz": None}
 
-    def test_request_extra_headers(self, client: EverMemOsClient) -> None:
+    def test_request_extra_headers(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -485,7 +485,7 @@ class TestEverMemOsClient:
         )
         assert request.headers.get("X-Bar") == "false"
 
-    def test_request_extra_query(self, client: EverMemOsClient) -> None:
+    def test_request_extra_query(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -526,7 +526,7 @@ class TestEverMemOsClient:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, client: EverMemOsClient) -> None:
+    def test_multipart_repeating_array(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions.construct(
                 method="post",
@@ -556,7 +556,7 @@ class TestEverMemOsClient:
         ]
 
     @pytest.mark.respx(base_url=base_url)
-    def test_binary_content_upload(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_binary_content_upload(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         respx_mock.post("/upload").mock(side_effect=mirror_request_content)
 
         file_content = b"Hello, this is a test file."
@@ -581,7 +581,7 @@ class TestEverMemOsClient:
             assert counter.value == 0, "the request body should not have been read"
             return httpx.Response(200, content=request.read())
 
-        with EverMemOsClient(
+        with EverMemOS(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
@@ -600,9 +600,7 @@ class TestEverMemOsClient:
             assert counter.value == 1
 
     @pytest.mark.respx(base_url=base_url)
-    def test_binary_content_upload_with_body_is_deprecated(
-        self, respx_mock: MockRouter, client: EverMemOsClient
-    ) -> None:
+    def test_binary_content_upload_with_body_is_deprecated(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         respx_mock.post("/upload").mock(side_effect=mirror_request_content)
 
         file_content = b"Hello, this is a test file."
@@ -622,7 +620,7 @@ class TestEverMemOsClient:
         assert response.content == file_content
 
     @pytest.mark.respx(base_url=base_url)
-    def test_basic_union_response(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_basic_union_response(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         class Model1(BaseModel):
             name: str
 
@@ -636,7 +634,7 @@ class TestEverMemOsClient:
         assert response.foo == "bar"
 
     @pytest.mark.respx(base_url=base_url)
-    def test_union_response_different_types(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_union_response_different_types(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         """Union of objects with the same field name using a different type"""
 
         class Model1(BaseModel):
@@ -658,9 +656,7 @@ class TestEverMemOsClient:
         assert response.foo == 1
 
     @pytest.mark.respx(base_url=base_url)
-    def test_non_application_json_content_type_for_json_data(
-        self, respx_mock: MockRouter, client: EverMemOsClient
-    ) -> None:
+    def test_non_application_json_content_type_for_json_data(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         """
         Response that sets Content-Type to something other than application/json but returns json data
         """
@@ -681,9 +677,7 @@ class TestEverMemOsClient:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = EverMemOsClient(
-            base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True
-        )
+        client = EverMemOS(base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True)
         assert client.base_url == "https://example.com/from_init/"
 
         client.base_url = "https://example.com/from_setter"  # type: ignore[assignment]
@@ -693,17 +687,15 @@ class TestEverMemOsClient:
         client.close()
 
     def test_base_url_env(self) -> None:
-        with update_env(EVER_MEM_OS_CLIENT_BASE_URL="http://localhost:5000/from/env"):
-            client = EverMemOsClient(api_key=api_key, _strict_response_validation=True)
+        with update_env(EVER_MEM_OS_BASE_URL="http://localhost:5000/from/env"):
+            client = EverMemOS(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            EverMemOsClient(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
-            EverMemOsClient(
+            EverMemOS(base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True),
+            EverMemOS(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -712,7 +704,7 @@ class TestEverMemOsClient:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: EverMemOsClient) -> None:
+    def test_base_url_trailing_slash(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -726,10 +718,8 @@ class TestEverMemOsClient:
     @pytest.mark.parametrize(
         "client",
         [
-            EverMemOsClient(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
-            EverMemOsClient(
+            EverMemOS(base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True),
+            EverMemOS(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -738,7 +728,7 @@ class TestEverMemOsClient:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: EverMemOsClient) -> None:
+    def test_base_url_no_trailing_slash(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -752,10 +742,8 @@ class TestEverMemOsClient:
     @pytest.mark.parametrize(
         "client",
         [
-            EverMemOsClient(
-                base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
-            ),
-            EverMemOsClient(
+            EverMemOS(base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True),
+            EverMemOS(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -764,7 +752,7 @@ class TestEverMemOsClient:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: EverMemOsClient) -> None:
+    def test_absolute_request_url(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -776,7 +764,7 @@ class TestEverMemOsClient:
         client.close()
 
     def test_copied_client_does_not_close_http(self) -> None:
-        test_client = EverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        test_client = EverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         assert not test_client.is_closed()
 
         copied = test_client.copy()
@@ -787,7 +775,7 @@ class TestEverMemOsClient:
         assert not test_client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        test_client = EverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        test_client = EverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         with test_client as c2:
             assert c2 is test_client
             assert not c2.is_closed()
@@ -795,7 +783,7 @@ class TestEverMemOsClient:
         assert test_client.is_closed()
 
     @pytest.mark.respx(base_url=base_url)
-    def test_client_response_validation_error(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_client_response_validation_error(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         class Model(BaseModel):
             foo: str
 
@@ -808,9 +796,7 @@ class TestEverMemOsClient:
 
     def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            EverMemOsClient(
-                base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None)
-            )
+            EverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None))
 
     @pytest.mark.respx(base_url=base_url)
     def test_received_text_for_expected_json(self, respx_mock: MockRouter) -> None:
@@ -819,12 +805,12 @@ class TestEverMemOsClient:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = EverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        strict_client = EverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        non_strict_client = EverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        non_strict_client = EverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=False)
 
         response = non_strict_client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -855,49 +841,49 @@ class TestEverMemOsClient:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     def test_parse_retry_after_header(
-        self, remaining_retries: int, retry_after: str, timeout: float, client: EverMemOsClient
+        self, remaining_retries: int, retry_after: str, timeout: float, client: EverMemOS
     ) -> None:
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         respx_mock.post("/api/v1/memories").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
             client.v1.memories.with_streaming_response.create(
-                content="Let's discuss the technical solution for the new feature today",
+                content="I prefer morning meetings, usually around 9am works best for me.",
                 create_time="2025-01-15T10:00:00+00:00",
                 message_id="msg_001",
-                sender="user_001",
+                sender="user_alice",
             ).__enter__()
 
         assert _get_open_connections(client) == 0
 
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         respx_mock.post("/api/v1/memories").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
             client.v1.memories.with_streaming_response.create(
-                content="Let's discuss the technical solution for the new feature today",
+                content="I prefer morning meetings, usually around 9am works best for me.",
                 create_time="2025-01-15T10:00:00+00:00",
                 message_id="msg_001",
-                sender="user_001",
+                sender="user_alice",
             ).__enter__()
         assert _get_open_connections(client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
         self,
-        client: EverMemOsClient,
+        client: EverMemOS,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -918,20 +904,20 @@ class TestEverMemOsClient:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = client.v1.memories.with_raw_response.create(
-            content="Let's discuss the technical solution for the new feature today",
+            content="I prefer morning meetings, usually around 9am works best for me.",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_001",
+            sender="user_alice",
         )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
-        self, client: EverMemOsClient, failures_before_success: int, respx_mock: MockRouter
+        self, client: EverMemOS, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -947,20 +933,20 @@ class TestEverMemOsClient:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = client.v1.memories.with_raw_response.create(
-            content="Let's discuss the technical solution for the new feature today",
+            content="I prefer morning meetings, usually around 9am works best for me.",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_001",
+            sender="user_alice",
             extra_headers={"x-stainless-retry-count": Omit()},
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
-        self, client: EverMemOsClient, failures_before_success: int, respx_mock: MockRouter
+        self, client: EverMemOS, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -976,10 +962,10 @@ class TestEverMemOsClient:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = client.v1.memories.with_raw_response.create(
-            content="Let's discuss the technical solution for the new feature today",
+            content="I prefer morning meetings, usually around 9am works best for me.",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_001",
+            sender="user_alice",
             extra_headers={"x-stainless-retry-count": "42"},
         )
 
@@ -1008,7 +994,7 @@ class TestEverMemOsClient:
         )
 
     @pytest.mark.respx(base_url=base_url)
-    def test_follow_redirects(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_follow_redirects(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         # Test that the default follow_redirects=True allows following redirects
         respx_mock.post("/redirect").mock(
             return_value=httpx.Response(302, headers={"Location": f"{base_url}/redirected"})
@@ -1020,7 +1006,7 @@ class TestEverMemOsClient:
         assert response.json() == {"status": "ok"}
 
     @pytest.mark.respx(base_url=base_url)
-    def test_follow_redirects_disabled(self, respx_mock: MockRouter, client: EverMemOsClient) -> None:
+    def test_follow_redirects_disabled(self, respx_mock: MockRouter, client: EverMemOS) -> None:
         # Test that follow_redirects=False prevents following redirects
         respx_mock.post("/redirect").mock(
             return_value=httpx.Response(302, headers={"Location": f"{base_url}/redirected"})
@@ -1033,9 +1019,9 @@ class TestEverMemOsClient:
         assert exc_info.value.response.headers["Location"] == f"{base_url}/redirected"
 
 
-class TestAsyncEverMemOsClient:
+class TestAsyncEverMemOS:
     @pytest.mark.respx(base_url=base_url)
-    async def test_raw_response(self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient) -> None:
+    async def test_raw_response(self, respx_mock: MockRouter, async_client: AsyncEverMemOS) -> None:
         respx_mock.post("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
 
         response = await async_client.post("/foo", cast_to=httpx.Response)
@@ -1044,7 +1030,7 @@ class TestAsyncEverMemOsClient:
         assert response.json() == {"foo": "bar"}
 
     @pytest.mark.respx(base_url=base_url)
-    async def test_raw_response_for_binary(self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient) -> None:
+    async def test_raw_response_for_binary(self, respx_mock: MockRouter, async_client: AsyncEverMemOS) -> None:
         respx_mock.post("/foo").mock(
             return_value=httpx.Response(200, headers={"Content-Type": "application/binary"}, content='{"foo": "bar"}')
         )
@@ -1054,7 +1040,7 @@ class TestAsyncEverMemOsClient:
         assert isinstance(response, httpx.Response)
         assert response.json() == {"foo": "bar"}
 
-    def test_copy(self, async_client: AsyncEverMemOsClient) -> None:
+    def test_copy(self, async_client: AsyncEverMemOS) -> None:
         copied = async_client.copy()
         assert id(copied) != id(async_client)
 
@@ -1062,7 +1048,7 @@ class TestAsyncEverMemOsClient:
         assert copied.api_key == "another My API Key"
         assert async_client.api_key == "My API Key"
 
-    def test_copy_default_options(self, async_client: AsyncEverMemOsClient) -> None:
+    def test_copy_default_options(self, async_client: AsyncEverMemOS) -> None:
         # options that have a default are overridden correctly
         copied = async_client.copy(max_retries=7)
         assert copied.max_retries == 7
@@ -1079,7 +1065,7 @@ class TestAsyncEverMemOsClient:
         assert isinstance(async_client.timeout, httpx.Timeout)
 
     async def test_copy_default_headers(self) -> None:
-        client = AsyncEverMemOsClient(
+        client = AsyncEverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
@@ -1114,7 +1100,7 @@ class TestAsyncEverMemOsClient:
         await client.close()
 
     async def test_copy_default_query(self) -> None:
-        client = AsyncEverMemOsClient(
+        client = AsyncEverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
@@ -1151,7 +1137,7 @@ class TestAsyncEverMemOsClient:
 
         await client.close()
 
-    def test_copy_signature(self, async_client: AsyncEverMemOsClient) -> None:
+    def test_copy_signature(self, async_client: AsyncEverMemOS) -> None:
         # ensure the same parameters that can be passed to the client are defined in the `.copy()` method
         init_signature = inspect.signature(
             # mypy doesn't like that we access the `__init__` property.
@@ -1168,7 +1154,7 @@ class TestAsyncEverMemOsClient:
             assert copy_param is not None, f"copy() signature is missing the {name} param"
 
     @pytest.mark.skipif(sys.version_info >= (3, 10), reason="fails because of a memory leak that started from 3.12")
-    def test_copy_build_request(self, async_client: AsyncEverMemOsClient) -> None:
+    def test_copy_build_request(self, async_client: AsyncEverMemOS) -> None:
         options = FinalRequestOptions(method="get", url="/foo")
 
         def build_request(options: FinalRequestOptions) -> None:
@@ -1208,10 +1194,10 @@ class TestAsyncEverMemOsClient:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "evermemos/_legacy_response.py",
-                        "evermemos/_response.py",
+                        "EverMemOS/_legacy_response.py",
+                        "EverMemOS/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "evermemos/_compat.py",
+                        "EverMemOS/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -1230,7 +1216,7 @@ class TestAsyncEverMemOsClient:
                     print(frame)
             raise AssertionError()
 
-    async def test_request_timeout(self, async_client: AsyncEverMemOsClient) -> None:
+    async def test_request_timeout(self, async_client: AsyncEverMemOS) -> None:
         request = async_client._build_request(FinalRequestOptions(method="get", url="/foo"))
         timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
         assert timeout == DEFAULT_TIMEOUT
@@ -1242,7 +1228,7 @@ class TestAsyncEverMemOsClient:
         assert timeout == httpx.Timeout(100.0)
 
     async def test_client_timeout_option(self) -> None:
-        client = AsyncEverMemOsClient(
+        client = AsyncEverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
@@ -1255,7 +1241,7 @@ class TestAsyncEverMemOsClient:
     async def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
-            client = AsyncEverMemOsClient(
+            client = AsyncEverMemOS(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1267,7 +1253,7 @@ class TestAsyncEverMemOsClient:
 
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
-            client = AsyncEverMemOsClient(
+            client = AsyncEverMemOS(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1279,7 +1265,7 @@ class TestAsyncEverMemOsClient:
 
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = AsyncEverMemOsClient(
+            client = AsyncEverMemOS(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1292,7 +1278,7 @@ class TestAsyncEverMemOsClient:
     def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             with httpx.Client() as http_client:
-                AsyncEverMemOsClient(
+                AsyncEverMemOS(
                     base_url=base_url,
                     api_key=api_key,
                     _strict_response_validation=True,
@@ -1300,14 +1286,14 @@ class TestAsyncEverMemOsClient:
                 )
 
     async def test_default_headers_option(self) -> None:
-        test_client = AsyncEverMemOsClient(
+        test_client = AsyncEverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = test_client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        test_client2 = AsyncEverMemOsClient(
+        test_client2 = AsyncEverMemOS(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
@@ -1324,17 +1310,17 @@ class TestAsyncEverMemOsClient:
         await test_client2.close()
 
     def test_validate_headers(self) -> None:
-        client = AsyncEverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = AsyncEverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
-        with pytest.raises(EverMemOsClientError):
+        with pytest.raises(EverMemOSError):
             with update_env(**{"EVERMEMOS_API_KEY": Omit()}):
-                client2 = AsyncEverMemOsClient(base_url=base_url, api_key=None, _strict_response_validation=True)
+                client2 = AsyncEverMemOS(base_url=base_url, api_key=None, _strict_response_validation=True)
             _ = client2
 
     async def test_default_query_option(self) -> None:
-        client = AsyncEverMemOsClient(
+        client = AsyncEverMemOS(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"query_param": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1353,7 +1339,7 @@ class TestAsyncEverMemOsClient:
 
         await client.close()
 
-    def test_request_extra_json(self, client: EverMemOsClient) -> None:
+    def test_request_extra_json(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1387,7 +1373,7 @@ class TestAsyncEverMemOsClient:
         data = json.loads(request.content.decode("utf-8"))
         assert data == {"foo": "bar", "baz": None}
 
-    def test_request_extra_headers(self, client: EverMemOsClient) -> None:
+    def test_request_extra_headers(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1409,7 +1395,7 @@ class TestAsyncEverMemOsClient:
         )
         assert request.headers.get("X-Bar") == "false"
 
-    def test_request_extra_query(self, client: EverMemOsClient) -> None:
+    def test_request_extra_query(self, client: EverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1450,7 +1436,7 @@ class TestAsyncEverMemOsClient:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, async_client: AsyncEverMemOsClient) -> None:
+    def test_multipart_repeating_array(self, async_client: AsyncEverMemOS) -> None:
         request = async_client._build_request(
             FinalRequestOptions.construct(
                 method="post",
@@ -1480,7 +1466,7 @@ class TestAsyncEverMemOsClient:
         ]
 
     @pytest.mark.respx(base_url=base_url)
-    async def test_binary_content_upload(self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient) -> None:
+    async def test_binary_content_upload(self, respx_mock: MockRouter, async_client: AsyncEverMemOS) -> None:
         respx_mock.post("/upload").mock(side_effect=mirror_request_content)
 
         file_content = b"Hello, this is a test file."
@@ -1505,7 +1491,7 @@ class TestAsyncEverMemOsClient:
             assert counter.value == 0, "the request body should not have been read"
             return httpx.Response(200, content=await request.aread())
 
-        async with AsyncEverMemOsClient(
+        async with AsyncEverMemOS(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
@@ -1525,7 +1511,7 @@ class TestAsyncEverMemOsClient:
 
     @pytest.mark.respx(base_url=base_url)
     async def test_binary_content_upload_with_body_is_deprecated(
-        self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient
+        self, respx_mock: MockRouter, async_client: AsyncEverMemOS
     ) -> None:
         respx_mock.post("/upload").mock(side_effect=mirror_request_content)
 
@@ -1546,7 +1532,7 @@ class TestAsyncEverMemOsClient:
         assert response.content == file_content
 
     @pytest.mark.respx(base_url=base_url)
-    async def test_basic_union_response(self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient) -> None:
+    async def test_basic_union_response(self, respx_mock: MockRouter, async_client: AsyncEverMemOS) -> None:
         class Model1(BaseModel):
             name: str
 
@@ -1560,9 +1546,7 @@ class TestAsyncEverMemOsClient:
         assert response.foo == "bar"
 
     @pytest.mark.respx(base_url=base_url)
-    async def test_union_response_different_types(
-        self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient
-    ) -> None:
+    async def test_union_response_different_types(self, respx_mock: MockRouter, async_client: AsyncEverMemOS) -> None:
         """Union of objects with the same field name using a different type"""
 
         class Model1(BaseModel):
@@ -1585,7 +1569,7 @@ class TestAsyncEverMemOsClient:
 
     @pytest.mark.respx(base_url=base_url)
     async def test_non_application_json_content_type_for_json_data(
-        self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient
+        self, respx_mock: MockRouter, async_client: AsyncEverMemOS
     ) -> None:
         """
         Response that sets Content-Type to something other than application/json but returns json data
@@ -1607,7 +1591,7 @@ class TestAsyncEverMemOsClient:
         assert response.foo == 2
 
     async def test_base_url_setter(self) -> None:
-        client = AsyncEverMemOsClient(
+        client = AsyncEverMemOS(
             base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True
         )
         assert client.base_url == "https://example.com/from_init/"
@@ -1619,17 +1603,17 @@ class TestAsyncEverMemOsClient:
         await client.close()
 
     async def test_base_url_env(self) -> None:
-        with update_env(EVER_MEM_OS_CLIENT_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncEverMemOsClient(api_key=api_key, _strict_response_validation=True)
+        with update_env(EVER_MEM_OS_BASE_URL="http://localhost:5000/from/env"):
+            client = AsyncEverMemOS(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncEverMemOsClient(
+            AsyncEverMemOS(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            AsyncEverMemOsClient(
+            AsyncEverMemOS(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -1638,7 +1622,7 @@ class TestAsyncEverMemOsClient:
         ],
         ids=["standard", "custom http client"],
     )
-    async def test_base_url_trailing_slash(self, client: AsyncEverMemOsClient) -> None:
+    async def test_base_url_trailing_slash(self, client: AsyncEverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1652,10 +1636,10 @@ class TestAsyncEverMemOsClient:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncEverMemOsClient(
+            AsyncEverMemOS(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            AsyncEverMemOsClient(
+            AsyncEverMemOS(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -1664,7 +1648,7 @@ class TestAsyncEverMemOsClient:
         ],
         ids=["standard", "custom http client"],
     )
-    async def test_base_url_no_trailing_slash(self, client: AsyncEverMemOsClient) -> None:
+    async def test_base_url_no_trailing_slash(self, client: AsyncEverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1678,10 +1662,10 @@ class TestAsyncEverMemOsClient:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncEverMemOsClient(
+            AsyncEverMemOS(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            AsyncEverMemOsClient(
+            AsyncEverMemOS(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -1690,7 +1674,7 @@ class TestAsyncEverMemOsClient:
         ],
         ids=["standard", "custom http client"],
     )
-    async def test_absolute_request_url(self, client: AsyncEverMemOsClient) -> None:
+    async def test_absolute_request_url(self, client: AsyncEverMemOS) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1702,7 +1686,7 @@ class TestAsyncEverMemOsClient:
         await client.close()
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        test_client = AsyncEverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        test_client = AsyncEverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         assert not test_client.is_closed()
 
         copied = test_client.copy()
@@ -1714,7 +1698,7 @@ class TestAsyncEverMemOsClient:
         assert not test_client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        test_client = AsyncEverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        test_client = AsyncEverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         async with test_client as c2:
             assert c2 is test_client
             assert not c2.is_closed()
@@ -1722,9 +1706,7 @@ class TestAsyncEverMemOsClient:
         assert test_client.is_closed()
 
     @pytest.mark.respx(base_url=base_url)
-    async def test_client_response_validation_error(
-        self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient
-    ) -> None:
+    async def test_client_response_validation_error(self, respx_mock: MockRouter, async_client: AsyncEverMemOS) -> None:
         class Model(BaseModel):
             foo: str
 
@@ -1737,7 +1719,7 @@ class TestAsyncEverMemOsClient:
 
     async def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            AsyncEverMemOsClient(
+            AsyncEverMemOS(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None)
             )
 
@@ -1748,12 +1730,12 @@ class TestAsyncEverMemOsClient:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncEverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        strict_client = AsyncEverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        non_strict_client = AsyncEverMemOsClient(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        non_strict_client = AsyncEverMemOS(base_url=base_url, api_key=api_key, _strict_response_validation=False)
 
         response = await non_strict_client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1784,53 +1766,53 @@ class TestAsyncEverMemOsClient:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     async def test_parse_retry_after_header(
-        self, remaining_retries: int, retry_after: str, timeout: float, async_client: AsyncEverMemOsClient
+        self, remaining_retries: int, retry_after: str, timeout: float, async_client: AsyncEverMemOS
     ) -> None:
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
         calculated = async_client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(
-        self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient
+        self, respx_mock: MockRouter, async_client: AsyncEverMemOS
     ) -> None:
         respx_mock.post("/api/v1/memories").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
             await async_client.v1.memories.with_streaming_response.create(
-                content="Let's discuss the technical solution for the new feature today",
+                content="I prefer morning meetings, usually around 9am works best for me.",
                 create_time="2025-01-15T10:00:00+00:00",
                 message_id="msg_001",
-                sender="user_001",
+                sender="user_alice",
             ).__aenter__()
 
         assert _get_open_connections(async_client) == 0
 
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(
-        self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient
+        self, respx_mock: MockRouter, async_client: AsyncEverMemOS
     ) -> None:
         respx_mock.post("/api/v1/memories").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
             await async_client.v1.memories.with_streaming_response.create(
-                content="Let's discuss the technical solution for the new feature today",
+                content="I prefer morning meetings, usually around 9am works best for me.",
                 create_time="2025-01-15T10:00:00+00:00",
                 message_id="msg_001",
-                sender="user_001",
+                sender="user_alice",
             ).__aenter__()
         assert _get_open_connections(async_client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     async def test_retries_taken(
         self,
-        async_client: AsyncEverMemOsClient,
+        async_client: AsyncEverMemOS,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -1851,20 +1833,20 @@ class TestAsyncEverMemOsClient:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = await client.v1.memories.with_raw_response.create(
-            content="Let's discuss the technical solution for the new feature today",
+            content="I prefer morning meetings, usually around 9am works best for me.",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_001",
+            sender="user_alice",
         )
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_omit_retry_count_header(
-        self, async_client: AsyncEverMemOsClient, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncEverMemOS, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
@@ -1880,20 +1862,20 @@ class TestAsyncEverMemOsClient:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = await client.v1.memories.with_raw_response.create(
-            content="Let's discuss the technical solution for the new feature today",
+            content="I prefer morning meetings, usually around 9am works best for me.",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_001",
+            sender="user_alice",
             extra_headers={"x-stainless-retry-count": Omit()},
         )
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("evermemos._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("EverMemOS._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_overwrite_retry_count_header(
-        self, async_client: AsyncEverMemOsClient, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncEverMemOS, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
@@ -1909,10 +1891,10 @@ class TestAsyncEverMemOsClient:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = await client.v1.memories.with_raw_response.create(
-            content="Let's discuss the technical solution for the new feature today",
+            content="I prefer morning meetings, usually around 9am works best for me.",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_001",
+            sender="user_alice",
             extra_headers={"x-stainless-retry-count": "42"},
         )
 
@@ -1945,7 +1927,7 @@ class TestAsyncEverMemOsClient:
         )
 
     @pytest.mark.respx(base_url=base_url)
-    async def test_follow_redirects(self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient) -> None:
+    async def test_follow_redirects(self, respx_mock: MockRouter, async_client: AsyncEverMemOS) -> None:
         # Test that the default follow_redirects=True allows following redirects
         respx_mock.post("/redirect").mock(
             return_value=httpx.Response(302, headers={"Location": f"{base_url}/redirected"})
@@ -1957,7 +1939,7 @@ class TestAsyncEverMemOsClient:
         assert response.json() == {"status": "ok"}
 
     @pytest.mark.respx(base_url=base_url)
-    async def test_follow_redirects_disabled(self, respx_mock: MockRouter, async_client: AsyncEverMemOsClient) -> None:
+    async def test_follow_redirects_disabled(self, respx_mock: MockRouter, async_client: AsyncEverMemOS) -> None:
         # Test that follow_redirects=False prevents following redirects
         respx_mock.post("/redirect").mock(
             return_value=httpx.Response(302, headers={"Location": f"{base_url}/redirected"})
