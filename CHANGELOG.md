@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 (2026-01-26)
+
+Full Changelog: [v0.1.1...v0.1.2](https://github.com/evermemos/evermemos-python/compare/v0.1.1...v0.1.2)
+
 ## 0.1.1 (2026-01-26)
 
 Full Changelog: [v0.1.0...v0.1.1](https://github.com/evermemos/evermemos-python/compare/v0.1.0...v0.1.1)
