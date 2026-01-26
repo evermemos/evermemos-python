@@ -5,8 +5,8 @@ from typing import Iterator, AsyncIterator
 import httpx
 import pytest
 
-from EverMemOS import EverMemOS, AsyncEverMemOS
-from EverMemOS._streaming import Stream, AsyncStream, ServerSentEvent
+from evermemos import EverMemOS, AsyncEverMemOS
+from evermemos._streaming import Stream, AsyncStream, ServerSentEvent
 
 
 @pytest.mark.asyncio

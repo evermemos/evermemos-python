@@ -7,9 +7,9 @@ from typing import Any, cast
 
 import pytest
 
-from EverMemOS import EverMemOS, AsyncEverMemOS
+from evermemos import EverMemOS, AsyncEverMemOS
 from tests.utils import assert_matches_type
-from EverMemOS.types.v1 import (
+from evermemos.types.v1 import (
     MemoryListResponse,
     MemoryCreateResponse,
     MemoryDeleteResponse,
