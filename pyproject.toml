@@ -5,7 +5,7 @@ description = "The official Python library for the EverMemOS API"
 dynamic = ["readme"]
 license = "Apache-2.0"
 authors = [
-{ name = "Ever Mem Os", email = "" },
+{ name = "Ever Mem OS", email = "" },
 ]
 
 dependencies = [

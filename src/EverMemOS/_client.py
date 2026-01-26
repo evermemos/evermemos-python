@@ -23,7 +23,7 @@ from ._utils import is_given, get_async_library
 from ._compat import cached_property
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
-from ._exceptions import APIStatusError, EverMemOsError
+from ._exceptions import APIStatusError, EverMemOSError
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
@@ -39,14 +39,14 @@ __all__ = [
     "Transport",
     "ProxiesTypes",
     "RequestOptions",
-    "EverMemOs",
-    "AsyncEverMemOs",
+    "EverMemOS",
+    "AsyncEverMemOS",
     "Client",
     "AsyncClient",
 ]
 
 
-class EverMemOs(SyncAPIClient):
+class EverMemOS(SyncAPIClient):
     # client options
     api_key: str
 
@@ -73,15 +73,15 @@ class EverMemOs(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous EverMemOs client instance.
+        """Construct a new synchronous EverMemOS client instance.
 
-        This automatically infers the `api_key` argument from the `EVER_MEM_OS_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `EVERMEMOS_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("EVER_MEM_OS_API_KEY")
+            api_key = os.environ.get("EVERMEMOS_API_KEY")
         if api_key is None:
-            raise EverMemOsError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the EVER_MEM_OS_API_KEY environment variable"
+            raise EverMemOSError(
+                "The api_key client option must be set either by passing api_key to the client or by setting the EVERMEMOS_API_KEY environment variable"
             )
         self.api_key = api_key
 
@@ -108,12 +108,12 @@ class EverMemOs(SyncAPIClient):
         return V1Resource(self)
 
     @cached_property
-    def with_raw_response(self) -> EverMemOsWithRawResponse:
-        return EverMemOsWithRawResponse(self)
+    def with_raw_response(self) -> EverMemOSWithRawResponse:
+        return EverMemOSWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> EverMemOsWithStreamedResponse:
-        return EverMemOsWithStreamedResponse(self)
+    def with_streaming_response(self) -> EverMemOSWithStreamedResponse:
+        return EverMemOSWithStreamedResponse(self)
 
     @property
     @override
@@ -220,7 +220,7 @@ class EverMemOs(SyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class AsyncEverMemOs(AsyncAPIClient):
+class AsyncEverMemOS(AsyncAPIClient):
     # client options
     api_key: str
 
@@ -247,15 +247,15 @@ class AsyncEverMemOs(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async AsyncEverMemOs client instance.
+        """Construct a new async AsyncEverMemOS client instance.
 
-        This automatically infers the `api_key` argument from the `EVER_MEM_OS_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `EVERMEMOS_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("EVER_MEM_OS_API_KEY")
+            api_key = os.environ.get("EVERMEMOS_API_KEY")
         if api_key is None:
-            raise EverMemOsError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the EVER_MEM_OS_API_KEY environment variable"
+            raise EverMemOSError(
+                "The api_key client option must be set either by passing api_key to the client or by setting the EVERMEMOS_API_KEY environment variable"
             )
         self.api_key = api_key
 
@@ -282,12 +282,12 @@ class AsyncEverMemOs(AsyncAPIClient):
         return AsyncV1Resource(self)
 
     @cached_property
-    def with_raw_response(self) -> AsyncEverMemOsWithRawResponse:
-        return AsyncEverMemOsWithRawResponse(self)
+    def with_raw_response(self) -> AsyncEverMemOSWithRawResponse:
+        return AsyncEverMemOSWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncEverMemOsWithStreamedResponse:
-        return AsyncEverMemOsWithStreamedResponse(self)
+    def with_streaming_response(self) -> AsyncEverMemOSWithStreamedResponse:
+        return AsyncEverMemOSWithStreamedResponse(self)
 
     @property
     @override
@@ -394,10 +394,10 @@ class AsyncEverMemOs(AsyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class EverMemOsWithRawResponse:
-    _client: EverMemOs
+class EverMemOSWithRawResponse:
+    _client: EverMemOS
 
-    def __init__(self, client: EverMemOs) -> None:
+    def __init__(self, client: EverMemOS) -> None:
         self._client = client
 
     @cached_property
@@ -407,10 +407,10 @@ class EverMemOsWithRawResponse:
         return V1ResourceWithRawResponse(self._client.v1)
 
 
-class AsyncEverMemOsWithRawResponse:
-    _client: AsyncEverMemOs
+class AsyncEverMemOSWithRawResponse:
+    _client: AsyncEverMemOS
 
-    def __init__(self, client: AsyncEverMemOs) -> None:
+    def __init__(self, client: AsyncEverMemOS) -> None:
         self._client = client
 
     @cached_property
@@ -420,10 +420,10 @@ class AsyncEverMemOsWithRawResponse:
         return AsyncV1ResourceWithRawResponse(self._client.v1)
 
 
-class EverMemOsWithStreamedResponse:
-    _client: EverMemOs
+class EverMemOSWithStreamedResponse:
+    _client: EverMemOS
 
-    def __init__(self, client: EverMemOs) -> None:
+    def __init__(self, client: EverMemOS) -> None:
         self._client = client
 
     @cached_property
@@ -433,10 +433,10 @@ class EverMemOsWithStreamedResponse:
         return V1ResourceWithStreamingResponse(self._client.v1)
 
 
-class AsyncEverMemOsWithStreamedResponse:
-    _client: AsyncEverMemOs
+class AsyncEverMemOSWithStreamedResponse:
+    _client: AsyncEverMemOS
 
-    def __init__(self, client: AsyncEverMemOs) -> None:
+    def __init__(self, client: AsyncEverMemOS) -> None:
         self._client = client
 
     @cached_property
@@ -446,6 +446,6 @@ class AsyncEverMemOsWithStreamedResponse:
         return AsyncV1ResourceWithStreamingResponse(self._client.v1)
 
 
-Client = EverMemOs
+Client = EverMemOS
 
-AsyncClient = AsyncEverMemOs
+AsyncClient = AsyncEverMemOS

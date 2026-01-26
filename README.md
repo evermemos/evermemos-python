@@ -1,9 +1,9 @@
-# Ever Mem Os Python API library
+# EverMemOS API library
 
 <!-- prettier-ignore -->
 [![PyPI version](https://img.shields.io/pypi/v/EverMemOS.svg?label=pypi%20(stable))](https://pypi.org/project/EverMemOS/)
 
-The Ever Mem Os Python library provides convenient access to the Ever Mem Os REST API from any Python 3.9+
+The EverMemOS library provides convenient access to the Ever Mem OS REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -29,46 +29,46 @@ The full API of this library can be found in [api.md](api.md).
 
 ```python
 import os
-from EverMemOS import EverMemOs
+from EverMemOS import EverMemOS
 
-client = EverMemOs(
-    api_key=os.environ.get("EVER_MEM_OS_API_KEY"),  # This is the default and can be omitted
+client = EverMemOS(
+    api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
 )
 
 memory = client.v1.memories.create(
-    content="Let's discuss the technical solution for the new feature today",
+    content="I prefer morning meetings, usually around 9am works best for me.",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_001",
+    sender="user_alice",
 )
 print(memory.message)
 ```
 
 While you can provide an `api_key` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `EVER_MEM_OS_API_KEY="My API Key"` to your `.env` file
+to add `EVERMEMOS_API_KEY="My API Key"` to your `.env` file
 so that your API Key is not stored in source control.
 
 ## Async usage
 
-Simply import `AsyncEverMemOs` instead of `EverMemOs` and use `await` with each API call:
+Simply import `AsyncEverMemOS` instead of `EverMemOS` and use `await` with each API call:
 
 ```python
 import os
 import asyncio
-from EverMemOS import AsyncEverMemOs
+from EverMemOS import AsyncEverMemOS
 
-client = AsyncEverMemOs(
-    api_key=os.environ.get("EVER_MEM_OS_API_KEY"),  # This is the default and can be omitted
+client = AsyncEverMemOS(
+    api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
 )
 
 
 async def main() -> None:
     memory = await client.v1.memories.create(
-        content="Let's discuss the technical solution for the new feature today",
+        content="I prefer morning meetings, usually around 9am works best for me.",
         create_time="2025-01-15T10:00:00+00:00",
         message_id="msg_001",
-        sender="user_001",
+        sender="user_alice",
     )
     print(memory.message)
 
@@ -95,19 +95,19 @@ Then you can enable it by instantiating the client with `http_client=DefaultAioH
 import os
 import asyncio
 from EverMemOS import DefaultAioHttpClient
-from EverMemOS import AsyncEverMemOs
+from EverMemOS import AsyncEverMemOS
 
 
 async def main() -> None:
-    async with AsyncEverMemOs(
-        api_key=os.environ.get("EVER_MEM_OS_API_KEY"),  # This is the default and can be omitted
+    async with AsyncEverMemOS(
+        api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
         memory = await client.v1.memories.create(
-            content="Let's discuss the technical solution for the new feature today",
+            content="I prefer morning meetings, usually around 9am works best for me.",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_001",
+            sender="user_alice",
         )
         print(memory.message)
 
@@ -135,16 +135,16 @@ All errors inherit from `EverMemOS.APIError`.
 
 ```python
 import EverMemOS
-from EverMemOS import EverMemOs
+from EverMemOS import EverMemOS
 
-client = EverMemOs()
+client = EverMemOS()
 
 try:
     client.v1.memories.create(
-        content="Let's discuss the technical solution for the new feature today",
+        content="I prefer morning meetings, usually around 9am works best for me.",
         create_time="2025-01-15T10:00:00+00:00",
         message_id="msg_001",
-        sender="user_001",
+        sender="user_alice",
     )
 except EverMemOS.APIConnectionError as e:
     print("The server could not be reached")
@@ -179,20 +179,20 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from EverMemOS import EverMemOs
+from EverMemOS import EverMemOS
 
 # Configure the default for all requests:
-client = EverMemOs(
+client = EverMemOS(
     # default is 2
     max_retries=0,
 )
 
 # Or, configure per-request:
 client.with_options(max_retries=5).v1.memories.create(
-    content="Let's discuss the technical solution for the new feature today",
+    content="I prefer morning meetings, usually around 9am works best for me.",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_001",
+    sender="user_alice",
 )
 ```
 
@@ -202,25 +202,25 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
 
 ```python
-from EverMemOS import EverMemOs
+from EverMemOS import EverMemOS
 
 # Configure the default for all requests:
-client = EverMemOs(
+client = EverMemOS(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = EverMemOs(
+client = EverMemOS(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
 # Override per-request:
 client.with_options(timeout=5.0).v1.memories.create(
-    content="Let's discuss the technical solution for the new feature today",
+    content="I prefer morning meetings, usually around 9am works best for me.",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_001",
+    sender="user_alice",
 )
 ```
 
@@ -259,14 +259,14 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from EverMemOS import EverMemOs
+from EverMemOS import EverMemOS
 
-client = EverMemOs()
+client = EverMemOS()
 response = client.v1.memories.with_raw_response.create(
-    content="Let's discuss the technical solution for the new feature today",
+    content="I prefer morning meetings, usually around 9am works best for me.",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_001",
+    sender="user_alice",
 )
 print(response.headers.get('X-My-Header'))
 
@@ -286,10 +286,10 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 
 ```python
 with client.v1.memories.with_streaming_response.create(
-    content="Let's discuss the technical solution for the new feature today",
+    content="I prefer morning meetings, usually around 9am works best for me.",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_001",
+    sender="user_alice",
 ) as response:
     print(response.headers.get("X-My-Header"))
 
@@ -343,9 +343,9 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from EverMemOS import EverMemOs, DefaultHttpxClient
+from EverMemOS import EverMemOS, DefaultHttpxClient
 
-client = EverMemOs(
+client = EverMemOS(
     # Or use the `EVER_MEM_OS_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
@@ -366,9 +366,9 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from EverMemOS import EverMemOs
+from EverMemOS import EverMemOS
 
-with EverMemOs() as client:
+with EverMemOS() as client:
   # make requests here
   ...
 

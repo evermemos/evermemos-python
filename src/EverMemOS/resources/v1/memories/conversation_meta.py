@@ -18,6 +18,7 @@ from ...._response import (
 )
 from ...._base_client import make_request_options
 from ....types.v1.memories import conversation_meta_create_params, conversation_meta_update_params
+from ....types.v1.memories.conversation_meta_get_response import ConversationMetaGetResponse
 from ....types.v1.memories.conversation_meta_create_response import ConversationMetaCreateResponse
 from ....types.v1.memories.conversation_meta_update_response import ConversationMetaUpdateResponse
 
@@ -209,6 +210,40 @@ class ConversationMetaResource(SyncAPIResource):
             cast_to=ConversationMetaUpdateResponse,
         )
 
+    def get(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConversationMetaGetResponse:
+        """
+        Retrieve conversation metadata by group_id with fallback to default config
+
+                ## Functionality:
+                - Query by group_id to get conversation metadata
+                - If group_id not found, fallback to default config
+                - If group_id not provided, returns default config
+
+                ## Fallback Logic:
+                - Try exact group_id first, then use default config
+
+                ## Use Cases:
+                - Get specific group's metadata
+                - Get default settings (group_id not provided or null)
+                - Auto-fallback to defaults when group config not set
+        """
+        return self._get(
+            "/api/v1/memories/conversation-meta",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConversationMetaGetResponse,
+        )
+
 
 class AsyncConversationMetaResource(AsyncAPIResource):
     @cached_property
@@ -395,6 +430,40 @@ class AsyncConversationMetaResource(AsyncAPIResource):
             cast_to=ConversationMetaUpdateResponse,
         )
 
+    async def get(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConversationMetaGetResponse:
+        """
+        Retrieve conversation metadata by group_id with fallback to default config
+
+                ## Functionality:
+                - Query by group_id to get conversation metadata
+                - If group_id not found, fallback to default config
+                - If group_id not provided, returns default config
+
+                ## Fallback Logic:
+                - Try exact group_id first, then use default config
+
+                ## Use Cases:
+                - Get specific group's metadata
+                - Get default settings (group_id not provided or null)
+                - Auto-fallback to defaults when group config not set
+        """
+        return await self._get(
+            "/api/v1/memories/conversation-meta",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConversationMetaGetResponse,
+        )
+
 
 class ConversationMetaResourceWithRawResponse:
     def __init__(self, conversation_meta: ConversationMetaResource) -> None:
@@ -405,6 +474,9 @@ class ConversationMetaResourceWithRawResponse:
         )
         self.update = to_raw_response_wrapper(
             conversation_meta.update,
+        )
+        self.get = to_raw_response_wrapper(
+            conversation_meta.get,
         )
 
 
@@ -418,6 +490,9 @@ class AsyncConversationMetaResourceWithRawResponse:
         self.update = async_to_raw_response_wrapper(
             conversation_meta.update,
         )
+        self.get = async_to_raw_response_wrapper(
+            conversation_meta.get,
+        )
 
 
 class ConversationMetaResourceWithStreamingResponse:
@@ -430,6 +505,9 @@ class ConversationMetaResourceWithStreamingResponse:
         self.update = to_streamed_response_wrapper(
             conversation_meta.update,
         )
+        self.get = to_streamed_response_wrapper(
+            conversation_meta.get,
+        )
 
 
 class AsyncConversationMetaResourceWithStreamingResponse:
@@ -441,4 +519,7 @@ class AsyncConversationMetaResourceWithStreamingResponse:
         )
         self.update = async_to_streamed_response_wrapper(
             conversation_meta.update,
+        )
+        self.get = async_to_streamed_response_wrapper(
+            conversation_meta.get,
         )

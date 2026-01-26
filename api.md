@@ -30,6 +30,7 @@ Types:
 from EverMemOS.types.v1.memories import (
     ConversationMetaCreateResponse,
     ConversationMetaUpdateResponse,
+    ConversationMetaGetResponse,
 )
 ```
 
@@ -37,3 +38,4 @@ Methods:
 
 - <code title="post /api/v1/memories/conversation-meta">client.v1.memories.conversation_meta.<a href="./src/EverMemOS/resources/v1/memories/conversation_meta.py">create</a>(\*\*<a href="src/EverMemOS/types/v1/memories/conversation_meta_create_params.py">params</a>) -> <a href="./src/EverMemOS/types/v1/memories/conversation_meta_create_response.py">ConversationMetaCreateResponse</a></code>
 - <code title="patch /api/v1/memories/conversation-meta">client.v1.memories.conversation_meta.<a href="./src/EverMemOS/resources/v1/memories/conversation_meta.py">update</a>(\*\*<a href="src/EverMemOS/types/v1/memories/conversation_meta_update_params.py">params</a>) -> <a href="./src/EverMemOS/types/v1/memories/conversation_meta_update_response.py">ConversationMetaUpdateResponse</a></code>
+- <code title="get /api/v1/memories/conversation-meta">client.v1.memories.conversation_meta.<a href="./src/EverMemOS/resources/v1/memories/conversation_meta.py">get</a>() -> <a href="./src/EverMemOS/types/v1/memories/conversation_meta_get_response.py">ConversationMetaGetResponse</a></code>
