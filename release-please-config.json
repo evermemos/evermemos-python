@@ -61,7 +61,6 @@
   ],
   "release-type": "python",
   "extra-files": [
-    "src/EverMemOS/_version.py",
-    "pyproject.toml"
+    "src/evermemos/_version.py"
   ]
 }

@@ -1,7 +1,7 @@
 # EverMemOS API library
 
 <!-- prettier-ignore -->
-[![PyPI version](https://img.shields.io/pypi/v/EverMemOS.svg?label=pypi%20(stable))](https://pypi.org/project/EverMemOS/)
+[![PyPI version](https://img.shields.io/pypi/v/evermemos.svg?label=pypi%20(stable))](https://pypi.org/project/evermemos/)
 
 The EverMemOS library provides convenient access to the EverMemOS REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
@@ -17,7 +17,7 @@ The full API of this library can be found in [api.md](api.md).
 
 ```sh
 # install from PyPI
-pip install EverMemOS
+pip install evermemos
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ The full API of this library can be found in [api.md](api.md).
 
 ```python
 import os
-from EverMemOS import EverMemOS
+from evermemos import EverMemOS
 
 client = EverMemOS(
     api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
@@ -53,7 +53,7 @@ Simply import `AsyncEverMemOS` instead of `EverMemOS` and use `await` with each 
 ```python
 import os
 import asyncio
-from EverMemOS import AsyncEverMemOS
+from evermemos import AsyncEverMemOS
 
 client = AsyncEverMemOS(
     api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
@@ -83,7 +83,7 @@ You can enable this by installing `aiohttp`:
 
 ```sh
 # install from PyPI
-pip install EverMemOS[aiohttp]
+pip install evermemos[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -91,8 +91,8 @@ Then you can enable it by instantiating the client with `http_client=DefaultAioH
 ```python
 import os
 import asyncio
-from EverMemOS import DefaultAioHttpClient
-from EverMemOS import AsyncEverMemOS
+from evermemos import DefaultAioHttpClient
+from evermemos import AsyncEverMemOS
 
 
 async def main() -> None:
@@ -123,16 +123,16 @@ Typed requests and responses provide autocomplete and documentation within your 
 
 ## Handling errors
 
-When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `EverMemOS.APIConnectionError` is raised.
+When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `evermemos.APIConnectionError` is raised.
 
 When the API returns a non-success status code (that is, 4xx or 5xx
-response), a subclass of `EverMemOS.APIStatusError` is raised, containing `status_code` and `response` properties.
+response), a subclass of `evermemos.APIStatusError` is raised, containing `status_code` and `response` properties.
 
-All errors inherit from `EverMemOS.APIError`.
+All errors inherit from `evermemos.APIError`.
 
 ```python
-import EverMemOS
-from EverMemOS import EverMemOS
+import evermemos
+from evermemos import EverMemOS
 
 client = EverMemOS()
 
@@ -143,12 +143,12 @@ try:
         message_id="msg_001",
         sender="user_alice",
     )
-except EverMemOS.APIConnectionError as e:
+except evermemos.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
-except EverMemOS.RateLimitError as e:
+except evermemos.RateLimitError as e:
     print("A 429 status code was received; we should back off a bit.")
-except EverMemOS.APIStatusError as e:
+except evermemos.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
@@ -176,7 +176,7 @@ Connection errors (for example, due to a network connectivity problem), 408 Requ
 You can use the `max_retries` option to configure or disable retry settings:
 
 ```python
-from EverMemOS import EverMemOS
+from evermemos import EverMemOS
 
 # Configure the default for all requests:
 client = EverMemOS(
@@ -199,7 +199,7 @@ By default requests time out after 1 minute. You can configure this with a `time
 which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:
 
 ```python
-from EverMemOS import EverMemOS
+from evermemos import EverMemOS
 
 # Configure the default for all requests:
 client = EverMemOS(
@@ -256,7 +256,7 @@ if response.my_field is None:
 The "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,
 
 ```py
-from EverMemOS import EverMemOS
+from evermemos import EverMemOS
 
 client = EverMemOS()
 response = client.v1.memories.with_raw_response.create(
@@ -271,9 +271,9 @@ memory = response.parse()  # get the object that `v1.memories.create()` would ha
 print(memory.message)
 ```
 
-These methods return an [`APIResponse`](https://github.com/evermemos/evermemos-python/tree/main/src/EverMemOS/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/evermemos/evermemos-python/tree/main/src/evermemos/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/evermemos/evermemos-python/tree/main/src/EverMemOS/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/evermemos/evermemos-python/tree/main/src/evermemos/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -340,7 +340,7 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from EverMemOS import EverMemOS, DefaultHttpxClient
+from evermemos import EverMemOS, DefaultHttpxClient
 
 client = EverMemOS(
     # Or use the `EVER_MEM_OS_BASE_URL` env var
@@ -363,7 +363,7 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from EverMemOS import EverMemOS
+from evermemos import EverMemOS
 
 with EverMemOS() as client:
   # make requests here
@@ -391,8 +391,8 @@ If you've upgraded to the latest version but aren't seeing any new features you 
 You can determine the version that is being used at runtime with:
 
 ```py
-import EverMemOS
-print(EverMemOS.__version__)
+import evermemos
+print(evermemos.__version__)
 ```
 
 ## Requirements
