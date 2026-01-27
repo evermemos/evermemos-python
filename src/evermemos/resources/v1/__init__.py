@@ -8,6 +8,14 @@ from .v1 import (
     V1ResourceWithStreamingResponse,
     AsyncV1ResourceWithStreamingResponse,
 )
+from .stats import (
+    StatsResource,
+    AsyncStatsResource,
+    StatsResourceWithRawResponse,
+    AsyncStatsResourceWithRawResponse,
+    StatsResourceWithStreamingResponse,
+    AsyncStatsResourceWithStreamingResponse,
+)
 from .memories import (
     MemoriesResource,
     AsyncMemoriesResource,
@@ -15,6 +23,14 @@ from .memories import (
     AsyncMemoriesResourceWithRawResponse,
     MemoriesResourceWithStreamingResponse,
     AsyncMemoriesResourceWithStreamingResponse,
+)
+from .global_user_profile import (
+    GlobalUserProfileResource,
+    AsyncGlobalUserProfileResource,
+    GlobalUserProfileResourceWithRawResponse,
+    AsyncGlobalUserProfileResourceWithRawResponse,
+    GlobalUserProfileResourceWithStreamingResponse,
+    AsyncGlobalUserProfileResourceWithStreamingResponse,
 )
 
 __all__ = [
@@ -24,6 +40,18 @@ __all__ = [
     "AsyncMemoriesResourceWithRawResponse",
     "MemoriesResourceWithStreamingResponse",
     "AsyncMemoriesResourceWithStreamingResponse",
+    "GlobalUserProfileResource",
+    "AsyncGlobalUserProfileResource",
+    "GlobalUserProfileResourceWithRawResponse",
+    "AsyncGlobalUserProfileResourceWithRawResponse",
+    "GlobalUserProfileResourceWithStreamingResponse",
+    "AsyncGlobalUserProfileResourceWithStreamingResponse",
+    "StatsResource",
+    "AsyncStatsResource",
+    "StatsResourceWithRawResponse",
+    "AsyncStatsResourceWithRawResponse",
+    "StatsResourceWithStreamingResponse",
+    "AsyncStatsResourceWithStreamingResponse",
     "V1Resource",
     "AsyncV1Resource",
     "V1ResourceWithRawResponse",

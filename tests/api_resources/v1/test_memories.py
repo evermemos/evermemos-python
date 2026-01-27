@@ -10,7 +10,8 @@ import pytest
 from evermemos import EverMemOS, AsyncEverMemOS
 from tests.utils import assert_matches_type
 from evermemos.types.v1 import (
-    MemoryListResponse,
+    MemoryGetResponse,
+    MemoryLoadResponse,
     MemoryCreateResponse,
     MemoryDeleteResponse,
     MemorySearchResponse,
@@ -83,34 +84,6 @@ class TestMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    def test_method_list(self, client: EverMemOS) -> None:
-        memory = client.v1.memories.list()
-        assert_matches_type(MemoryListResponse, memory, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_raw_response_list(self, client: EverMemOS) -> None:
-        response = client.v1.memories.with_raw_response.list()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        memory = response.parse()
-        assert_matches_type(MemoryListResponse, memory, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    def test_streaming_response_list(self, client: EverMemOS) -> None:
-        with client.v1.memories.with_streaming_response.list() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            memory = response.parse()
-            assert_matches_type(MemoryListResponse, memory, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
     def test_method_delete(self, client: EverMemOS) -> None:
         memory = client.v1.memories.delete()
         assert_matches_type(MemoryDeleteResponse, memory, path=["response"])
@@ -144,6 +117,103 @@ class TestMemories:
 
             memory = response.parse()
             assert_matches_type(MemoryDeleteResponse, memory, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_get(self, client: EverMemOS) -> None:
+        memory = client.v1.memories.get()
+        assert_matches_type(MemoryGetResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_get(self, client: EverMemOS) -> None:
+        response = client.v1.memories.with_raw_response.get()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        memory = response.parse()
+        assert_matches_type(MemoryGetResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_get(self, client: EverMemOS) -> None:
+        with client.v1.memories.with_streaming_response.get() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            memory = response.parse()
+            assert_matches_type(MemoryGetResponse, memory, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_load(self, client: EverMemOS) -> None:
+        memory = client.v1.memories.load(
+            conversation_meta={"group_id": "chat_user_001_assistant"},
+        )
+        assert_matches_type(MemoryLoadResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_load_with_all_params(self, client: EverMemOS) -> None:
+        memory = client.v1.memories.load(
+            conversation_meta={
+                "group_id": "chat_user_001_assistant",
+                "created_at": "2025-06-26T00:00:00Z",
+                "default_timezone": "UTC",
+                "description": "Conversation between user and assistant",
+                "name": "User Support Chat",
+                "scene": "assistant",
+                "scene_desc": {"description": "bar"},
+                "tags": ["support"],
+                "user_details": {
+                    "user_001": "bar",
+                    "robot_001": "bar",
+                },
+            },
+            conversation_list=[
+                {
+                    "content": "Hello",
+                    "create_time": "2025-06-26T00:00:00Z",
+                    "extra": {"foo": "bar"},
+                    "message_id": "msg_001",
+                    "refer_list": [{"foo": "bar"}],
+                    "role": "user",
+                    "sender": "user_001",
+                    "sender_name": "user",
+                    "type": "text",
+                }
+            ],
+            version="1.0.0",
+        )
+        assert_matches_type(MemoryLoadResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_load(self, client: EverMemOS) -> None:
+        response = client.v1.memories.with_raw_response.load(
+            conversation_meta={"group_id": "chat_user_001_assistant"},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        memory = response.parse()
+        assert_matches_type(MemoryLoadResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_load(self, client: EverMemOS) -> None:
+        with client.v1.memories.with_streaming_response.load(
+            conversation_meta={"group_id": "chat_user_001_assistant"},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            memory = response.parse()
+            assert_matches_type(MemoryLoadResponse, memory, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -242,34 +312,6 @@ class TestAsyncMemories:
 
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
-    async def test_method_list(self, async_client: AsyncEverMemOS) -> None:
-        memory = await async_client.v1.memories.list()
-        assert_matches_type(MemoryListResponse, memory, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_raw_response_list(self, async_client: AsyncEverMemOS) -> None:
-        response = await async_client.v1.memories.with_raw_response.list()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        memory = await response.parse()
-        assert_matches_type(MemoryListResponse, memory, path=["response"])
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncEverMemOS) -> None:
-        async with async_client.v1.memories.with_streaming_response.list() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            memory = await response.parse()
-            assert_matches_type(MemoryListResponse, memory, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Prism tests are disabled")
-    @parametrize
     async def test_method_delete(self, async_client: AsyncEverMemOS) -> None:
         memory = await async_client.v1.memories.delete()
         assert_matches_type(MemoryDeleteResponse, memory, path=["response"])
@@ -303,6 +345,103 @@ class TestAsyncMemories:
 
             memory = await response.parse()
             assert_matches_type(MemoryDeleteResponse, memory, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_get(self, async_client: AsyncEverMemOS) -> None:
+        memory = await async_client.v1.memories.get()
+        assert_matches_type(MemoryGetResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_get(self, async_client: AsyncEverMemOS) -> None:
+        response = await async_client.v1.memories.with_raw_response.get()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        memory = await response.parse()
+        assert_matches_type(MemoryGetResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_get(self, async_client: AsyncEverMemOS) -> None:
+        async with async_client.v1.memories.with_streaming_response.get() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            memory = await response.parse()
+            assert_matches_type(MemoryGetResponse, memory, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_load(self, async_client: AsyncEverMemOS) -> None:
+        memory = await async_client.v1.memories.load(
+            conversation_meta={"group_id": "chat_user_001_assistant"},
+        )
+        assert_matches_type(MemoryLoadResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_load_with_all_params(self, async_client: AsyncEverMemOS) -> None:
+        memory = await async_client.v1.memories.load(
+            conversation_meta={
+                "group_id": "chat_user_001_assistant",
+                "created_at": "2025-06-26T00:00:00Z",
+                "default_timezone": "UTC",
+                "description": "Conversation between user and assistant",
+                "name": "User Support Chat",
+                "scene": "assistant",
+                "scene_desc": {"description": "bar"},
+                "tags": ["support"],
+                "user_details": {
+                    "user_001": "bar",
+                    "robot_001": "bar",
+                },
+            },
+            conversation_list=[
+                {
+                    "content": "Hello",
+                    "create_time": "2025-06-26T00:00:00Z",
+                    "extra": {"foo": "bar"},
+                    "message_id": "msg_001",
+                    "refer_list": [{"foo": "bar"}],
+                    "role": "user",
+                    "sender": "user_001",
+                    "sender_name": "user",
+                    "type": "text",
+                }
+            ],
+            version="1.0.0",
+        )
+        assert_matches_type(MemoryLoadResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_load(self, async_client: AsyncEverMemOS) -> None:
+        response = await async_client.v1.memories.with_raw_response.load(
+            conversation_meta={"group_id": "chat_user_001_assistant"},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        memory = await response.parse()
+        assert_matches_type(MemoryLoadResponse, memory, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_load(self, async_client: AsyncEverMemOS) -> None:
+        async with async_client.v1.memories.with_streaming_response.load(
+            conversation_meta={"group_id": "chat_user_001_assistant"},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            memory = await response.parse()
+            assert_matches_type(MemoryLoadResponse, memory, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

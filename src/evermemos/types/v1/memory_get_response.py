@@ -8,7 +8,7 @@ from .metadata import Metadata
 from ..._models import BaseModel
 
 __all__ = [
-    "MemoryListResponse",
+    "MemoryGetResponse",
     "Result",
     "ResultMemory",
     "ResultMemoryProfileModel",
@@ -258,7 +258,7 @@ class Result(BaseModel):
     total_count: Optional[int] = None
 
 
-class MemoryListResponse(BaseModel):
+class MemoryGetResponse(BaseModel):
     """Memory fetch API response
 
     Response for GET /api/v1/memories endpoint.
