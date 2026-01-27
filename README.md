@@ -124,6 +124,34 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
 
+## Nested params
+
+Nested parameters are dictionaries, typed using `TypedDict`, for example:
+
+```python
+from evermemos import EverMemOS
+
+client = EverMemOS()
+
+response = client.v1.memories.load(
+    conversation_meta={
+        "group_id": "chat_user_001_assistant",
+        "created_at": "2025-06-26T00:00:00Z",
+        "default_timezone": "UTC",
+        "description": "Conversation between user and assistant",
+        "name": "User Support Chat",
+        "scene": "assistant",
+        "scene_desc": {"description": "bar"},
+        "tags": ["support"],
+        "user_details": {
+            "user_001": "bar",
+            "robot_001": "bar",
+        },
+    },
+)
+print(response.conversation_meta)
+```
+
 ## Handling errors
 
 When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `evermemos.APIConnectionError` is raised.
