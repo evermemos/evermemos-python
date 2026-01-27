@@ -4,6 +4,14 @@ from __future__ import annotations
 
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
+from .stats.stats import (
+    StatsResource,
+    AsyncStatsResource,
+    StatsResourceWithRawResponse,
+    AsyncStatsResourceWithRawResponse,
+    StatsResourceWithStreamingResponse,
+    AsyncStatsResourceWithStreamingResponse,
+)
 from .memories.memories import (
     MemoriesResource,
     AsyncMemoriesResource,
@@ -11,6 +19,14 @@ from .memories.memories import (
     AsyncMemoriesResourceWithRawResponse,
     MemoriesResourceWithStreamingResponse,
     AsyncMemoriesResourceWithStreamingResponse,
+)
+from .global_user_profile.global_user_profile import (
+    GlobalUserProfileResource,
+    AsyncGlobalUserProfileResource,
+    GlobalUserProfileResourceWithRawResponse,
+    AsyncGlobalUserProfileResourceWithRawResponse,
+    GlobalUserProfileResourceWithStreamingResponse,
+    AsyncGlobalUserProfileResourceWithStreamingResponse,
 )
 
 __all__ = ["V1Resource", "AsyncV1Resource"]
@@ -20,6 +36,14 @@ class V1Resource(SyncAPIResource):
     @cached_property
     def memories(self) -> MemoriesResource:
         return MemoriesResource(self._client)
+
+    @cached_property
+    def global_user_profile(self) -> GlobalUserProfileResource:
+        return GlobalUserProfileResource(self._client)
+
+    @cached_property
+    def stats(self) -> StatsResource:
+        return StatsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> V1ResourceWithRawResponse:
@@ -45,6 +69,14 @@ class AsyncV1Resource(AsyncAPIResource):
     @cached_property
     def memories(self) -> AsyncMemoriesResource:
         return AsyncMemoriesResource(self._client)
+
+    @cached_property
+    def global_user_profile(self) -> AsyncGlobalUserProfileResource:
+        return AsyncGlobalUserProfileResource(self._client)
+
+    @cached_property
+    def stats(self) -> AsyncStatsResource:
+        return AsyncStatsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncV1ResourceWithRawResponse:
@@ -74,6 +106,14 @@ class V1ResourceWithRawResponse:
     def memories(self) -> MemoriesResourceWithRawResponse:
         return MemoriesResourceWithRawResponse(self._v1.memories)
 
+    @cached_property
+    def global_user_profile(self) -> GlobalUserProfileResourceWithRawResponse:
+        return GlobalUserProfileResourceWithRawResponse(self._v1.global_user_profile)
+
+    @cached_property
+    def stats(self) -> StatsResourceWithRawResponse:
+        return StatsResourceWithRawResponse(self._v1.stats)
+
 
 class AsyncV1ResourceWithRawResponse:
     def __init__(self, v1: AsyncV1Resource) -> None:
@@ -82,6 +122,14 @@ class AsyncV1ResourceWithRawResponse:
     @cached_property
     def memories(self) -> AsyncMemoriesResourceWithRawResponse:
         return AsyncMemoriesResourceWithRawResponse(self._v1.memories)
+
+    @cached_property
+    def global_user_profile(self) -> AsyncGlobalUserProfileResourceWithRawResponse:
+        return AsyncGlobalUserProfileResourceWithRawResponse(self._v1.global_user_profile)
+
+    @cached_property
+    def stats(self) -> AsyncStatsResourceWithRawResponse:
+        return AsyncStatsResourceWithRawResponse(self._v1.stats)
 
 
 class V1ResourceWithStreamingResponse:
@@ -92,6 +140,14 @@ class V1ResourceWithStreamingResponse:
     def memories(self) -> MemoriesResourceWithStreamingResponse:
         return MemoriesResourceWithStreamingResponse(self._v1.memories)
 
+    @cached_property
+    def global_user_profile(self) -> GlobalUserProfileResourceWithStreamingResponse:
+        return GlobalUserProfileResourceWithStreamingResponse(self._v1.global_user_profile)
+
+    @cached_property
+    def stats(self) -> StatsResourceWithStreamingResponse:
+        return StatsResourceWithStreamingResponse(self._v1.stats)
+
 
 class AsyncV1ResourceWithStreamingResponse:
     def __init__(self, v1: AsyncV1Resource) -> None:
@@ -100,3 +156,11 @@ class AsyncV1ResourceWithStreamingResponse:
     @cached_property
     def memories(self) -> AsyncMemoriesResourceWithStreamingResponse:
         return AsyncMemoriesResourceWithStreamingResponse(self._v1.memories)
+
+    @cached_property
+    def global_user_profile(self) -> AsyncGlobalUserProfileResourceWithStreamingResponse:
+        return AsyncGlobalUserProfileResourceWithStreamingResponse(self._v1.global_user_profile)
+
+    @cached_property
+    def stats(self) -> AsyncStatsResourceWithStreamingResponse:
+        return AsyncStatsResourceWithStreamingResponse(self._v1.stats)

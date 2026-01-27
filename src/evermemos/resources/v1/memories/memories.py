@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Iterable, Optional
 
 import httpx
 
 from ...._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
-from ....types.v1 import memory_create_params, memory_delete_params
+from ....types.v1 import memory_load_params, memory_create_params, memory_delete_params
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
     to_raw_response_wrapper,
@@ -26,7 +26,8 @@ from .conversation_meta import (
     ConversationMetaResourceWithStreamingResponse,
     AsyncConversationMetaResourceWithStreamingResponse,
 )
-from ....types.v1.memory_list_response import MemoryListResponse
+from ....types.v1.memory_get_response import MemoryGetResponse
+from ....types.v1.memory_load_response import MemoryLoadResponse
 from ....types.v1.memory_create_response import MemoryCreateResponse
 from ....types.v1.memory_delete_response import MemoryDeleteResponse
 from ....types.v1.memory_search_response import MemorySearchResponse
@@ -87,9 +88,11 @@ class MemoriesResource(SyncAPIResource):
 
           message_id: Message unique identifier
 
-          sender: Sender user ID
+          sender: Sender user ID (required). Also used as user_id internally for memory ownership.
 
-          group_id: Group ID
+          group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
+              '\\__group' suffix, representing single-user mode where each user's messages are
+              extracted into separate memory spaces.
 
           group_name: Group name
 
@@ -133,25 +136,6 @@ class MemoriesResource(SyncAPIResource):
             cast_to=MemoryCreateResponse,
         )
 
-    def list(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MemoryListResponse:
-        """Retrieve memory records by memory_type with optional filters"""
-        return self._get(
-            "/api/v1/memories",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=MemoryListResponse,
-        )
-
     def delete(
         self,
         *,
@@ -167,28 +151,6 @@ class MemoriesResource(SyncAPIResource):
     ) -> MemoryDeleteResponse:
         """
         Delete memory records based on combined filter criteria
-
-                ## Functionality:
-                - Delete records matching combined filter conditions
-                - If multiple conditions provided, ALL must be satisfied (AND logic)
-                - At least one filter must be specified
-
-                ## Filter Parameters (combined with AND):
-                - **event_id**: Filter by specific event_id
-                - **user_id**: Filter by user ID
-                - **group_id**: Filter by group ID
-
-                ## Examples:
-                - event_id only: Delete specific memory
-                - user_id only: Delete all user's memories
-                - user_id + group_id: Delete user's memories in specific group
-                - event_id + user_id + group_id: Delete if all conditions match
-
-                ## Use cases:
-                - User requests data deletion
-                - Group chat cleanup
-                - Privacy compliance (GDPR, etc.)
-                - Conversation history management
 
         Args:
           event_id: Memory event_id (filter condition)
@@ -219,6 +181,74 @@ class MemoriesResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=MemoryDeleteResponse,
+        )
+
+    def get(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> MemoryGetResponse:
+        """Retrieve memory records by memory_type with optional filters"""
+        return self._get(
+            "/api/v1/memories",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=MemoryGetResponse,
+        )
+
+    def load(
+        self,
+        *,
+        conversation_meta: memory_load_params.ConversationMeta,
+        conversation_list: Optional[Iterable[memory_load_params.ConversationList]] | Omit = omit,
+        version: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> MemoryLoadResponse:
+        """Import conversation metadata and message list in one request.
+
+        Messages are
+        queued for processing.
+
+        Args:
+          conversation_meta: Conversation metadata for batch import.
+
+          conversation_list: Message list.
+
+          version: Format version.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._post(
+            "/api/v1/memories/import",
+            body=maybe_transform(
+                {
+                    "conversation_meta": conversation_meta,
+                    "conversation_list": conversation_list,
+                    "version": version,
+                },
+                memory_load_params.MemoryLoadParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=MemoryLoadResponse,
         )
 
     def search(
@@ -297,9 +327,11 @@ class AsyncMemoriesResource(AsyncAPIResource):
 
           message_id: Message unique identifier
 
-          sender: Sender user ID
+          sender: Sender user ID (required). Also used as user_id internally for memory ownership.
 
-          group_id: Group ID
+          group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
+              '\\__group' suffix, representing single-user mode where each user's messages are
+              extracted into separate memory spaces.
 
           group_name: Group name
 
@@ -343,25 +375,6 @@ class AsyncMemoriesResource(AsyncAPIResource):
             cast_to=MemoryCreateResponse,
         )
 
-    async def list(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MemoryListResponse:
-        """Retrieve memory records by memory_type with optional filters"""
-        return await self._get(
-            "/api/v1/memories",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=MemoryListResponse,
-        )
-
     async def delete(
         self,
         *,
@@ -377,28 +390,6 @@ class AsyncMemoriesResource(AsyncAPIResource):
     ) -> MemoryDeleteResponse:
         """
         Delete memory records based on combined filter criteria
-
-                ## Functionality:
-                - Delete records matching combined filter conditions
-                - If multiple conditions provided, ALL must be satisfied (AND logic)
-                - At least one filter must be specified
-
-                ## Filter Parameters (combined with AND):
-                - **event_id**: Filter by specific event_id
-                - **user_id**: Filter by user ID
-                - **group_id**: Filter by group ID
-
-                ## Examples:
-                - event_id only: Delete specific memory
-                - user_id only: Delete all user's memories
-                - user_id + group_id: Delete user's memories in specific group
-                - event_id + user_id + group_id: Delete if all conditions match
-
-                ## Use cases:
-                - User requests data deletion
-                - Group chat cleanup
-                - Privacy compliance (GDPR, etc.)
-                - Conversation history management
 
         Args:
           event_id: Memory event_id (filter condition)
@@ -431,6 +422,74 @@ class AsyncMemoriesResource(AsyncAPIResource):
             cast_to=MemoryDeleteResponse,
         )
 
+    async def get(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> MemoryGetResponse:
+        """Retrieve memory records by memory_type with optional filters"""
+        return await self._get(
+            "/api/v1/memories",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=MemoryGetResponse,
+        )
+
+    async def load(
+        self,
+        *,
+        conversation_meta: memory_load_params.ConversationMeta,
+        conversation_list: Optional[Iterable[memory_load_params.ConversationList]] | Omit = omit,
+        version: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> MemoryLoadResponse:
+        """Import conversation metadata and message list in one request.
+
+        Messages are
+        queued for processing.
+
+        Args:
+          conversation_meta: Conversation metadata for batch import.
+
+          conversation_list: Message list.
+
+          version: Format version.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._post(
+            "/api/v1/memories/import",
+            body=await async_maybe_transform(
+                {
+                    "conversation_meta": conversation_meta,
+                    "conversation_list": conversation_list,
+                    "version": version,
+                },
+                memory_load_params.MemoryLoadParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=MemoryLoadResponse,
+        )
+
     async def search(
         self,
         *,
@@ -461,11 +520,14 @@ class MemoriesResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             memories.create,
         )
-        self.list = to_raw_response_wrapper(
-            memories.list,
-        )
         self.delete = to_raw_response_wrapper(
             memories.delete,
+        )
+        self.get = to_raw_response_wrapper(
+            memories.get,
+        )
+        self.load = to_raw_response_wrapper(
+            memories.load,
         )
         self.search = to_raw_response_wrapper(
             memories.search,
@@ -483,11 +545,14 @@ class AsyncMemoriesResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             memories.create,
         )
-        self.list = async_to_raw_response_wrapper(
-            memories.list,
-        )
         self.delete = async_to_raw_response_wrapper(
             memories.delete,
+        )
+        self.get = async_to_raw_response_wrapper(
+            memories.get,
+        )
+        self.load = async_to_raw_response_wrapper(
+            memories.load,
         )
         self.search = async_to_raw_response_wrapper(
             memories.search,
@@ -505,11 +570,14 @@ class MemoriesResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             memories.create,
         )
-        self.list = to_streamed_response_wrapper(
-            memories.list,
-        )
         self.delete = to_streamed_response_wrapper(
             memories.delete,
+        )
+        self.get = to_streamed_response_wrapper(
+            memories.get,
+        )
+        self.load = to_streamed_response_wrapper(
+            memories.load,
         )
         self.search = to_streamed_response_wrapper(
             memories.search,
@@ -527,11 +595,14 @@ class AsyncMemoriesResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             memories.create,
         )
-        self.list = async_to_streamed_response_wrapper(
-            memories.list,
-        )
         self.delete = async_to_streamed_response_wrapper(
             memories.delete,
+        )
+        self.get = async_to_streamed_response_wrapper(
+            memories.get,
+        )
+        self.load = async_to_streamed_response_wrapper(
+            memories.load,
         )
         self.search = async_to_streamed_response_wrapper(
             memories.search,

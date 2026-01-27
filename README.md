@@ -33,10 +33,10 @@ client = EverMemOS(
 )
 
 memory = client.v1.memories.create(
-    content="I prefer morning meetings, usually around 9am works best for me.",
+    content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_alice",
+    sender="user_001",
 )
 print(memory.message)
 ```
@@ -62,10 +62,10 @@ client = AsyncEverMemOS(
 
 async def main() -> None:
     memory = await client.v1.memories.create(
-        content="I prefer morning meetings, usually around 9am works best for me.",
+        content="Let's discuss the technical solution for the new feature today",
         create_time="2025-01-15T10:00:00+00:00",
         message_id="msg_001",
-        sender="user_alice",
+        sender="user_001",
     )
     print(memory.message)
 
@@ -101,10 +101,10 @@ async def main() -> None:
         http_client=DefaultAioHttpClient(),
     ) as client:
         memory = await client.v1.memories.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
         )
         print(memory.message)
 
@@ -120,6 +120,34 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 - Converting to a dictionary, `model.to_dict()`
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
+
+## Nested params
+
+Nested parameters are dictionaries, typed using `TypedDict`, for example:
+
+```python
+from evermemos import EverMemOS
+
+client = EverMemOS()
+
+response = client.v1.memories.load(
+    conversation_meta={
+        "group_id": "chat_user_001_assistant",
+        "created_at": "2025-06-26T00:00:00Z",
+        "default_timezone": "UTC",
+        "description": "Conversation between user and assistant",
+        "name": "User Support Chat",
+        "scene": "assistant",
+        "scene_desc": {"description": "bar"},
+        "tags": ["support"],
+        "user_details": {
+            "user_001": "bar",
+            "robot_001": "bar",
+        },
+    },
+)
+print(response.conversation_meta)
+```
 
 ## Handling errors
 
@@ -138,10 +166,10 @@ client = EverMemOS()
 
 try:
     client.v1.memories.create(
-        content="I prefer morning meetings, usually around 9am works best for me.",
+        content="Let's discuss the technical solution for the new feature today",
         create_time="2025-01-15T10:00:00+00:00",
         message_id="msg_001",
-        sender="user_alice",
+        sender="user_001",
     )
 except evermemos.APIConnectionError as e:
     print("The server could not be reached")
@@ -186,10 +214,10 @@ client = EverMemOS(
 
 # Or, configure per-request:
 client.with_options(max_retries=5).v1.memories.create(
-    content="I prefer morning meetings, usually around 9am works best for me.",
+    content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_alice",
+    sender="user_001",
 )
 ```
 
@@ -214,10 +242,10 @@ client = EverMemOS(
 
 # Override per-request:
 client.with_options(timeout=5.0).v1.memories.create(
-    content="I prefer morning meetings, usually around 9am works best for me.",
+    content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_alice",
+    sender="user_001",
 )
 ```
 
@@ -260,10 +288,10 @@ from evermemos import EverMemOS
 
 client = EverMemOS()
 response = client.v1.memories.with_raw_response.create(
-    content="I prefer morning meetings, usually around 9am works best for me.",
+    content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_alice",
+    sender="user_001",
 )
 print(response.headers.get('X-My-Header'))
 
@@ -283,10 +311,10 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 
 ```python
 with client.v1.memories.with_streaming_response.create(
-    content="I prefer morning meetings, usually around 9am works best for me.",
+    content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
-    sender="user_alice",
+    sender="user_001",
 ) as response:
     print(response.headers.get("X-My-Header"))
 

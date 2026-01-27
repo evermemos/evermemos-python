@@ -52,7 +52,6 @@ class ConversationMetaResource(SyncAPIResource):
         name: str,
         scene: str,
         scene_desc: Dict[str, object],
-        version: str,
         default_timezone: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
@@ -69,19 +68,6 @@ class ConversationMetaResource(SyncAPIResource):
         Save conversation metadata information, including scene, participants, tags,
         etc.
 
-                ## Functionality:
-                - If group_id exists, update the entire record (upsert)
-                - If group_id does not exist, create a new record
-                - If group_id is omitted, save as default config for the scene
-                - All fields must be provided with complete data
-
-                ## Default Config:
-                - Default config is used as fallback when specific group_id config not found
-
-                ## Notes:
-                - This is a full update interface that will replace the entire record
-                - If you only need to update partial fields, use the PATCH /conversation-meta interface
-
         Args:
           created_at: Conversation creation time (ISO 8601 format)
 
@@ -96,8 +82,6 @@ class ConversationMetaResource(SyncAPIResource):
                 conversations
 
           scene_desc: Scene description object, can include fields like description
-
-          version: Metadata version number
 
           default_timezone: Default timezone
 
@@ -126,7 +110,6 @@ class ConversationMetaResource(SyncAPIResource):
                     "name": name,
                     "scene": scene,
                     "scene_desc": scene_desc,
-                    "version": version,
                     "default_timezone": default_timezone,
                     "description": description,
                     "group_id": group_id,
@@ -160,12 +143,6 @@ class ConversationMetaResource(SyncAPIResource):
     ) -> ConversationMetaUpdateResponse:
         """
         Partially update conversation metadata, only updating provided fields
-
-                ## Functionality:
-                - Locate the conversation metadata to update by group_id
-                - When group_id is null or not provided, updates the default config
-                - Only update fields provided in the request, keep unchanged fields as-is
-                - Suitable for scenarios requiring modification of partial information
 
         Args:
           default_timezone: New default timezone
@@ -220,22 +197,7 @@ class ConversationMetaResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConversationMetaGetResponse:
-        """
-        Retrieve conversation metadata by group_id with fallback to default config
-
-                ## Functionality:
-                - Query by group_id to get conversation metadata
-                - If group_id not found, fallback to default config
-                - If group_id not provided, returns default config
-
-                ## Fallback Logic:
-                - Try exact group_id first, then use default config
-
-                ## Use Cases:
-                - Get specific group's metadata
-                - Get default settings (group_id not provided or null)
-                - Auto-fallback to defaults when group config not set
-        """
+        """Retrieve conversation metadata by group_id with fallback to default config"""
         return self._get(
             "/api/v1/memories/conversation-meta",
             options=make_request_options(
@@ -272,7 +234,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         name: str,
         scene: str,
         scene_desc: Dict[str, object],
-        version: str,
         default_timezone: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
@@ -289,19 +250,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         Save conversation metadata information, including scene, participants, tags,
         etc.
 
-                ## Functionality:
-                - If group_id exists, update the entire record (upsert)
-                - If group_id does not exist, create a new record
-                - If group_id is omitted, save as default config for the scene
-                - All fields must be provided with complete data
-
-                ## Default Config:
-                - Default config is used as fallback when specific group_id config not found
-
-                ## Notes:
-                - This is a full update interface that will replace the entire record
-                - If you only need to update partial fields, use the PATCH /conversation-meta interface
-
         Args:
           created_at: Conversation creation time (ISO 8601 format)
 
@@ -316,8 +264,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
                 conversations
 
           scene_desc: Scene description object, can include fields like description
-
-          version: Metadata version number
 
           default_timezone: Default timezone
 
@@ -346,7 +292,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
                     "name": name,
                     "scene": scene,
                     "scene_desc": scene_desc,
-                    "version": version,
                     "default_timezone": default_timezone,
                     "description": description,
                     "group_id": group_id,
@@ -380,12 +325,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
     ) -> ConversationMetaUpdateResponse:
         """
         Partially update conversation metadata, only updating provided fields
-
-                ## Functionality:
-                - Locate the conversation metadata to update by group_id
-                - When group_id is null or not provided, updates the default config
-                - Only update fields provided in the request, keep unchanged fields as-is
-                - Suitable for scenarios requiring modification of partial information
 
         Args:
           default_timezone: New default timezone
@@ -440,22 +379,7 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConversationMetaGetResponse:
-        """
-        Retrieve conversation metadata by group_id with fallback to default config
-
-                ## Functionality:
-                - Query by group_id to get conversation metadata
-                - If group_id not found, fallback to default config
-                - If group_id not provided, returns default config
-
-                ## Fallback Logic:
-                - Try exact group_id first, then use default config
-
-                ## Use Cases:
-                - Get specific group's metadata
-                - Get default settings (group_id not provided or null)
-                - Auto-fallback to defaults when group config not set
-        """
+        """Retrieve conversation metadata by group_id with fallback to default config"""
         return await self._get(
             "/api/v1/memories/conversation-meta",
             options=make_request_options(
