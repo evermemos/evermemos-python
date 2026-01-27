@@ -29,9 +29,6 @@ class ConversationMetaCreateParams(TypedDict, total=False):
     scene_desc: Required[Dict[str, object]]
     """Scene description object, can include fields like description"""
 
-    version: Required[str]
-    """Metadata version number"""
-
     default_timezone: Optional[str]
     """Default timezone"""
 

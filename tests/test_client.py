@@ -855,10 +855,10 @@ class TestEverMemOS:
 
         with pytest.raises(APITimeoutError):
             client.v1.memories.with_streaming_response.create(
-                content="I prefer morning meetings, usually around 9am works best for me.",
+                content="Let's discuss the technical solution for the new feature today",
                 create_time="2025-01-15T10:00:00+00:00",
                 message_id="msg_001",
-                sender="user_alice",
+                sender="user_001",
             ).__enter__()
 
         assert _get_open_connections(client) == 0
@@ -870,10 +870,10 @@ class TestEverMemOS:
 
         with pytest.raises(APIStatusError):
             client.v1.memories.with_streaming_response.create(
-                content="I prefer morning meetings, usually around 9am works best for me.",
+                content="Let's discuss the technical solution for the new feature today",
                 create_time="2025-01-15T10:00:00+00:00",
                 message_id="msg_001",
-                sender="user_alice",
+                sender="user_001",
             ).__enter__()
         assert _get_open_connections(client) == 0
 
@@ -904,10 +904,10 @@ class TestEverMemOS:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = client.v1.memories.with_raw_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
         )
 
         assert response.retries_taken == failures_before_success
@@ -933,10 +933,10 @@ class TestEverMemOS:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = client.v1.memories.with_raw_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
             extra_headers={"x-stainless-retry-count": Omit()},
         )
 
@@ -962,10 +962,10 @@ class TestEverMemOS:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = client.v1.memories.with_raw_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
             extra_headers={"x-stainless-retry-count": "42"},
         )
 
@@ -1782,10 +1782,10 @@ class TestAsyncEverMemOS:
 
         with pytest.raises(APITimeoutError):
             await async_client.v1.memories.with_streaming_response.create(
-                content="I prefer morning meetings, usually around 9am works best for me.",
+                content="Let's discuss the technical solution for the new feature today",
                 create_time="2025-01-15T10:00:00+00:00",
                 message_id="msg_001",
-                sender="user_alice",
+                sender="user_001",
             ).__aenter__()
 
         assert _get_open_connections(async_client) == 0
@@ -1799,10 +1799,10 @@ class TestAsyncEverMemOS:
 
         with pytest.raises(APIStatusError):
             await async_client.v1.memories.with_streaming_response.create(
-                content="I prefer morning meetings, usually around 9am works best for me.",
+                content="Let's discuss the technical solution for the new feature today",
                 create_time="2025-01-15T10:00:00+00:00",
                 message_id="msg_001",
-                sender="user_alice",
+                sender="user_001",
             ).__aenter__()
         assert _get_open_connections(async_client) == 0
 
@@ -1833,10 +1833,10 @@ class TestAsyncEverMemOS:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = await client.v1.memories.with_raw_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
         )
 
         assert response.retries_taken == failures_before_success
@@ -1862,10 +1862,10 @@ class TestAsyncEverMemOS:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = await client.v1.memories.with_raw_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
             extra_headers={"x-stainless-retry-count": Omit()},
         )
 
@@ -1891,10 +1891,10 @@ class TestAsyncEverMemOS:
         respx_mock.post("/api/v1/memories").mock(side_effect=retry_handler)
 
         response = await client.v1.memories.with_raw_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
             extra_headers={"x-stainless-retry-count": "42"},
         )
 

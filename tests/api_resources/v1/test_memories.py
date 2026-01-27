@@ -26,10 +26,10 @@ class TestMemories:
     @parametrize
     def test_method_create(self, client: EverMemOS) -> None:
         memory = client.v1.memories.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
         )
         assert_matches_type(MemoryCreateResponse, memory, path=["response"])
 
@@ -37,15 +37,15 @@ class TestMemories:
     @parametrize
     def test_method_create_with_all_params(self, client: EverMemOS) -> None:
         memory = client.v1.memories.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
-            group_id="group_project_123",
-            group_name="Project Discussion",
-            refer_list=["string"],
+            sender="user_001",
+            group_id="group_123",
+            group_name="Project Discussion Group",
+            refer_list=["msg_000"],
             role="user",
-            sender_name="Alice",
+            sender_name="John",
         )
         assert_matches_type(MemoryCreateResponse, memory, path=["response"])
 
@@ -53,10 +53,10 @@ class TestMemories:
     @parametrize
     def test_raw_response_create(self, client: EverMemOS) -> None:
         response = client.v1.memories.with_raw_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
         )
 
         assert response.is_closed is True
@@ -68,10 +68,10 @@ class TestMemories:
     @parametrize
     def test_streaming_response_create(self, client: EverMemOS) -> None:
         with client.v1.memories.with_streaming_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -119,9 +119,9 @@ class TestMemories:
     @parametrize
     def test_method_delete_with_all_params(self, client: EverMemOS) -> None:
         memory = client.v1.memories.delete(
-            event_id="__all__",
-            group_id="group_project_123",
-            user_id="user_alice",
+            event_id="507f1f77bcf86cd799439011",
+            group_id="group_456",
+            user_id="user_123",
         )
         assert_matches_type(MemoryDeleteResponse, memory, path=["response"])
 
@@ -185,10 +185,10 @@ class TestAsyncMemories:
     @parametrize
     async def test_method_create(self, async_client: AsyncEverMemOS) -> None:
         memory = await async_client.v1.memories.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
         )
         assert_matches_type(MemoryCreateResponse, memory, path=["response"])
 
@@ -196,15 +196,15 @@ class TestAsyncMemories:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncEverMemOS) -> None:
         memory = await async_client.v1.memories.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
-            group_id="group_project_123",
-            group_name="Project Discussion",
-            refer_list=["string"],
+            sender="user_001",
+            group_id="group_123",
+            group_name="Project Discussion Group",
+            refer_list=["msg_000"],
             role="user",
-            sender_name="Alice",
+            sender_name="John",
         )
         assert_matches_type(MemoryCreateResponse, memory, path=["response"])
 
@@ -212,10 +212,10 @@ class TestAsyncMemories:
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncEverMemOS) -> None:
         response = await async_client.v1.memories.with_raw_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
         )
 
         assert response.is_closed is True
@@ -227,10 +227,10 @@ class TestAsyncMemories:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncEverMemOS) -> None:
         async with async_client.v1.memories.with_streaming_response.create(
-            content="I prefer morning meetings, usually around 9am works best for me.",
+            content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
-            sender="user_alice",
+            sender="user_001",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -278,9 +278,9 @@ class TestAsyncMemories:
     @parametrize
     async def test_method_delete_with_all_params(self, async_client: AsyncEverMemOS) -> None:
         memory = await async_client.v1.memories.delete(
-            event_id="__all__",
-            group_id="group_project_123",
-            user_id="user_alice",
+            event_id="507f1f77bcf86cd799439011",
+            group_id="group_456",
+            user_id="user_123",
         )
         assert_matches_type(MemoryDeleteResponse, memory, path=["response"])
 

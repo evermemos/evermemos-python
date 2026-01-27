@@ -26,10 +26,12 @@ class TestConversationMeta:
     def test_method_create(self, client: EverMemOS) -> None:
         conversation_meta = client.v1.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
-            name="Backend API Project",
+            name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={"description": "bar"},
-            version="1.0",
+            scene_desc={
+                "description": "bar",
+                "type": "bar",
+            },
         )
         assert_matches_type(ConversationMetaCreateResponse, conversation_meta, path=["response"])
 
@@ -38,25 +40,27 @@ class TestConversationMeta:
     def test_method_create_with_all_params(self, client: EverMemOS) -> None:
         conversation_meta = client.v1.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
-            name="Backend API Project",
+            name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={"description": "bar"},
-            version="1.0",
+            scene_desc={
+                "description": "bar",
+                "type": "bar",
+            },
             default_timezone="UTC",
-            description="Discussion channel for backend API development",
-            group_id="group_project_123",
-            tags=["backend", "api", "engineering"],
+            description="Technical discussion for new feature development",
+            group_id="group_123",
+            tags=["work", "technical"],
             user_details={
-                "user_alice": {
-                    "custom_role": "tech_lead",
-                    "extra": {"department": "bar"},
-                    "full_name": "Alice Chen",
-                    "role": "user",
+                "bot_001": {
+                    "custom_role": "assistant",
+                    "extra": {"type": "bar"},
+                    "full_name": "AI Assistant",
+                    "role": "assistant",
                 },
-                "user_bob": {
+                "user_001": {
                     "custom_role": "developer",
                     "extra": {"department": "bar"},
-                    "full_name": "Bob Smith",
+                    "full_name": "John Smith",
                     "role": "user",
                 },
             },
@@ -68,10 +72,12 @@ class TestConversationMeta:
     def test_raw_response_create(self, client: EverMemOS) -> None:
         response = client.v1.memories.conversation_meta.with_raw_response.create(
             created_at="2025-01-15T10:00:00+00:00",
-            name="Backend API Project",
+            name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={"description": "bar"},
-            version="1.0",
+            scene_desc={
+                "description": "bar",
+                "type": "bar",
+            },
         )
 
         assert response.is_closed is True
@@ -84,10 +90,12 @@ class TestConversationMeta:
     def test_streaming_response_create(self, client: EverMemOS) -> None:
         with client.v1.memories.conversation_meta.with_streaming_response.create(
             created_at="2025-01-15T10:00:00+00:00",
-            name="Backend API Project",
+            name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={"description": "bar"},
-            version="1.0",
+            scene_desc={
+                "description": "bar",
+                "type": "bar",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -108,11 +116,11 @@ class TestConversationMeta:
     def test_method_update_with_all_params(self, client: EverMemOS) -> None:
         conversation_meta = client.v1.memories.conversation_meta.update(
             default_timezone="Asia/Shanghai",
-            description="Updated discussion channel for backend API v2 development",
-            group_id="group_project_123",
-            name="Backend API Project - Phase 2",
+            description="Updated description",
+            group_id="group_123",
+            name="New Conversation Name",
             scene_desc={"description": "bar"},
-            tags=["backend", "api", "engineering", "v2"],
+            tags=["tag1", "tag2"],
             user_details={
                 "user_001": {
                     "custom_role": "lead",
@@ -185,10 +193,12 @@ class TestAsyncConversationMeta:
     async def test_method_create(self, async_client: AsyncEverMemOS) -> None:
         conversation_meta = await async_client.v1.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
-            name="Backend API Project",
+            name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={"description": "bar"},
-            version="1.0",
+            scene_desc={
+                "description": "bar",
+                "type": "bar",
+            },
         )
         assert_matches_type(ConversationMetaCreateResponse, conversation_meta, path=["response"])
 
@@ -197,25 +207,27 @@ class TestAsyncConversationMeta:
     async def test_method_create_with_all_params(self, async_client: AsyncEverMemOS) -> None:
         conversation_meta = await async_client.v1.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
-            name="Backend API Project",
+            name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={"description": "bar"},
-            version="1.0",
+            scene_desc={
+                "description": "bar",
+                "type": "bar",
+            },
             default_timezone="UTC",
-            description="Discussion channel for backend API development",
-            group_id="group_project_123",
-            tags=["backend", "api", "engineering"],
+            description="Technical discussion for new feature development",
+            group_id="group_123",
+            tags=["work", "technical"],
             user_details={
-                "user_alice": {
-                    "custom_role": "tech_lead",
-                    "extra": {"department": "bar"},
-                    "full_name": "Alice Chen",
-                    "role": "user",
+                "bot_001": {
+                    "custom_role": "assistant",
+                    "extra": {"type": "bar"},
+                    "full_name": "AI Assistant",
+                    "role": "assistant",
                 },
-                "user_bob": {
+                "user_001": {
                     "custom_role": "developer",
                     "extra": {"department": "bar"},
-                    "full_name": "Bob Smith",
+                    "full_name": "John Smith",
                     "role": "user",
                 },
             },
@@ -227,10 +239,12 @@ class TestAsyncConversationMeta:
     async def test_raw_response_create(self, async_client: AsyncEverMemOS) -> None:
         response = await async_client.v1.memories.conversation_meta.with_raw_response.create(
             created_at="2025-01-15T10:00:00+00:00",
-            name="Backend API Project",
+            name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={"description": "bar"},
-            version="1.0",
+            scene_desc={
+                "description": "bar",
+                "type": "bar",
+            },
         )
 
         assert response.is_closed is True
@@ -243,10 +257,12 @@ class TestAsyncConversationMeta:
     async def test_streaming_response_create(self, async_client: AsyncEverMemOS) -> None:
         async with async_client.v1.memories.conversation_meta.with_streaming_response.create(
             created_at="2025-01-15T10:00:00+00:00",
-            name="Backend API Project",
+            name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={"description": "bar"},
-            version="1.0",
+            scene_desc={
+                "description": "bar",
+                "type": "bar",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -267,11 +283,11 @@ class TestAsyncConversationMeta:
     async def test_method_update_with_all_params(self, async_client: AsyncEverMemOS) -> None:
         conversation_meta = await async_client.v1.memories.conversation_meta.update(
             default_timezone="Asia/Shanghai",
-            description="Updated discussion channel for backend API v2 development",
-            group_id="group_project_123",
-            name="Backend API Project - Phase 2",
+            description="Updated description",
+            group_id="group_123",
+            name="New Conversation Name",
             scene_desc={"description": "bar"},
-            tags=["backend", "api", "engineering", "v2"],
+            tags=["tag1", "tag2"],
             user_details={
                 "user_001": {
                     "custom_role": "lead",
