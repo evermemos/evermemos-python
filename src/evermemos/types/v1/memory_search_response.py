@@ -1,49 +1,11 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Dict, List, Optional
-from datetime import datetime
-from typing_extensions import Literal
 
 from .metadata import Metadata
 from ..._models import BaseModel
-from .memory_type import MemoryType
 
-__all__ = ["MemorySearchResponse", "Result", "ResultMemoryResultMemoryItem", "ResultPendingMessage"]
-
-
-class ResultMemoryResultMemoryItem(BaseModel):
-    memory_type: MemoryType
-
-    ori_event_id_list: List[str]
-
-    timestamp: datetime
-
-    user_id: str
-
-    id: Optional[str] = None
-
-    extend: Optional[Dict[str, object]] = None
-
-    group_id: Optional[str] = None
-
-    group_name: Optional[str] = None
-
-    keywords: Optional[List[str]] = None
-
-    linked_entities: Optional[List[str]] = None
-
-    memcell_event_id_list: Optional[List[str]] = None
-
-    participants: Optional[List[str]] = None
-
-    type: Optional[Literal["Conversation"]] = None
-    """Types of content that can be processed."""
-
-    user_name: Optional[str] = None
-
-    vector: Optional[List[float]] = None
-
-    vector_model: Optional[str] = None
+__all__ = ["MemorySearchResponse", "Result", "ResultPendingMessage"]
 
 
 class ResultPendingMessage(BaseModel):
@@ -86,7 +48,7 @@ class Result(BaseModel):
 
     importance_scores: Optional[List[float]] = None
 
-    memories: Optional[List[Dict[str, List[ResultMemoryResultMemoryItem]]]] = None
+    memories: Optional[List[Dict[str, List[object]]]] = None
 
     metadata: Optional[Metadata] = None
 

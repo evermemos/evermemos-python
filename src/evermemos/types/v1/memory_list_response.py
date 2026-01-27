@@ -12,6 +12,10 @@ __all__ = [
     "Result",
     "ResultMemory",
     "ResultMemoryProfileModel",
+    "ResultMemoryGlobalUserProfileModel",
+    "ResultMemoryCombinedProfileModel",
+    "ResultMemoryCombinedProfileModelGlobalProfile",
+    "ResultMemoryCombinedProfileModelProfile",
     "ResultMemoryEpisodicMemoryModel",
     "ResultMemoryEventLogModel",
     "ResultMemoryForesightModel",
@@ -42,6 +46,78 @@ class ResultMemoryProfileModel(BaseModel):
     updated_at: Optional[datetime] = None
 
     version: Optional[int] = None
+
+
+class ResultMemoryGlobalUserProfileModel(BaseModel):
+    id: str
+
+    user_id: str
+
+    confidence: Optional[float] = None
+
+    created_at: Optional[datetime] = None
+
+    custom_profile_data: Optional[Dict[str, object]] = None
+
+    memcell_count: Optional[int] = None
+
+    profile_data: Optional[Dict[str, object]] = None
+
+    updated_at: Optional[datetime] = None
+
+
+class ResultMemoryCombinedProfileModelGlobalProfile(BaseModel):
+    id: str
+
+    user_id: str
+
+    confidence: Optional[float] = None
+
+    created_at: Optional[datetime] = None
+
+    custom_profile_data: Optional[Dict[str, object]] = None
+
+    memcell_count: Optional[int] = None
+
+    profile_data: Optional[Dict[str, object]] = None
+
+    updated_at: Optional[datetime] = None
+
+
+class ResultMemoryCombinedProfileModelProfile(BaseModel):
+    id: str
+
+    group_id: str
+
+    user_id: str
+
+    cluster_ids: Optional[List[str]] = None
+
+    confidence: Optional[float] = None
+
+    created_at: Optional[datetime] = None
+
+    last_updated_cluster: Optional[str] = None
+
+    memcell_count: Optional[int] = None
+
+    profile_data: Optional[Dict[str, object]] = None
+
+    scenario: Optional[str] = None
+
+    updated_at: Optional[datetime] = None
+
+    version: Optional[int] = None
+
+
+class ResultMemoryCombinedProfileModel(BaseModel):
+    user_id: str
+
+    global_profile: Optional[ResultMemoryCombinedProfileModelGlobalProfile] = None
+
+    group_id: Optional[str] = None
+
+    profiles: Optional[List[ResultMemoryCombinedProfileModelProfile]] = None
 
 
 class ResultMemoryEpisodicMemoryModel(BaseModel):
@@ -161,7 +237,12 @@ class ResultMemoryForesightModel(BaseModel):
 
 
 ResultMemory: TypeAlias = Union[
-    ResultMemoryProfileModel, ResultMemoryEpisodicMemoryModel, ResultMemoryEventLogModel, ResultMemoryForesightModel
+    ResultMemoryProfileModel,
+    ResultMemoryGlobalUserProfileModel,
+    ResultMemoryCombinedProfileModel,
+    ResultMemoryEpisodicMemoryModel,
+    ResultMemoryEventLogModel,
+    ResultMemoryForesightModel,
 ]
 
 

@@ -22,9 +22,6 @@ class Result(BaseModel):
     scene: str
     """Scene identifier"""
 
-    version: str
-    """Metadata version"""
-
     created_at: Optional[str] = None
     """Record creation time"""
 

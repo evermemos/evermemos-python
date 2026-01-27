@@ -21,10 +21,18 @@ class MemoryCreateParams(TypedDict, total=False):
     """Message unique identifier"""
 
     sender: Required[str]
-    """Sender user ID"""
+    """Sender user ID (required).
+
+    Also used as user_id internally for memory ownership.
+    """
 
     group_id: Optional[str]
-    """Group ID"""
+    """Group ID.
+
+    If not provided, will automatically generate based on hash(sender) + '\\__group'
+    suffix, representing single-user mode where each user's messages are extracted
+    into separate memory spaces.
+    """
 
     group_name: Optional[str]
     """Group name"""
