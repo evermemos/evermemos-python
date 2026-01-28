@@ -46,7 +46,7 @@ class MemoriesResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return MemoriesResourceWithRawResponse(self)
 
@@ -55,7 +55,7 @@ class MemoriesResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return MemoriesResourceWithStreamingResponse(self)
 
@@ -66,6 +66,7 @@ class MemoriesResource(SyncAPIResource):
         create_time: str,
         message_id: str,
         sender: str,
+        flush: bool | Omit = omit,
         group_id: Optional[str] | Omit = omit,
         group_name: Optional[str] | Omit = omit,
         refer_list: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -89,6 +90,9 @@ class MemoriesResource(SyncAPIResource):
           message_id: Message unique identifier
 
           sender: Sender user ID (required). Also used as user_id internally for memory ownership.
+
+          flush: Force boundary trigger. When True, immediately triggers memory extraction
+              instead of waiting for natural boundary detection.
 
           group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
               '\\__group' suffix, representing single-user mode where each user's messages are
@@ -122,6 +126,7 @@ class MemoriesResource(SyncAPIResource):
                     "create_time": create_time,
                     "message_id": message_id,
                     "sender": sender,
+                    "flush": flush,
                     "group_id": group_id,
                     "group_name": group_name,
                     "refer_list": refer_list,
@@ -139,8 +144,8 @@ class MemoriesResource(SyncAPIResource):
     def delete(
         self,
         *,
-        event_id: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
+        memory_id: Optional[str] | Omit = omit,
         user_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -153,9 +158,9 @@ class MemoriesResource(SyncAPIResource):
         Delete memory records based on combined filter criteria
 
         Args:
-          event_id: Memory event_id (filter condition)
-
           group_id: Group ID (filter condition)
+
+          memory_id: Memory id (filter condition)
 
           user_id: User ID (filter condition)
 
@@ -171,8 +176,8 @@ class MemoriesResource(SyncAPIResource):
             "/api/v1/memories",
             body=maybe_transform(
                 {
-                    "event_id": event_id,
                     "group_id": group_id,
+                    "memory_id": memory_id,
                     "user_id": user_id,
                 },
                 memory_delete_params.MemoryDeleteParams,
@@ -285,7 +290,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return AsyncMemoriesResourceWithRawResponse(self)
 
@@ -294,7 +299,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return AsyncMemoriesResourceWithStreamingResponse(self)
 
@@ -305,6 +310,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
         create_time: str,
         message_id: str,
         sender: str,
+        flush: bool | Omit = omit,
         group_id: Optional[str] | Omit = omit,
         group_name: Optional[str] | Omit = omit,
         refer_list: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -328,6 +334,9 @@ class AsyncMemoriesResource(AsyncAPIResource):
           message_id: Message unique identifier
 
           sender: Sender user ID (required). Also used as user_id internally for memory ownership.
+
+          flush: Force boundary trigger. When True, immediately triggers memory extraction
+              instead of waiting for natural boundary detection.
 
           group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
               '\\__group' suffix, representing single-user mode where each user's messages are
@@ -361,6 +370,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
                     "create_time": create_time,
                     "message_id": message_id,
                     "sender": sender,
+                    "flush": flush,
                     "group_id": group_id,
                     "group_name": group_name,
                     "refer_list": refer_list,
@@ -378,8 +388,8 @@ class AsyncMemoriesResource(AsyncAPIResource):
     async def delete(
         self,
         *,
-        event_id: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
+        memory_id: Optional[str] | Omit = omit,
         user_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -392,9 +402,9 @@ class AsyncMemoriesResource(AsyncAPIResource):
         Delete memory records based on combined filter criteria
 
         Args:
-          event_id: Memory event_id (filter condition)
-
           group_id: Group ID (filter condition)
+
+          memory_id: Memory id (filter condition)
 
           user_id: User ID (filter condition)
 
@@ -410,8 +420,8 @@ class AsyncMemoriesResource(AsyncAPIResource):
             "/api/v1/memories",
             body=await async_maybe_transform(
                 {
-                    "event_id": event_id,
                     "group_id": group_id,
+                    "memory_id": memory_id,
                     "user_id": user_id,
                 },
                 memory_delete_params.MemoryDeleteParams,

@@ -24,14 +24,6 @@ from .memories import (
     MemoriesResourceWithStreamingResponse,
     AsyncMemoriesResourceWithStreamingResponse,
 )
-from .global_user_profile import (
-    GlobalUserProfileResource,
-    AsyncGlobalUserProfileResource,
-    GlobalUserProfileResourceWithRawResponse,
-    AsyncGlobalUserProfileResourceWithRawResponse,
-    GlobalUserProfileResourceWithStreamingResponse,
-    AsyncGlobalUserProfileResourceWithStreamingResponse,
-)
 
 __all__ = [
     "MemoriesResource",
@@ -40,12 +32,6 @@ __all__ = [
     "AsyncMemoriesResourceWithRawResponse",
     "MemoriesResourceWithStreamingResponse",
     "AsyncMemoriesResourceWithStreamingResponse",
-    "GlobalUserProfileResource",
-    "AsyncGlobalUserProfileResource",
-    "GlobalUserProfileResourceWithRawResponse",
-    "AsyncGlobalUserProfileResourceWithRawResponse",
-    "GlobalUserProfileResourceWithStreamingResponse",
-    "AsyncGlobalUserProfileResourceWithStreamingResponse",
     "StatsResource",
     "AsyncStatsResource",
     "StatsResourceWithRawResponse",

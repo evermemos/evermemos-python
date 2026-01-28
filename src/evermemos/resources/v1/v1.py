@@ -20,14 +20,6 @@ from .memories.memories import (
     MemoriesResourceWithStreamingResponse,
     AsyncMemoriesResourceWithStreamingResponse,
 )
-from .global_user_profile.global_user_profile import (
-    GlobalUserProfileResource,
-    AsyncGlobalUserProfileResource,
-    GlobalUserProfileResourceWithRawResponse,
-    AsyncGlobalUserProfileResourceWithRawResponse,
-    GlobalUserProfileResourceWithStreamingResponse,
-    AsyncGlobalUserProfileResourceWithStreamingResponse,
-)
 
 __all__ = ["V1Resource", "AsyncV1Resource"]
 
@@ -36,10 +28,6 @@ class V1Resource(SyncAPIResource):
     @cached_property
     def memories(self) -> MemoriesResource:
         return MemoriesResource(self._client)
-
-    @cached_property
-    def global_user_profile(self) -> GlobalUserProfileResource:
-        return GlobalUserProfileResource(self._client)
 
     @cached_property
     def stats(self) -> StatsResource:
@@ -51,7 +39,7 @@ class V1Resource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return V1ResourceWithRawResponse(self)
 
@@ -60,7 +48,7 @@ class V1Resource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return V1ResourceWithStreamingResponse(self)
 
@@ -69,10 +57,6 @@ class AsyncV1Resource(AsyncAPIResource):
     @cached_property
     def memories(self) -> AsyncMemoriesResource:
         return AsyncMemoriesResource(self._client)
-
-    @cached_property
-    def global_user_profile(self) -> AsyncGlobalUserProfileResource:
-        return AsyncGlobalUserProfileResource(self._client)
 
     @cached_property
     def stats(self) -> AsyncStatsResource:
@@ -84,7 +68,7 @@ class AsyncV1Resource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return AsyncV1ResourceWithRawResponse(self)
 
@@ -93,7 +77,7 @@ class AsyncV1Resource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return AsyncV1ResourceWithStreamingResponse(self)
 
@@ -105,10 +89,6 @@ class V1ResourceWithRawResponse:
     @cached_property
     def memories(self) -> MemoriesResourceWithRawResponse:
         return MemoriesResourceWithRawResponse(self._v1.memories)
-
-    @cached_property
-    def global_user_profile(self) -> GlobalUserProfileResourceWithRawResponse:
-        return GlobalUserProfileResourceWithRawResponse(self._v1.global_user_profile)
 
     @cached_property
     def stats(self) -> StatsResourceWithRawResponse:
@@ -124,10 +104,6 @@ class AsyncV1ResourceWithRawResponse:
         return AsyncMemoriesResourceWithRawResponse(self._v1.memories)
 
     @cached_property
-    def global_user_profile(self) -> AsyncGlobalUserProfileResourceWithRawResponse:
-        return AsyncGlobalUserProfileResourceWithRawResponse(self._v1.global_user_profile)
-
-    @cached_property
     def stats(self) -> AsyncStatsResourceWithRawResponse:
         return AsyncStatsResourceWithRawResponse(self._v1.stats)
 
@@ -141,10 +117,6 @@ class V1ResourceWithStreamingResponse:
         return MemoriesResourceWithStreamingResponse(self._v1.memories)
 
     @cached_property
-    def global_user_profile(self) -> GlobalUserProfileResourceWithStreamingResponse:
-        return GlobalUserProfileResourceWithStreamingResponse(self._v1.global_user_profile)
-
-    @cached_property
     def stats(self) -> StatsResourceWithStreamingResponse:
         return StatsResourceWithStreamingResponse(self._v1.stats)
 
@@ -156,10 +128,6 @@ class AsyncV1ResourceWithStreamingResponse:
     @cached_property
     def memories(self) -> AsyncMemoriesResourceWithStreamingResponse:
         return AsyncMemoriesResourceWithStreamingResponse(self._v1.memories)
-
-    @cached_property
-    def global_user_profile(self) -> AsyncGlobalUserProfileResourceWithStreamingResponse:
-        return AsyncGlobalUserProfileResourceWithStreamingResponse(self._v1.global_user_profile)
 
     @cached_property
     def stats(self) -> AsyncStatsResourceWithStreamingResponse:
