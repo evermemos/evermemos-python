@@ -10,4 +10,4 @@ __all__ = ["RequestGetParams"]
 
 class RequestGetParams(TypedDict, total=False):
     request_id: Required[Optional[str]]
-    """Request ID (recommended)"""
+    """this id is returned by add_memories api"""

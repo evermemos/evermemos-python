@@ -58,7 +58,7 @@ class RequestResource(SyncAPIResource):
         Query the processing status of a specific request
 
         Args:
-          request_id: Request ID (recommended)
+          request_id: this id is returned by add_memories api
 
           extra_headers: Send extra headers
 
@@ -116,7 +116,7 @@ class AsyncRequestResource(AsyncAPIResource):
         Query the processing status of a specific request
 
         Args:
-          request_id: Request ID (recommended)
+          request_id: this id is returned by add_memories api
 
           extra_headers: Send extra headers
 

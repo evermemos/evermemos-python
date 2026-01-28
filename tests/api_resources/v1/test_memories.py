@@ -42,6 +42,7 @@ class TestMemories:
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
             sender="user_001",
+            flush=False,
             group_id="group_123",
             group_name="Project Discussion Group",
             refer_list=["msg_000"],
@@ -92,8 +93,8 @@ class TestMemories:
     @parametrize
     def test_method_delete_with_all_params(self, client: EverMemOS) -> None:
         memory = client.v1.memories.delete(
-            event_id="507f1f77bcf86cd799439011",
             group_id="group_456",
+            memory_id="507f1f77bcf86cd799439011",
             user_id="user_123",
         )
         assert_matches_type(MemoryDeleteResponse, memory, path=["response"])
@@ -270,6 +271,7 @@ class TestAsyncMemories:
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
             sender="user_001",
+            flush=False,
             group_id="group_123",
             group_name="Project Discussion Group",
             refer_list=["msg_000"],
@@ -320,8 +322,8 @@ class TestAsyncMemories:
     @parametrize
     async def test_method_delete_with_all_params(self, async_client: AsyncEverMemOS) -> None:
         memory = await async_client.v1.memories.delete(
-            event_id="507f1f77bcf86cd799439011",
             group_id="group_456",
+            memory_id="507f1f77bcf86cd799439011",
             user_id="user_123",
         )
         assert_matches_type(MemoryDeleteResponse, memory, path=["response"])

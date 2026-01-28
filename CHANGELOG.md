@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.8 (2026-01-28)
+
+Full Changelog: [v0.3.7...v0.3.8](https://github.com/evermemos/evermemos-python/compare/v0.3.7...v0.3.8)
+
+### Features
+
+* **api:** api update ([e2cc79c](https://github.com/evermemos/evermemos-python/commit/e2cc79c7b19cd8da12385d59bd6fcb7e83be6c84))
+
+
+### Chores
+
+* update SDK settings ([c6d796d](https://github.com/evermemos/evermemos-python/commit/c6d796d7bbbec539954c1802094932a919d0b8e5))
+* update SDK settings ([11a1c09](https://github.com/evermemos/evermemos-python/commit/11a1c09da854becb6567ad5428db716e38e81ee0))
+
 ## 0.3.7 (2026-01-27)
 
 Full Changelog: [v0.3.6...v0.3.7](https://github.com/evermemos/evermemos-python/compare/v0.3.6...v0.3.7)

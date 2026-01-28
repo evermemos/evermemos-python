@@ -145,9 +145,11 @@ class ResultMemoryEpisodicMemoryModel(BaseModel):
 
     location: Optional[str] = None
 
-    memcell_event_id_list: Optional[List[str]] = None
-
     metadata: Optional[Metadata] = None
+
+    parent_id: Optional[str] = None
+
+    parent_type: Optional[str] = None
 
     participants: Optional[List[str]] = None
 

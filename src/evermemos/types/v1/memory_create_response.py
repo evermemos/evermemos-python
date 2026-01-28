@@ -1,39 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
-
 from ..._models import BaseModel
 
-__all__ = ["MemoryCreateResponse", "Result"]
-
-
-class Result(BaseModel):
-    """Memory storage result"""
-
-    count: Optional[int] = None
-    """Number of memories extracted"""
-
-    saved_memories: Optional[List[object]] = None
-    """List of saved memories (fetch via API for details)"""
-
-    status_info: Optional[str] = None
-    """
-    Processing status: 'extracted' (memories created) or 'accumulated' (waiting for
-    boundary)
-    """
+__all__ = ["MemoryCreateResponse"]
 
 
 class MemoryCreateResponse(BaseModel):
-    """Memory storage response
+    message: str
 
-    Response for POST /api/v1/memories endpoint.
-    """
+    request_id: str
 
-    message: Optional[str] = None
-    """Response message"""
-
-    result: Optional[Result] = None
-    """Memory storage result"""
-
-    status: Optional[str] = None
-    """Response status"""
+    status: str

@@ -38,7 +38,7 @@ memory = client.v1.memories.create(
     message_id="msg_001",
     sender="user_001",
 )
-print(memory.message)
+print(memory.request_id)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -67,7 +67,7 @@ async def main() -> None:
         message_id="msg_001",
         sender="user_001",
     )
-    print(memory.message)
+    print(memory.request_id)
 
 
 asyncio.run(main())
@@ -106,7 +106,7 @@ async def main() -> None:
             message_id="msg_001",
             sender="user_001",
         )
-        print(memory.message)
+        print(memory.request_id)
 
 
 asyncio.run(main())
@@ -296,7 +296,7 @@ response = client.v1.memories.with_raw_response.create(
 print(response.headers.get('X-My-Header'))
 
 memory = response.parse()  # get the object that `v1.memories.create()` would have returned
-print(memory.message)
+print(memory.request_id)
 ```
 
 These methods return an [`APIResponse`](https://github.com/evermemos/evermemos-python/tree/main/src/evermemos/_response.py) object.
