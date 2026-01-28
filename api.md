@@ -42,20 +42,6 @@ Methods:
 - <code title="patch /api/v1/memories/conversation-meta">client.v1.memories.conversation_meta.<a href="./src/evermemos/resources/v1/memories/conversation_meta.py">update</a>(\*\*<a href="src/evermemos/types/v1/memories/conversation_meta_update_params.py">params</a>) -> <a href="./src/evermemos/types/v1/memories/conversation_meta_update_response.py">ConversationMetaUpdateResponse</a></code>
 - <code title="get /api/v1/memories/conversation-meta">client.v1.memories.conversation_meta.<a href="./src/evermemos/resources/v1/memories/conversation_meta.py">get</a>() -> <a href="./src/evermemos/types/v1/memories/conversation_meta_get_response.py">ConversationMetaGetResponse</a></code>
 
-## GlobalUserProfile
-
-### Custom
-
-Types:
-
-```python
-from evermemos.types.v1.global_user_profile import CustomUpsertResponse
-```
-
-Methods:
-
-- <code title="post /api/v1/global-user-profile/custom">client.v1.global_user_profile.custom.<a href="./src/evermemos/resources/v1/global_user_profile/custom.py">upsert</a>(\*\*<a href="src/evermemos/types/v1/global_user_profile/custom_upsert_params.py">params</a>) -> <a href="./src/evermemos/types/v1/global_user_profile/custom_upsert_response.py">CustomUpsertResponse</a></code>
-
 ## Stats
 
 ### Request

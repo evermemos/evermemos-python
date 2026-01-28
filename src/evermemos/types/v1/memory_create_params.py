@@ -26,6 +26,13 @@ class MemoryCreateParams(TypedDict, total=False):
     Also used as user_id internally for memory ownership.
     """
 
+    flush: bool
+    """Force boundary trigger.
+
+    When True, immediately triggers memory extraction instead of waiting for natural
+    boundary detection.
+    """
+
     group_id: Optional[str]
     """Group ID.
 
