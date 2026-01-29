@@ -10,10 +10,7 @@ __all__ = ["MemoryDeleteParams"]
 
 class MemoryDeleteParams(TypedDict, total=False):
     group_id: Optional[str]
-    """Group ID (filter condition)"""
 
     memory_id: Optional[str]
-    """Memory id (filter condition)"""
 
     user_id: Optional[str]
-    """User ID (filter condition)"""

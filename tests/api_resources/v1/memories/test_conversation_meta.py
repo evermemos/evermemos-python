@@ -28,10 +28,7 @@ class TestConversationMeta:
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={
-                "description": "bar",
-                "type": "bar",
-            },
+            scene_desc={"type": "bar"},
         )
         assert_matches_type(ConversationMetaCreateResponse, conversation_meta, path=["response"])
 
@@ -42,12 +39,8 @@ class TestConversationMeta:
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={
-                "description": "bar",
-                "type": "bar",
-            },
+            scene_desc={"type": "bar"},
             default_timezone="UTC",
-            description="Technical discussion for new feature development",
             group_id="group_123",
             tags=["work", "technical"],
             user_details={
@@ -74,10 +67,7 @@ class TestConversationMeta:
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={
-                "description": "bar",
-                "type": "bar",
-            },
+            scene_desc={"type": "bar"},
         )
 
         assert response.is_closed is True
@@ -92,10 +82,7 @@ class TestConversationMeta:
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={
-                "description": "bar",
-                "type": "bar",
-            },
+            scene_desc={"type": "bar"},
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -116,10 +103,9 @@ class TestConversationMeta:
     def test_method_update_with_all_params(self, client: EverMemOS) -> None:
         conversation_meta = client.v1.memories.conversation_meta.update(
             default_timezone="Asia/Shanghai",
-            description="Updated description",
             group_id="group_123",
             name="New Conversation Name",
-            scene_desc={"description": "bar"},
+            scene_desc={},
             tags=["tag1", "tag2"],
             user_details={
                 "user_001": {
@@ -195,10 +181,7 @@ class TestAsyncConversationMeta:
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={
-                "description": "bar",
-                "type": "bar",
-            },
+            scene_desc={"type": "bar"},
         )
         assert_matches_type(ConversationMetaCreateResponse, conversation_meta, path=["response"])
 
@@ -209,12 +192,8 @@ class TestAsyncConversationMeta:
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={
-                "description": "bar",
-                "type": "bar",
-            },
+            scene_desc={"type": "bar"},
             default_timezone="UTC",
-            description="Technical discussion for new feature development",
             group_id="group_123",
             tags=["work", "technical"],
             user_details={
@@ -241,10 +220,7 @@ class TestAsyncConversationMeta:
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={
-                "description": "bar",
-                "type": "bar",
-            },
+            scene_desc={"type": "bar"},
         )
 
         assert response.is_closed is True
@@ -259,10 +235,7 @@ class TestAsyncConversationMeta:
             created_at="2025-01-15T10:00:00+00:00",
             name="Project Discussion Group",
             scene="group_chat",
-            scene_desc={
-                "description": "bar",
-                "type": "bar",
-            },
+            scene_desc={"type": "bar"},
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -283,10 +256,9 @@ class TestAsyncConversationMeta:
     async def test_method_update_with_all_params(self, async_client: AsyncEverMemOS) -> None:
         conversation_meta = await async_client.v1.memories.conversation_meta.update(
             default_timezone="Asia/Shanghai",
-            description="Updated description",
             group_id="group_123",
             name="New Conversation Name",
-            scene_desc={"description": "bar"},
+            scene_desc={},
             tags=["tag1", "tag2"],
             user_details={
                 "user_001": {

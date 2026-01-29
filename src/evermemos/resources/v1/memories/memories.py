@@ -83,33 +83,6 @@ class MemoriesResource(SyncAPIResource):
         Store a single message into memory.
 
         Args:
-          content: Message content
-
-          create_time: Message creation time (ISO 8601 format)
-
-          message_id: Message unique identifier
-
-          sender: Sender user ID (required). Also used as user_id internally for memory ownership.
-
-          flush: Force boundary trigger. When True, immediately triggers memory extraction
-              instead of waiting for natural boundary detection.
-
-          group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
-              '\\__group' suffix, representing single-user mode where each user's messages are
-              extracted into separate memory spaces.
-
-          group_name: Group name
-
-          refer_list: List of referenced message IDs
-
-          role: Message sender role, used to identify the source of the message. Enum values
-              from MessageSenderRole:
-
-              - user: Message from a human user
-              - assistant: Message from an AI assistant
-
-          sender_name: Sender name (uses sender if not provided)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -158,12 +131,6 @@ class MemoriesResource(SyncAPIResource):
         Delete memory records based on combined filter criteria
 
         Args:
-          group_id: Group ID (filter condition)
-
-          memory_id: Memory id (filter condition)
-
-          user_id: User ID (filter condition)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -226,12 +193,6 @@ class MemoriesResource(SyncAPIResource):
         queued for processing.
 
         Args:
-          conversation_meta: Conversation metadata for batch import.
-
-          conversation_list: Message list.
-
-          version: Format version.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -327,33 +288,6 @@ class AsyncMemoriesResource(AsyncAPIResource):
         Store a single message into memory.
 
         Args:
-          content: Message content
-
-          create_time: Message creation time (ISO 8601 format)
-
-          message_id: Message unique identifier
-
-          sender: Sender user ID (required). Also used as user_id internally for memory ownership.
-
-          flush: Force boundary trigger. When True, immediately triggers memory extraction
-              instead of waiting for natural boundary detection.
-
-          group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
-              '\\__group' suffix, representing single-user mode where each user's messages are
-              extracted into separate memory spaces.
-
-          group_name: Group name
-
-          refer_list: List of referenced message IDs
-
-          role: Message sender role, used to identify the source of the message. Enum values
-              from MessageSenderRole:
-
-              - user: Message from a human user
-              - assistant: Message from an AI assistant
-
-          sender_name: Sender name (uses sender if not provided)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -402,12 +336,6 @@ class AsyncMemoriesResource(AsyncAPIResource):
         Delete memory records based on combined filter criteria
 
         Args:
-          group_id: Group ID (filter condition)
-
-          memory_id: Memory id (filter condition)
-
-          user_id: User ID (filter condition)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -470,12 +398,6 @@ class AsyncMemoriesResource(AsyncAPIResource):
         queued for processing.
 
         Args:
-          conversation_meta: Conversation metadata for batch import.
-
-          conversation_list: Message list.
-
-          version: Format version.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request

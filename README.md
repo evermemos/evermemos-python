@@ -135,10 +135,9 @@ response = client.v1.memories.load(
         "group_id": "chat_user_001_assistant",
         "created_at": "2025-06-26T00:00:00Z",
         "default_timezone": "UTC",
-        "description": "Conversation between user and assistant",
         "name": "User Support Chat",
         "scene": "assistant",
-        "scene_desc": {"description": "bar"},
+        "scene_desc": {},
         "tags": ["support"],
         "user_details": {
             "user_001": "bar",

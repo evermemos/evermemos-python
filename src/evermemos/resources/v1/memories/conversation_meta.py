@@ -53,7 +53,6 @@ class ConversationMetaResource(SyncAPIResource):
         scene: str,
         scene_desc: Dict[str, object],
         default_timezone: Optional[str] | Omit = omit,
-        description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
         user_details: Optional[Dict[str, conversation_meta_create_params.UserDetails]] | Omit = omit,
@@ -69,31 +68,6 @@ class ConversationMetaResource(SyncAPIResource):
         etc.
 
         Args:
-          created_at: Conversation creation time (ISO 8601 format)
-
-          name: Conversation name
-
-          scene:
-              Scene identifier, enum values from ScenarioType:
-
-              - group_chat: work/group chat scenario, suitable for group conversations such as
-                multi-person collaboration and project discussions
-              - assistant: assistant scenario, suitable for one-on-one AI assistant
-                conversations
-
-          scene_desc: Scene description object, can include fields like description
-
-          default_timezone: Default timezone
-
-          description: Conversation description
-
-          group_id: Group unique identifier. When null/not provided, represents default settings for
-              this scene.
-
-          tags: Tag list
-
-          user_details: Participant details, key is user ID, value is user detail object
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -111,7 +85,6 @@ class ConversationMetaResource(SyncAPIResource):
                     "scene": scene,
                     "scene_desc": scene_desc,
                     "default_timezone": default_timezone,
-                    "description": description,
                     "group_id": group_id,
                     "tags": tags,
                     "user_details": user_details,
@@ -128,7 +101,6 @@ class ConversationMetaResource(SyncAPIResource):
         self,
         *,
         default_timezone: Optional[str] | Omit = omit,
-        description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
         scene_desc: Optional[Dict[str, object]] | Omit = omit,
@@ -145,20 +117,6 @@ class ConversationMetaResource(SyncAPIResource):
         Partially update conversation metadata, only updating provided fields
 
         Args:
-          default_timezone: New default timezone
-
-          description: New conversation description
-
-          group_id: Group ID to update. When null, updates the default config.
-
-          name: New conversation name
-
-          scene_desc: New scene description
-
-          tags: New tag list
-
-          user_details: New user details (will completely replace existing user_details)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -172,7 +130,6 @@ class ConversationMetaResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "default_timezone": default_timezone,
-                    "description": description,
                     "group_id": group_id,
                     "name": name,
                     "scene_desc": scene_desc,
@@ -235,7 +192,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         scene: str,
         scene_desc: Dict[str, object],
         default_timezone: Optional[str] | Omit = omit,
-        description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
         user_details: Optional[Dict[str, conversation_meta_create_params.UserDetails]] | Omit = omit,
@@ -251,31 +207,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         etc.
 
         Args:
-          created_at: Conversation creation time (ISO 8601 format)
-
-          name: Conversation name
-
-          scene:
-              Scene identifier, enum values from ScenarioType:
-
-              - group_chat: work/group chat scenario, suitable for group conversations such as
-                multi-person collaboration and project discussions
-              - assistant: assistant scenario, suitable for one-on-one AI assistant
-                conversations
-
-          scene_desc: Scene description object, can include fields like description
-
-          default_timezone: Default timezone
-
-          description: Conversation description
-
-          group_id: Group unique identifier. When null/not provided, represents default settings for
-              this scene.
-
-          tags: Tag list
-
-          user_details: Participant details, key is user ID, value is user detail object
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -293,7 +224,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
                     "scene": scene,
                     "scene_desc": scene_desc,
                     "default_timezone": default_timezone,
-                    "description": description,
                     "group_id": group_id,
                     "tags": tags,
                     "user_details": user_details,
@@ -310,7 +240,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         self,
         *,
         default_timezone: Optional[str] | Omit = omit,
-        description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
         name: Optional[str] | Omit = omit,
         scene_desc: Optional[Dict[str, object]] | Omit = omit,
@@ -327,20 +256,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         Partially update conversation metadata, only updating provided fields
 
         Args:
-          default_timezone: New default timezone
-
-          description: New conversation description
-
-          group_id: Group ID to update. When null, updates the default config.
-
-          name: New conversation name
-
-          scene_desc: New scene description
-
-          tags: New tag list
-
-          user_details: New user details (will completely replace existing user_details)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -354,7 +269,6 @@ class AsyncConversationMetaResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "default_timezone": default_timezone,
-                    "description": description,
                     "group_id": group_id,
                     "name": name,
                     "scene_desc": scene_desc,
