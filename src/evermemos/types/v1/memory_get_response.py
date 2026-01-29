@@ -249,8 +249,6 @@ ResultMemory: TypeAlias = Union[
 
 
 class Result(BaseModel):
-    """Memory fetch result"""
-
     has_more: Optional[bool] = None
 
     memories: Optional[List[ResultMemory]] = None
@@ -261,16 +259,8 @@ class Result(BaseModel):
 
 
 class MemoryGetResponse(BaseModel):
-    """Memory fetch API response
-
-    Response for GET /api/v1/memories endpoint.
-    """
-
     result: Result
-    """Memory fetch result"""
 
     message: Optional[str] = None
-    """Response message"""
 
     status: Optional[str] = None
-    """Response status"""

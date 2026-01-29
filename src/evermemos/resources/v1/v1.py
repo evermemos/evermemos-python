@@ -4,14 +4,6 @@ from __future__ import annotations
 
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
-from .stats.stats import (
-    StatsResource,
-    AsyncStatsResource,
-    StatsResourceWithRawResponse,
-    AsyncStatsResourceWithRawResponse,
-    StatsResourceWithStreamingResponse,
-    AsyncStatsResourceWithStreamingResponse,
-)
 from .memories.memories import (
     MemoriesResource,
     AsyncMemoriesResource,
@@ -30,16 +22,12 @@ class V1Resource(SyncAPIResource):
         return MemoriesResource(self._client)
 
     @cached_property
-    def stats(self) -> StatsResource:
-        return StatsResource(self._client)
-
-    @cached_property
     def with_raw_response(self) -> V1ResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return V1ResourceWithRawResponse(self)
 
@@ -48,7 +36,7 @@ class V1Resource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return V1ResourceWithStreamingResponse(self)
 
@@ -59,16 +47,12 @@ class AsyncV1Resource(AsyncAPIResource):
         return AsyncMemoriesResource(self._client)
 
     @cached_property
-    def stats(self) -> AsyncStatsResource:
-        return AsyncStatsResource(self._client)
-
-    @cached_property
     def with_raw_response(self) -> AsyncV1ResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return AsyncV1ResourceWithRawResponse(self)
 
@@ -77,7 +61,7 @@ class AsyncV1Resource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return AsyncV1ResourceWithStreamingResponse(self)
 
@@ -90,10 +74,6 @@ class V1ResourceWithRawResponse:
     def memories(self) -> MemoriesResourceWithRawResponse:
         return MemoriesResourceWithRawResponse(self._v1.memories)
 
-    @cached_property
-    def stats(self) -> StatsResourceWithRawResponse:
-        return StatsResourceWithRawResponse(self._v1.stats)
-
 
 class AsyncV1ResourceWithRawResponse:
     def __init__(self, v1: AsyncV1Resource) -> None:
@@ -102,10 +82,6 @@ class AsyncV1ResourceWithRawResponse:
     @cached_property
     def memories(self) -> AsyncMemoriesResourceWithRawResponse:
         return AsyncMemoriesResourceWithRawResponse(self._v1.memories)
-
-    @cached_property
-    def stats(self) -> AsyncStatsResourceWithRawResponse:
-        return AsyncStatsResourceWithRawResponse(self._v1.stats)
 
 
 class V1ResourceWithStreamingResponse:
@@ -116,10 +92,6 @@ class V1ResourceWithStreamingResponse:
     def memories(self) -> MemoriesResourceWithStreamingResponse:
         return MemoriesResourceWithStreamingResponse(self._v1.memories)
 
-    @cached_property
-    def stats(self) -> StatsResourceWithStreamingResponse:
-        return StatsResourceWithStreamingResponse(self._v1.stats)
-
 
 class AsyncV1ResourceWithStreamingResponse:
     def __init__(self, v1: AsyncV1Resource) -> None:
@@ -128,7 +100,3 @@ class AsyncV1ResourceWithStreamingResponse:
     @cached_property
     def memories(self) -> AsyncMemoriesResourceWithStreamingResponse:
         return AsyncMemoriesResourceWithStreamingResponse(self._v1.memories)
-
-    @cached_property
-    def stats(self) -> AsyncStatsResourceWithStreamingResponse:
-        return AsyncStatsResourceWithStreamingResponse(self._v1.stats)
