@@ -8,14 +8,6 @@ from .v1 import (
     V1ResourceWithStreamingResponse,
     AsyncV1ResourceWithStreamingResponse,
 )
-from .stats import (
-    StatsResource,
-    AsyncStatsResource,
-    StatsResourceWithRawResponse,
-    AsyncStatsResourceWithRawResponse,
-    StatsResourceWithStreamingResponse,
-    AsyncStatsResourceWithStreamingResponse,
-)
 from .memories import (
     MemoriesResource,
     AsyncMemoriesResource,
@@ -32,12 +24,6 @@ __all__ = [
     "AsyncMemoriesResourceWithRawResponse",
     "MemoriesResourceWithStreamingResponse",
     "AsyncMemoriesResourceWithStreamingResponse",
-    "StatsResource",
-    "AsyncStatsResource",
-    "StatsResourceWithRawResponse",
-    "AsyncStatsResourceWithRawResponse",
-    "StatsResourceWithStreamingResponse",
-    "AsyncStatsResourceWithStreamingResponse",
     "V1Resource",
     "AsyncV1Resource",
     "V1ResourceWithRawResponse",

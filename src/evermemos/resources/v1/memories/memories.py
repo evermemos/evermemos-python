@@ -46,7 +46,7 @@ class MemoriesResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return MemoriesResourceWithRawResponse(self)
 
@@ -55,7 +55,7 @@ class MemoriesResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return MemoriesResourceWithStreamingResponse(self)
 
@@ -83,33 +83,6 @@ class MemoriesResource(SyncAPIResource):
         Store a single message into memory.
 
         Args:
-          content: Message content
-
-          create_time: Message creation time (ISO 8601 format)
-
-          message_id: Message unique identifier
-
-          sender: Sender user ID (required). Also used as user_id internally for memory ownership.
-
-          flush: Force boundary trigger. When True, immediately triggers memory extraction
-              instead of waiting for natural boundary detection.
-
-          group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
-              '\\__group' suffix, representing single-user mode where each user's messages are
-              extracted into separate memory spaces.
-
-          group_name: Group name
-
-          refer_list: List of referenced message IDs
-
-          role: Message sender role, used to identify the source of the message. Enum values
-              from MessageSenderRole:
-
-              - user: Message from a human user
-              - assistant: Message from an AI assistant
-
-          sender_name: Sender name (uses sender if not provided)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -158,12 +131,6 @@ class MemoriesResource(SyncAPIResource):
         Delete memory records based on combined filter criteria
 
         Args:
-          group_id: Group ID (filter condition)
-
-          memory_id: Memory id (filter condition)
-
-          user_id: User ID (filter condition)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -226,12 +193,6 @@ class MemoriesResource(SyncAPIResource):
         queued for processing.
 
         Args:
-          conversation_meta: Conversation metadata for batch import.
-
-          conversation_list: Message list.
-
-          version: Format version.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -290,7 +251,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return AsyncMemoriesResourceWithRawResponse(self)
 
@@ -299,7 +260,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return AsyncMemoriesResourceWithStreamingResponse(self)
 
@@ -327,33 +288,6 @@ class AsyncMemoriesResource(AsyncAPIResource):
         Store a single message into memory.
 
         Args:
-          content: Message content
-
-          create_time: Message creation time (ISO 8601 format)
-
-          message_id: Message unique identifier
-
-          sender: Sender user ID (required). Also used as user_id internally for memory ownership.
-
-          flush: Force boundary trigger. When True, immediately triggers memory extraction
-              instead of waiting for natural boundary detection.
-
-          group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
-              '\\__group' suffix, representing single-user mode where each user's messages are
-              extracted into separate memory spaces.
-
-          group_name: Group name
-
-          refer_list: List of referenced message IDs
-
-          role: Message sender role, used to identify the source of the message. Enum values
-              from MessageSenderRole:
-
-              - user: Message from a human user
-              - assistant: Message from an AI assistant
-
-          sender_name: Sender name (uses sender if not provided)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -402,12 +336,6 @@ class AsyncMemoriesResource(AsyncAPIResource):
         Delete memory records based on combined filter criteria
 
         Args:
-          group_id: Group ID (filter condition)
-
-          memory_id: Memory id (filter condition)
-
-          user_id: User ID (filter condition)
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -470,12 +398,6 @@ class AsyncMemoriesResource(AsyncAPIResource):
         queued for processing.
 
         Args:
-          conversation_meta: Conversation metadata for batch import.
-
-          conversation_list: Message list.
-
-          version: Format version.
-
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request

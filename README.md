@@ -16,9 +16,12 @@ The full API of this library can be found in [api.md](api.md).
 ## Installation
 
 ```sh
-# install from PyPI
-pip install evermemos
+# install from this staging repo
+pip install git+ssh://git@github.com/stainless-sdks/EverMemOS-python.git
 ```
+
+> [!NOTE]
+> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install evermemos`
 
 ## Usage
 
@@ -82,8 +85,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-# install from PyPI
-pip install evermemos[aiohttp]
+# install from this staging repo
+pip install 'evermemos[aiohttp] @ git+ssh://git@github.com/stainless-sdks/EverMemOS-python.git'
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -135,10 +138,9 @@ response = client.v1.memories.load(
         "group_id": "chat_user_001_assistant",
         "created_at": "2025-06-26T00:00:00Z",
         "default_timezone": "UTC",
-        "description": "Conversation between user and assistant",
         "name": "User Support Chat",
         "scene": "assistant",
-        "scene_desc": {"description": "bar"},
+        "scene_desc": {},
         "tags": ["support"],
         "user_details": {
             "user_001": "bar",
@@ -299,9 +301,9 @@ memory = response.parse()  # get the object that `v1.memories.create()` would ha
 print(memory.request_id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/evermemos/evermemos-python/tree/main/src/evermemos/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/stainless-sdks/EverMemOS-python/tree/main/src/evermemos/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/evermemos/evermemos-python/tree/main/src/evermemos/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/EverMemOS-python/tree/main/src/evermemos/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -410,7 +412,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/evermemos/evermemos-python/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/EverMemOS-python/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 
