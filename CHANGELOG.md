@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 (2026-01-30)
+
+Full Changelog: [v0.3.9...v0.4.0](https://github.com/evermemos/evermemos-python/compare/v0.3.9...v0.4.0)
+
+### Features
+
+* **client:** add custom JSON encoder for extended type support ([07e2cfe](https://github.com/evermemos/evermemos-python/commit/07e2cfe00b6360c7227fa0149c8aaf8697d3ec3f))
+
 ## 0.3.9 (2026-01-29)
 
 Full Changelog: [v0.3.8...v0.3.9](https://github.com/evermemos/evermemos-python/compare/v0.3.8...v0.3.9)
