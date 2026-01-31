@@ -125,15 +125,13 @@ class ResultMemoryEpisodicMemoryModel(BaseModel):
 
     episode_id: str
 
-    summary: str
-
-    title: str
-
     user_id: str
 
     created_at: Optional[datetime] = None
 
     end_time: Optional[datetime] = None
+
+    episode: Optional[str] = None
 
     extend: Optional[Dict[str, object]] = None
 
@@ -141,7 +139,7 @@ class ResultMemoryEpisodicMemoryModel(BaseModel):
 
     group_name: Optional[str] = None
 
-    key_events: Optional[List[str]] = None
+    keywords: Optional[List[str]] = None
 
     location: Optional[str] = None
 
@@ -156,6 +154,8 @@ class ResultMemoryEpisodicMemoryModel(BaseModel):
     start_time: Optional[datetime] = None
 
     subject: Optional[str] = None
+
+    summary: Optional[str] = None
 
     timestamp: Optional[datetime] = None
 
@@ -203,6 +203,8 @@ class ResultMemoryForesightModel(BaseModel):
 
     content: str
 
+    foresight: str
+
     parent_id: str
 
     parent_type: str
@@ -249,6 +251,8 @@ ResultMemory: TypeAlias = Union[
 
 
 class Result(BaseModel):
+    """Memory fetch result"""
+
     has_more: Optional[bool] = None
 
     memories: Optional[List[ResultMemory]] = None
@@ -260,7 +264,10 @@ class Result(BaseModel):
 
 class MemoryGetResponse(BaseModel):
     result: Result
+    """Memory fetch result"""
 
     message: Optional[str] = None
+    """Response message"""
 
     status: Optional[str] = None
+    """Response status"""

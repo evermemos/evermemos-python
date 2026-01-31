@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Iterable, Optional
+from typing import Optional
 
 import httpx
 
 from ...._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
-from ....types.v1 import memory_load_params, memory_create_params, memory_delete_params
+from ....types.v1 import memory_add_params, memory_delete_params
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
     to_raw_response_wrapper,
@@ -26,9 +26,8 @@ from .conversation_meta import (
     ConversationMetaResourceWithStreamingResponse,
     AsyncConversationMetaResourceWithStreamingResponse,
 )
+from ....types.v1.memory_add_response import MemoryAddResponse
 from ....types.v1.memory_get_response import MemoryGetResponse
-from ....types.v1.memory_load_response import MemoryLoadResponse
-from ....types.v1.memory_create_response import MemoryCreateResponse
 from ....types.v1.memory_delete_response import MemoryDeleteResponse
 from ....types.v1.memory_search_response import MemorySearchResponse
 
@@ -46,7 +45,7 @@ class MemoriesResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return MemoriesResourceWithRawResponse(self)
 
@@ -55,11 +54,66 @@ class MemoriesResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return MemoriesResourceWithStreamingResponse(self)
 
-    def create(
+    def delete(
+        self,
+        *,
+        id: Optional[str] | Omit = omit,
+        event_id: Optional[str] | Omit = omit,
+        group_id: Optional[str] | Omit = omit,
+        memory_id: Optional[str] | Omit = omit,
+        user_id: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> MemoryDeleteResponse:
+        """
+        Delete memory records based on combined filter criteria
+
+        Args:
+          id: Alias for memory_id (backward compatibility)
+
+          event_id: Alias for memory_id (backward compatibility)
+
+          group_id: Group ID (filter condition)
+
+          memory_id: Memory id (filter condition)
+
+          user_id: User ID (filter condition)
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._delete(
+            "/api/v1/memories",
+            body=maybe_transform(
+                {
+                    "id": id,
+                    "event_id": event_id,
+                    "group_id": group_id,
+                    "memory_id": memory_id,
+                    "user_id": user_id,
+                },
+                memory_delete_params.MemoryDeleteParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=MemoryDeleteResponse,
+        )
+
+    def add(
         self,
         *,
         content: str,
@@ -78,11 +132,38 @@ class MemoriesResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MemoryCreateResponse:
+    ) -> MemoryAddResponse:
         """
         Store a single message into memory.
 
         Args:
+          content: Message content
+
+          create_time: Message creation time (ISO 8601 format)
+
+          message_id: Message unique identifier
+
+          sender: Sender user ID (required). Also used as user_id internally for memory ownership.
+
+          flush: Force boundary trigger. When True, immediately triggers memory extraction
+              instead of waiting for natural boundary detection.
+
+          group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
+              '\\__group' suffix, representing single-user mode where each user's messages are
+              extracted into separate memory spaces.
+
+          group_name: Group name
+
+          refer_list: List of referenced message IDs
+
+          role: Message sender role, used to identify the source of the message. Enum values
+              from MessageSenderRole:
+
+              - user: Message from a human user
+              - assistant: Message from an AI assistant
+
+          sender_name: Sender name (uses sender if not provided)
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -106,53 +187,12 @@ class MemoriesResource(SyncAPIResource):
                     "role": role,
                     "sender_name": sender_name,
                 },
-                memory_create_params.MemoryCreateParams,
+                memory_add_params.MemoryAddParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=MemoryCreateResponse,
-        )
-
-    def delete(
-        self,
-        *,
-        group_id: Optional[str] | Omit = omit,
-        memory_id: Optional[str] | Omit = omit,
-        user_id: Optional[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MemoryDeleteResponse:
-        """
-        Delete memory records based on combined filter criteria
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._delete(
-            "/api/v1/memories",
-            body=maybe_transform(
-                {
-                    "group_id": group_id,
-                    "memory_id": memory_id,
-                    "user_id": user_id,
-                },
-                memory_delete_params.MemoryDeleteParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=MemoryDeleteResponse,
+            cast_to=MemoryAddResponse,
         )
 
     def get(
@@ -172,49 +212,6 @@ class MemoriesResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=MemoryGetResponse,
-        )
-
-    def load(
-        self,
-        *,
-        conversation_meta: memory_load_params.ConversationMeta,
-        conversation_list: Optional[Iterable[memory_load_params.ConversationList]] | Omit = omit,
-        version: Optional[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MemoryLoadResponse:
-        """Import conversation metadata and message list in one request.
-
-        Messages are
-        queued for processing.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return self._post(
-            "/api/v1/memories/import",
-            body=maybe_transform(
-                {
-                    "conversation_meta": conversation_meta,
-                    "conversation_list": conversation_list,
-                    "version": version,
-                },
-                memory_load_params.MemoryLoadParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=MemoryLoadResponse,
         )
 
     def search(
@@ -251,7 +248,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#accessing-raw-response-data-eg-headers
         """
         return AsyncMemoriesResourceWithRawResponse(self)
 
@@ -260,11 +257,66 @@ class AsyncMemoriesResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/evermemos/evermemos-python#with_streaming_response
+        For more information, see https://www.github.com/stainless-sdks/EverMemOS-python#with_streaming_response
         """
         return AsyncMemoriesResourceWithStreamingResponse(self)
 
-    async def create(
+    async def delete(
+        self,
+        *,
+        id: Optional[str] | Omit = omit,
+        event_id: Optional[str] | Omit = omit,
+        group_id: Optional[str] | Omit = omit,
+        memory_id: Optional[str] | Omit = omit,
+        user_id: Optional[str] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> MemoryDeleteResponse:
+        """
+        Delete memory records based on combined filter criteria
+
+        Args:
+          id: Alias for memory_id (backward compatibility)
+
+          event_id: Alias for memory_id (backward compatibility)
+
+          group_id: Group ID (filter condition)
+
+          memory_id: Memory id (filter condition)
+
+          user_id: User ID (filter condition)
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._delete(
+            "/api/v1/memories",
+            body=await async_maybe_transform(
+                {
+                    "id": id,
+                    "event_id": event_id,
+                    "group_id": group_id,
+                    "memory_id": memory_id,
+                    "user_id": user_id,
+                },
+                memory_delete_params.MemoryDeleteParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=MemoryDeleteResponse,
+        )
+
+    async def add(
         self,
         *,
         content: str,
@@ -283,11 +335,38 @@ class AsyncMemoriesResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MemoryCreateResponse:
+    ) -> MemoryAddResponse:
         """
         Store a single message into memory.
 
         Args:
+          content: Message content
+
+          create_time: Message creation time (ISO 8601 format)
+
+          message_id: Message unique identifier
+
+          sender: Sender user ID (required). Also used as user_id internally for memory ownership.
+
+          flush: Force boundary trigger. When True, immediately triggers memory extraction
+              instead of waiting for natural boundary detection.
+
+          group_id: Group ID. If not provided, will automatically generate based on hash(sender) +
+              '\\__group' suffix, representing single-user mode where each user's messages are
+              extracted into separate memory spaces.
+
+          group_name: Group name
+
+          refer_list: List of referenced message IDs
+
+          role: Message sender role, used to identify the source of the message. Enum values
+              from MessageSenderRole:
+
+              - user: Message from a human user
+              - assistant: Message from an AI assistant
+
+          sender_name: Sender name (uses sender if not provided)
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -311,53 +390,12 @@ class AsyncMemoriesResource(AsyncAPIResource):
                     "role": role,
                     "sender_name": sender_name,
                 },
-                memory_create_params.MemoryCreateParams,
+                memory_add_params.MemoryAddParams,
             ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=MemoryCreateResponse,
-        )
-
-    async def delete(
-        self,
-        *,
-        group_id: Optional[str] | Omit = omit,
-        memory_id: Optional[str] | Omit = omit,
-        user_id: Optional[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MemoryDeleteResponse:
-        """
-        Delete memory records based on combined filter criteria
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._delete(
-            "/api/v1/memories",
-            body=await async_maybe_transform(
-                {
-                    "group_id": group_id,
-                    "memory_id": memory_id,
-                    "user_id": user_id,
-                },
-                memory_delete_params.MemoryDeleteParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=MemoryDeleteResponse,
+            cast_to=MemoryAddResponse,
         )
 
     async def get(
@@ -377,49 +415,6 @@ class AsyncMemoriesResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=MemoryGetResponse,
-        )
-
-    async def load(
-        self,
-        *,
-        conversation_meta: memory_load_params.ConversationMeta,
-        conversation_list: Optional[Iterable[memory_load_params.ConversationList]] | Omit = omit,
-        version: Optional[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MemoryLoadResponse:
-        """Import conversation metadata and message list in one request.
-
-        Messages are
-        queued for processing.
-
-        Args:
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        return await self._post(
-            "/api/v1/memories/import",
-            body=await async_maybe_transform(
-                {
-                    "conversation_meta": conversation_meta,
-                    "conversation_list": conversation_list,
-                    "version": version,
-                },
-                memory_load_params.MemoryLoadParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=MemoryLoadResponse,
         )
 
     async def search(
@@ -449,17 +444,14 @@ class MemoriesResourceWithRawResponse:
     def __init__(self, memories: MemoriesResource) -> None:
         self._memories = memories
 
-        self.create = to_raw_response_wrapper(
-            memories.create,
-        )
         self.delete = to_raw_response_wrapper(
             memories.delete,
         )
+        self.add = to_raw_response_wrapper(
+            memories.add,
+        )
         self.get = to_raw_response_wrapper(
             memories.get,
-        )
-        self.load = to_raw_response_wrapper(
-            memories.load,
         )
         self.search = to_raw_response_wrapper(
             memories.search,
@@ -474,17 +466,14 @@ class AsyncMemoriesResourceWithRawResponse:
     def __init__(self, memories: AsyncMemoriesResource) -> None:
         self._memories = memories
 
-        self.create = async_to_raw_response_wrapper(
-            memories.create,
-        )
         self.delete = async_to_raw_response_wrapper(
             memories.delete,
         )
+        self.add = async_to_raw_response_wrapper(
+            memories.add,
+        )
         self.get = async_to_raw_response_wrapper(
             memories.get,
-        )
-        self.load = async_to_raw_response_wrapper(
-            memories.load,
         )
         self.search = async_to_raw_response_wrapper(
             memories.search,
@@ -499,17 +488,14 @@ class MemoriesResourceWithStreamingResponse:
     def __init__(self, memories: MemoriesResource) -> None:
         self._memories = memories
 
-        self.create = to_streamed_response_wrapper(
-            memories.create,
-        )
         self.delete = to_streamed_response_wrapper(
             memories.delete,
         )
+        self.add = to_streamed_response_wrapper(
+            memories.add,
+        )
         self.get = to_streamed_response_wrapper(
             memories.get,
-        )
-        self.load = to_streamed_response_wrapper(
-            memories.load,
         )
         self.search = to_streamed_response_wrapper(
             memories.search,
@@ -524,17 +510,14 @@ class AsyncMemoriesResourceWithStreamingResponse:
     def __init__(self, memories: AsyncMemoriesResource) -> None:
         self._memories = memories
 
-        self.create = async_to_streamed_response_wrapper(
-            memories.create,
-        )
         self.delete = async_to_streamed_response_wrapper(
             memories.delete,
         )
+        self.add = async_to_streamed_response_wrapper(
+            memories.add,
+        )
         self.get = async_to_streamed_response_wrapper(
             memories.get,
-        )
-        self.load = async_to_streamed_response_wrapper(
-            memories.load,
         )
         self.search = async_to_streamed_response_wrapper(
             memories.search,
