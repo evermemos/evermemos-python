@@ -16,9 +16,12 @@ The full API of this library can be found in [api.md](api.md).
 ## Installation
 
 ```sh
-# install from PyPI
-pip install evermemos
+# install from this staging repo
+pip install git+ssh://git@github.com/stainless-sdks/EverMemOS-python.git
 ```
+
+> [!NOTE]
+> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install evermemos`
 
 ## Usage
 
@@ -32,13 +35,13 @@ client = EverMemOS(
     api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
 )
 
-memory = client.v1.memories.create(
+response = client.v1.memories.add(
     content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
     sender="user_001",
 )
-print(memory.request_id)
+print(response.request_id)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -61,13 +64,13 @@ client = AsyncEverMemOS(
 
 
 async def main() -> None:
-    memory = await client.v1.memories.create(
+    response = await client.v1.memories.add(
         content="Let's discuss the technical solution for the new feature today",
         create_time="2025-01-15T10:00:00+00:00",
         message_id="msg_001",
         sender="user_001",
     )
-    print(memory.request_id)
+    print(response.request_id)
 
 
 asyncio.run(main())
@@ -82,8 +85,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-# install from PyPI
-pip install evermemos[aiohttp]
+# install from this staging repo
+pip install 'evermemos[aiohttp] @ git+ssh://git@github.com/stainless-sdks/EverMemOS-python.git'
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
@@ -100,13 +103,13 @@ async def main() -> None:
         api_key=os.environ.get("EVERMEMOS_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        memory = await client.v1.memories.create(
+        response = await client.v1.memories.add(
             content="Let's discuss the technical solution for the new feature today",
             create_time="2025-01-15T10:00:00+00:00",
             message_id="msg_001",
             sender="user_001",
         )
-        print(memory.request_id)
+        print(response.request_id)
 
 
 asyncio.run(main())
@@ -130,22 +133,20 @@ from evermemos import EverMemOS
 
 client = EverMemOS()
 
-response = client.v1.memories.load(
-    conversation_meta={
-        "group_id": "chat_user_001_assistant",
-        "created_at": "2025-06-26T00:00:00Z",
-        "default_timezone": "UTC",
-        "name": "User Support Chat",
-        "scene": "assistant",
-        "scene_desc": {},
-        "tags": ["support"],
-        "user_details": {
-            "user_001": "bar",
-            "robot_001": "bar",
+conversation_meta = client.v1.memories.conversation_meta.create(
+    created_at="2025-01-15T10:00:00+00:00",
+    llm_custom_setting={
+        "boundary": {
+            "model": "gpt-4o-mini",
+            "provider": "openai",
+        },
+        "extraction": {
+            "model": "gpt-4o",
+            "provider": "openai",
         },
     },
 )
-print(response.conversation_meta)
+print(conversation_meta.llm_custom_setting)
 ```
 
 ## Handling errors
@@ -164,7 +165,7 @@ from evermemos import EverMemOS
 client = EverMemOS()
 
 try:
-    client.v1.memories.create(
+    client.v1.memories.add(
         content="Let's discuss the technical solution for the new feature today",
         create_time="2025-01-15T10:00:00+00:00",
         message_id="msg_001",
@@ -212,7 +213,7 @@ client = EverMemOS(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).v1.memories.create(
+client.with_options(max_retries=5).v1.memories.add(
     content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
@@ -240,7 +241,7 @@ client = EverMemOS(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).v1.memories.create(
+client.with_options(timeout=5.0).v1.memories.add(
     content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
@@ -286,7 +287,7 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from evermemos import EverMemOS
 
 client = EverMemOS()
-response = client.v1.memories.with_raw_response.create(
+response = client.v1.memories.with_raw_response.add(
     content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
@@ -294,13 +295,13 @@ response = client.v1.memories.with_raw_response.create(
 )
 print(response.headers.get('X-My-Header'))
 
-memory = response.parse()  # get the object that `v1.memories.create()` would have returned
+memory = response.parse()  # get the object that `v1.memories.add()` would have returned
 print(memory.request_id)
 ```
 
-These methods return an [`APIResponse`](https://github.com/evermemos/evermemos-python/tree/main/src/evermemos/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/stainless-sdks/EverMemOS-python/tree/main/src/evermemos/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/evermemos/evermemos-python/tree/main/src/evermemos/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/EverMemOS-python/tree/main/src/evermemos/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -309,7 +310,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.v1.memories.with_streaming_response.create(
+with client.v1.memories.with_streaming_response.add(
     content="Let's discuss the technical solution for the new feature today",
     create_time="2025-01-15T10:00:00+00:00",
     message_id="msg_001",
@@ -409,7 +410,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/evermemos/evermemos-python/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/EverMemOS-python/issues) with questions, bugs, or suggestions.
 
 ### Determining the installed version
 

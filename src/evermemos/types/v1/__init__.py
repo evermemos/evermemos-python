@@ -4,11 +4,9 @@ from __future__ import annotations
 
 from .metadata import Metadata as Metadata
 from .memory_type import MemoryType as MemoryType
-from .memory_load_params import MemoryLoadParams as MemoryLoadParams
+from .memory_add_params import MemoryAddParams as MemoryAddParams
+from .memory_add_response import MemoryAddResponse as MemoryAddResponse
 from .memory_get_response import MemoryGetResponse as MemoryGetResponse
-from .memory_create_params import MemoryCreateParams as MemoryCreateParams
 from .memory_delete_params import MemoryDeleteParams as MemoryDeleteParams
-from .memory_load_response import MemoryLoadResponse as MemoryLoadResponse
-from .memory_create_response import MemoryCreateResponse as MemoryCreateResponse
 from .memory_delete_response import MemoryDeleteResponse as MemoryDeleteResponse
 from .memory_search_response import MemorySearchResponse as MemorySearchResponse
