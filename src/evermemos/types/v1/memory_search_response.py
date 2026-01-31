@@ -74,6 +74,8 @@ class ResultPendingMessage(BaseModel):
 
 
 class Result(BaseModel):
+    """Memory search result"""
+
     has_more: Optional[bool] = None
 
     memories: Optional[List[ResultMemory]] = None
@@ -93,7 +95,10 @@ class Result(BaseModel):
 
 class MemorySearchResponse(BaseModel):
     result: Result
+    """Memory search result"""
 
     message: Optional[str] = None
+    """Response message"""
 
     status: Optional[str] = None
+    """Response status"""

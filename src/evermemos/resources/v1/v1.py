@@ -4,6 +4,14 @@ from __future__ import annotations
 
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
+from .status.status import (
+    StatusResource,
+    AsyncStatusResource,
+    StatusResourceWithRawResponse,
+    AsyncStatusResourceWithRawResponse,
+    StatusResourceWithStreamingResponse,
+    AsyncStatusResourceWithStreamingResponse,
+)
 from .memories.memories import (
     MemoriesResource,
     AsyncMemoriesResource,
@@ -20,6 +28,10 @@ class V1Resource(SyncAPIResource):
     @cached_property
     def memories(self) -> MemoriesResource:
         return MemoriesResource(self._client)
+
+    @cached_property
+    def status(self) -> StatusResource:
+        return StatusResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> V1ResourceWithRawResponse:
@@ -45,6 +57,10 @@ class AsyncV1Resource(AsyncAPIResource):
     @cached_property
     def memories(self) -> AsyncMemoriesResource:
         return AsyncMemoriesResource(self._client)
+
+    @cached_property
+    def status(self) -> AsyncStatusResource:
+        return AsyncStatusResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncV1ResourceWithRawResponse:
@@ -74,6 +90,10 @@ class V1ResourceWithRawResponse:
     def memories(self) -> MemoriesResourceWithRawResponse:
         return MemoriesResourceWithRawResponse(self._v1.memories)
 
+    @cached_property
+    def status(self) -> StatusResourceWithRawResponse:
+        return StatusResourceWithRawResponse(self._v1.status)
+
 
 class AsyncV1ResourceWithRawResponse:
     def __init__(self, v1: AsyncV1Resource) -> None:
@@ -82,6 +102,10 @@ class AsyncV1ResourceWithRawResponse:
     @cached_property
     def memories(self) -> AsyncMemoriesResourceWithRawResponse:
         return AsyncMemoriesResourceWithRawResponse(self._v1.memories)
+
+    @cached_property
+    def status(self) -> AsyncStatusResourceWithRawResponse:
+        return AsyncStatusResourceWithRawResponse(self._v1.status)
 
 
 class V1ResourceWithStreamingResponse:
@@ -92,6 +116,10 @@ class V1ResourceWithStreamingResponse:
     def memories(self) -> MemoriesResourceWithStreamingResponse:
         return MemoriesResourceWithStreamingResponse(self._v1.memories)
 
+    @cached_property
+    def status(self) -> StatusResourceWithStreamingResponse:
+        return StatusResourceWithStreamingResponse(self._v1.status)
+
 
 class AsyncV1ResourceWithStreamingResponse:
     def __init__(self, v1: AsyncV1Resource) -> None:
@@ -100,3 +128,7 @@ class AsyncV1ResourceWithStreamingResponse:
     @cached_property
     def memories(self) -> AsyncMemoriesResourceWithStreamingResponse:
         return AsyncMemoriesResourceWithStreamingResponse(self._v1.memories)
+
+    @cached_property
+    def status(self) -> AsyncStatusResourceWithStreamingResponse:
+        return AsyncStatusResourceWithStreamingResponse(self._v1.status)

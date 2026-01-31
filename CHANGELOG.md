@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.10 (2026-01-31)
+
+Full Changelog: [v0.3.9...v0.3.10](https://github.com/evermemos/evermemos-python/compare/v0.3.9...v0.3.10)
+
+### Features
+
+* **api:** api update ([98f0599](https://github.com/evermemos/evermemos-python/commit/98f05990549d226b03aa4a006b994df14ca91967))
+* **client:** add custom JSON encoder for extended type support ([07e2cfe](https://github.com/evermemos/evermemos-python/commit/07e2cfe00b6360c7227fa0149c8aaf8697d3ec3f))
+
+
+### Chores
+
+* update SDK settings ([135157a](https://github.com/evermemos/evermemos-python/commit/135157adbfe192a90a78aa0c51418a764649d054))
+* update SDK settings ([d6a254c](https://github.com/evermemos/evermemos-python/commit/d6a254c0c35bc5e1a0a74bb5c5f8b7d96f1c92e1))
+* update SDK settings ([dda1b57](https://github.com/evermemos/evermemos-python/commit/dda1b5786d59336c1ace3363876de645fcffccb7))
+
 ## 0.3.9 (2026-01-29)
 
 Full Changelog: [v0.3.8...v0.3.9](https://github.com/evermemos/evermemos-python/compare/v0.3.8...v0.3.9)

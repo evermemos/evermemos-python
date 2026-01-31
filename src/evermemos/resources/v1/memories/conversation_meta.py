@@ -49,11 +49,13 @@ class ConversationMetaResource(SyncAPIResource):
         self,
         *,
         created_at: str,
-        name: str,
-        scene: str,
-        scene_desc: Dict[str, object],
         default_timezone: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
+        llm_custom_setting: Optional[conversation_meta_create_params.LlmCustomSetting] | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        scene: Optional[str] | Omit = omit,
+        scene_desc: Optional[Dict[str, object]] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
         user_details: Optional[Dict[str, conversation_meta_create_params.UserDetails]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -68,6 +70,43 @@ class ConversationMetaResource(SyncAPIResource):
         etc.
 
         Args:
+          created_at: Conversation creation time (ISO 8601 format)
+
+          default_timezone: Default timezone
+
+          description: Conversation description
+
+          group_id: Group unique identifier. When null/not provided, represents default settings for
+              this scene.
+
+          llm_custom_setting: LLM custom settings for algorithm control. **Only for global config
+              (group_id=null), not allowed for group config (group_id provided).**
+
+              Allows configuring different LLM providers/models for different tasks like
+              boundary detection and memory extraction.
+
+          name: Group/conversation name. **Required for group config (group_id provided), not
+              allowed for global config (group_id=null).**
+
+          scene: Scene identifier. **Required for global config (group_id=null), not allowed for
+              group config (group_id provided).**
+
+              Enum values from ScenarioType:
+
+              - group_chat: work/group chat scenario, suitable for group conversations such as
+                multi-person collaboration and project discussions
+              - assistant: assistant scenario, suitable for one-on-one AI assistant
+                conversations
+
+          scene_desc: Scene description object. **Required for global config (group_id=null), not
+              allowed for group config (group_id provided).**
+
+              Can include fields like description, type, etc.
+
+          tags: Tag list
+
+          user_details: Participant details, key is user ID, value is user detail object
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -81,11 +120,13 @@ class ConversationMetaResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "created_at": created_at,
+                    "default_timezone": default_timezone,
+                    "description": description,
+                    "group_id": group_id,
+                    "llm_custom_setting": llm_custom_setting,
                     "name": name,
                     "scene": scene,
                     "scene_desc": scene_desc,
-                    "default_timezone": default_timezone,
-                    "group_id": group_id,
                     "tags": tags,
                     "user_details": user_details,
                 },
@@ -101,7 +142,9 @@ class ConversationMetaResource(SyncAPIResource):
         self,
         *,
         default_timezone: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
+        llm_custom_setting: Optional[conversation_meta_update_params.LlmCustomSetting] | Omit = omit,
         name: Optional[str] | Omit = omit,
         scene_desc: Optional[Dict[str, object]] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -117,6 +160,25 @@ class ConversationMetaResource(SyncAPIResource):
         Partially update conversation metadata, only updating provided fields
 
         Args:
+          default_timezone: New default timezone
+
+          description: New description
+
+          group_id: Group ID to update. When null, updates the global (default) config.
+
+          llm_custom_setting: New LLM custom settings. **Only allowed for global config (group_id=null). Not
+              allowed for group config (inherited from global config).**
+
+          name: New group/conversation name. **Only allowed for group config (group_id
+              provided). Not allowed for global config.**
+
+          scene_desc: New scene description. **Only allowed for global config (group_id=null). Not
+              allowed for group config (inherited from global config).**
+
+          tags: New tag list
+
+          user_details: New user details (will completely replace existing user_details)
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -130,7 +192,9 @@ class ConversationMetaResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "default_timezone": default_timezone,
+                    "description": description,
                     "group_id": group_id,
+                    "llm_custom_setting": llm_custom_setting,
                     "name": name,
                     "scene_desc": scene_desc,
                     "tags": tags,
@@ -188,11 +252,13 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         self,
         *,
         created_at: str,
-        name: str,
-        scene: str,
-        scene_desc: Dict[str, object],
         default_timezone: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
+        llm_custom_setting: Optional[conversation_meta_create_params.LlmCustomSetting] | Omit = omit,
+        name: Optional[str] | Omit = omit,
+        scene: Optional[str] | Omit = omit,
+        scene_desc: Optional[Dict[str, object]] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
         user_details: Optional[Dict[str, conversation_meta_create_params.UserDetails]] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -207,6 +273,43 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         etc.
 
         Args:
+          created_at: Conversation creation time (ISO 8601 format)
+
+          default_timezone: Default timezone
+
+          description: Conversation description
+
+          group_id: Group unique identifier. When null/not provided, represents default settings for
+              this scene.
+
+          llm_custom_setting: LLM custom settings for algorithm control. **Only for global config
+              (group_id=null), not allowed for group config (group_id provided).**
+
+              Allows configuring different LLM providers/models for different tasks like
+              boundary detection and memory extraction.
+
+          name: Group/conversation name. **Required for group config (group_id provided), not
+              allowed for global config (group_id=null).**
+
+          scene: Scene identifier. **Required for global config (group_id=null), not allowed for
+              group config (group_id provided).**
+
+              Enum values from ScenarioType:
+
+              - group_chat: work/group chat scenario, suitable for group conversations such as
+                multi-person collaboration and project discussions
+              - assistant: assistant scenario, suitable for one-on-one AI assistant
+                conversations
+
+          scene_desc: Scene description object. **Required for global config (group_id=null), not
+              allowed for group config (group_id provided).**
+
+              Can include fields like description, type, etc.
+
+          tags: Tag list
+
+          user_details: Participant details, key is user ID, value is user detail object
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -220,11 +323,13 @@ class AsyncConversationMetaResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "created_at": created_at,
+                    "default_timezone": default_timezone,
+                    "description": description,
+                    "group_id": group_id,
+                    "llm_custom_setting": llm_custom_setting,
                     "name": name,
                     "scene": scene,
                     "scene_desc": scene_desc,
-                    "default_timezone": default_timezone,
-                    "group_id": group_id,
                     "tags": tags,
                     "user_details": user_details,
                 },
@@ -240,7 +345,9 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         self,
         *,
         default_timezone: Optional[str] | Omit = omit,
+        description: Optional[str] | Omit = omit,
         group_id: Optional[str] | Omit = omit,
+        llm_custom_setting: Optional[conversation_meta_update_params.LlmCustomSetting] | Omit = omit,
         name: Optional[str] | Omit = omit,
         scene_desc: Optional[Dict[str, object]] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
@@ -256,6 +363,25 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         Partially update conversation metadata, only updating provided fields
 
         Args:
+          default_timezone: New default timezone
+
+          description: New description
+
+          group_id: Group ID to update. When null, updates the global (default) config.
+
+          llm_custom_setting: New LLM custom settings. **Only allowed for global config (group_id=null). Not
+              allowed for group config (inherited from global config).**
+
+          name: New group/conversation name. **Only allowed for group config (group_id
+              provided). Not allowed for global config.**
+
+          scene_desc: New scene description. **Only allowed for global config (group_id=null). Not
+              allowed for group config (inherited from global config).**
+
+          tags: New tag list
+
+          user_details: New user details (will completely replace existing user_details)
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -269,7 +395,9 @@ class AsyncConversationMetaResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "default_timezone": default_timezone,
+                    "description": description,
                     "group_id": group_id,
+                    "llm_custom_setting": llm_custom_setting,
                     "name": name,
                     "scene_desc": scene_desc,
                     "tags": tags,
