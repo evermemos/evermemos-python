@@ -70,7 +70,7 @@ class ConversationMetaResource(SyncAPIResource):
         etc.
 
         Args:
-          created_at: Conversation creation time (ISO 8601 format)
+          created_at: Conversation creation time (ISO 8601 format with Timezone is required)
 
           default_timezone: Default timezone
 
@@ -273,7 +273,7 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         etc.
 
         Args:
-          created_at: Conversation creation time (ISO 8601 format)
+          created_at: Conversation creation time (ISO 8601 format with Timezone is required)
 
           default_timezone: Default timezone
 

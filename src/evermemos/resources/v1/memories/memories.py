@@ -134,12 +134,12 @@ class MemoriesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> MemoryAddResponse:
         """
-        Store a single message into memory.
+        Extract memory from message.
 
         Args:
           content: Message content
 
-          create_time: Message creation time (ISO 8601 format)
+          create_time: Message creation time (ISO 8601 format with Timezone is required)
 
           message_id: Message unique identifier
 
@@ -337,12 +337,12 @@ class AsyncMemoriesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> MemoryAddResponse:
         """
-        Store a single message into memory.
+        Extract memory from message.
 
         Args:
           content: Message content
 
-          create_time: Message creation time (ISO 8601 format)
+          create_time: Message creation time (ISO 8601 format with Timezone is required)
 
           message_id: Message unique identifier
 
