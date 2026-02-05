@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 (2026-02-05)
+
+Full Changelog: [v0.3.10...v0.4.0](https://github.com/evermemos/evermemos-python/compare/v0.3.10...v0.4.0)
+
+### Features
+
+* **api:** api update ([0981f02](https://github.com/evermemos/evermemos-python/commit/0981f021d776d39cb9278f8ced62d749459fd613))
+
 ## 0.3.10 (2026-01-31)
 
 Full Changelog: [v0.3.9...v0.3.10](https://github.com/evermemos/evermemos-python/compare/v0.3.9...v0.3.10)
