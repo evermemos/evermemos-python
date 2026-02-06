@@ -2,31 +2,32 @@
 
 from typing import Dict, List, Union, Optional
 from datetime import datetime
-from typing_extensions import Literal, TypeAlias
+from typing_extensions import TypeAlias
 
 from .metadata import Metadata
 from ..._models import BaseModel
-from .memory_type import MemoryType
 
 __all__ = [
     "MemorySearchResponse",
     "Result",
     "ResultMemory",
-    "ResultMemoryEpisodeMemory",
-    "ResultMemoryEventLog",
-    "ResultMemoryForesight",
+    "ResultMemoryEpisodicMemoryModel",
+    "ResultMemoryEventLogModel",
+    "ResultMemoryForesightModel",
     "ResultPendingMessage",
 ]
 
 
-class ResultMemoryEpisodeMemory(BaseModel):
-    memory_type: Union[MemoryType, str]
+class ResultMemoryEpisodicMemoryModel(BaseModel):
+    id: str
 
-    timestamp: datetime
+    episode_id: str
 
     user_id: str
 
-    id: Optional[str] = None
+    created_at: Optional[datetime] = None
+
+    end_time: Optional[datetime] = None
 
     episode: Optional[str] = None
 
@@ -38,11 +39,9 @@ class ResultMemoryEpisodeMemory(BaseModel):
 
     keywords: Optional[List[str]] = None
 
-    linked_entities: Optional[List[str]] = None
+    location: Optional[str] = None
 
-    ori_event_id_list: Optional[List[str]] = None
-
-    original_data: Optional[List[Dict[str, object]]] = None
+    metadata: Optional[Metadata] = None
 
     parent_id: Optional[str] = None
 
@@ -50,59 +49,45 @@ class ResultMemoryEpisodeMemory(BaseModel):
 
     participants: Optional[List[str]] = None
 
-    score: Optional[float] = None
+    start_time: Optional[datetime] = None
 
     subject: Optional[str] = None
 
     summary: Optional[str] = None
 
-    type: Optional[Literal["Conversation"]] = None
+    timestamp: Optional[datetime] = None
 
-    user_name: Optional[str] = None
-
-    vector: Optional[List[float]] = None
-
-    vector_model: Optional[str] = None
+    updated_at: Optional[datetime] = None
 
 
-class ResultMemoryEventLog(BaseModel):
-    memory_type: Union[MemoryType, str]
+class ResultMemoryEventLogModel(BaseModel):
+    id: str
+
+    atomic_fact: str
+
+    parent_id: str
+
+    parent_type: str
 
     timestamp: datetime
 
     user_id: str
 
-    id: Optional[str] = None
+    created_at: Optional[datetime] = None
 
-    atomic_fact: Union[str, List[str], None] = None
+    event_type: Optional[str] = None
 
     extend: Optional[Dict[str, object]] = None
-
-    fact_embeddings: Optional[List[List[float]]] = None
 
     group_id: Optional[str] = None
 
     group_name: Optional[str] = None
 
-    keywords: Optional[List[str]] = None
-
-    linked_entities: Optional[List[str]] = None
-
-    ori_event_id_list: Optional[List[str]] = None
-
-    original_data: Optional[List[Dict[str, object]]] = None
-
-    parent_id: Optional[str] = None
-
-    parent_type: Optional[str] = None
+    metadata: Optional[Metadata] = None
 
     participants: Optional[List[str]] = None
 
-    score: Optional[float] = None
-
-    time: Optional[str] = None
-
-    type: Optional[Literal["Conversation"]] = None
+    updated_at: Optional[datetime] = None
 
     user_name: Optional[str] = None
 
@@ -111,14 +96,18 @@ class ResultMemoryEventLog(BaseModel):
     vector_model: Optional[str] = None
 
 
-class ResultMemoryForesight(BaseModel):
-    memory_type: Union[MemoryType, str]
+class ResultMemoryForesightModel(BaseModel):
+    id: str
 
-    timestamp: datetime
+    content: str
 
-    user_id: str
+    foresight: str
 
-    id: Optional[str] = None
+    parent_id: str
+
+    parent_type: str
+
+    created_at: Optional[datetime] = None
 
     duration_days: Optional[int] = None
 
@@ -128,31 +117,19 @@ class ResultMemoryForesight(BaseModel):
 
     extend: Optional[Dict[str, object]] = None
 
-    foresight: Optional[str] = None
-
     group_id: Optional[str] = None
 
     group_name: Optional[str] = None
 
-    keywords: Optional[List[str]] = None
-
-    linked_entities: Optional[List[str]] = None
-
-    ori_event_id_list: Optional[List[str]] = None
-
-    original_data: Optional[List[Dict[str, object]]] = None
-
-    parent_id: Optional[str] = None
-
-    parent_type: Optional[str] = None
+    metadata: Optional[Metadata] = None
 
     participants: Optional[List[str]] = None
 
-    score: Optional[float] = None
-
     start_time: Optional[str] = None
 
-    type: Optional[Literal["Conversation"]] = None
+    updated_at: Optional[datetime] = None
+
+    user_id: Optional[str] = None
 
     user_name: Optional[str] = None
 
@@ -161,7 +138,7 @@ class ResultMemoryForesight(BaseModel):
     vector_model: Optional[str] = None
 
 
-ResultMemory: TypeAlias = Union[ResultMemoryEpisodeMemory, ResultMemoryEventLog, ResultMemoryForesight]
+ResultMemory: TypeAlias = Union[ResultMemoryEpisodicMemoryModel, ResultMemoryEventLogModel, ResultMemoryForesightModel]
 
 
 class ResultPendingMessage(BaseModel):
