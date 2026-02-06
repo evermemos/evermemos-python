@@ -17,10 +17,10 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.v1.memories import conversation_meta_create_params, conversation_meta_update_params
-from ....types.v1.memories.conversation_meta_get_response import ConversationMetaGetResponse
-from ....types.v1.memories.conversation_meta_create_response import ConversationMetaCreateResponse
-from ....types.v1.memories.conversation_meta_update_response import ConversationMetaUpdateResponse
+from ....types.v0.memories import conversation_meta_create_params, conversation_meta_update_params
+from ....types.v0.memories.conversation_meta_get_response import ConversationMetaGetResponse
+from ....types.v0.memories.conversation_meta_create_response import ConversationMetaCreateResponse
+from ....types.v0.memories.conversation_meta_update_response import ConversationMetaUpdateResponse
 
 __all__ = ["ConversationMetaResource", "AsyncConversationMetaResource"]
 
@@ -70,7 +70,7 @@ class ConversationMetaResource(SyncAPIResource):
         etc.
 
         Args:
-          created_at: Conversation creation time (ISO 8601 format)
+          created_at: Conversation creation time (ISO 8601 format with Timezone is required)
 
           default_timezone: Default timezone
 
@@ -116,7 +116,7 @@ class ConversationMetaResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
-            "/api/v1/memories/conversation-meta",
+            "/api/v0/memories/conversation-meta",
             body=maybe_transform(
                 {
                     "created_at": created_at,
@@ -188,7 +188,7 @@ class ConversationMetaResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._patch(
-            "/api/v1/memories/conversation-meta",
+            "/api/v0/memories/conversation-meta",
             body=maybe_transform(
                 {
                     "default_timezone": default_timezone,
@@ -220,7 +220,7 @@ class ConversationMetaResource(SyncAPIResource):
     ) -> ConversationMetaGetResponse:
         """Retrieve conversation metadata by group_id with fallback to default config"""
         return self._get(
-            "/api/v1/memories/conversation-meta",
+            "/api/v0/memories/conversation-meta",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -273,7 +273,7 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         etc.
 
         Args:
-          created_at: Conversation creation time (ISO 8601 format)
+          created_at: Conversation creation time (ISO 8601 format with Timezone is required)
 
           default_timezone: Default timezone
 
@@ -319,7 +319,7 @@ class AsyncConversationMetaResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
-            "/api/v1/memories/conversation-meta",
+            "/api/v0/memories/conversation-meta",
             body=await async_maybe_transform(
                 {
                     "created_at": created_at,
@@ -391,7 +391,7 @@ class AsyncConversationMetaResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._patch(
-            "/api/v1/memories/conversation-meta",
+            "/api/v0/memories/conversation-meta",
             body=await async_maybe_transform(
                 {
                     "default_timezone": default_timezone,
@@ -423,7 +423,7 @@ class AsyncConversationMetaResource(AsyncAPIResource):
     ) -> ConversationMetaGetResponse:
         """Retrieve conversation metadata by group_id with fallback to default config"""
         return await self._get(
-            "/api/v1/memories/conversation-meta",
+            "/api/v0/memories/conversation-meta",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

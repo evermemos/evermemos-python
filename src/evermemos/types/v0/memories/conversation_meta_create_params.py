@@ -18,7 +18,7 @@ __all__ = [
 
 class ConversationMetaCreateParams(TypedDict, total=False):
     created_at: Required[str]
-    """Conversation creation time (ISO 8601 format)"""
+    """Conversation creation time (ISO 8601 format with Timezone is required)"""
 
     default_timezone: Optional[str]
     """Default timezone"""

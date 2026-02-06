@@ -31,8 +31,8 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import v1
-    from .resources.v1.v1 import V1Resource, AsyncV1Resource
+    from .resources import v0
+    from .resources.v0.v0 import V0Resource, AsyncV0Resource
 
 __all__ = [
     "Timeout",
@@ -102,10 +102,10 @@ class EverMemOS(SyncAPIClient):
         )
 
     @cached_property
-    def v1(self) -> V1Resource:
-        from .resources.v1 import V1Resource
+    def v0(self) -> V0Resource:
+        from .resources.v0 import V0Resource
 
-        return V1Resource(self)
+        return V0Resource(self)
 
     @cached_property
     def with_raw_response(self) -> EverMemOSWithRawResponse:
@@ -276,10 +276,10 @@ class AsyncEverMemOS(AsyncAPIClient):
         )
 
     @cached_property
-    def v1(self) -> AsyncV1Resource:
-        from .resources.v1 import AsyncV1Resource
+    def v0(self) -> AsyncV0Resource:
+        from .resources.v0 import AsyncV0Resource
 
-        return AsyncV1Resource(self)
+        return AsyncV0Resource(self)
 
     @cached_property
     def with_raw_response(self) -> AsyncEverMemOSWithRawResponse:
@@ -401,10 +401,10 @@ class EverMemOSWithRawResponse:
         self._client = client
 
     @cached_property
-    def v1(self) -> v1.V1ResourceWithRawResponse:
-        from .resources.v1 import V1ResourceWithRawResponse
+    def v0(self) -> v0.V0ResourceWithRawResponse:
+        from .resources.v0 import V0ResourceWithRawResponse
 
-        return V1ResourceWithRawResponse(self._client.v1)
+        return V0ResourceWithRawResponse(self._client.v0)
 
 
 class AsyncEverMemOSWithRawResponse:
@@ -414,10 +414,10 @@ class AsyncEverMemOSWithRawResponse:
         self._client = client
 
     @cached_property
-    def v1(self) -> v1.AsyncV1ResourceWithRawResponse:
-        from .resources.v1 import AsyncV1ResourceWithRawResponse
+    def v0(self) -> v0.AsyncV0ResourceWithRawResponse:
+        from .resources.v0 import AsyncV0ResourceWithRawResponse
 
-        return AsyncV1ResourceWithRawResponse(self._client.v1)
+        return AsyncV0ResourceWithRawResponse(self._client.v0)
 
 
 class EverMemOSWithStreamedResponse:
@@ -427,10 +427,10 @@ class EverMemOSWithStreamedResponse:
         self._client = client
 
     @cached_property
-    def v1(self) -> v1.V1ResourceWithStreamingResponse:
-        from .resources.v1 import V1ResourceWithStreamingResponse
+    def v0(self) -> v0.V0ResourceWithStreamingResponse:
+        from .resources.v0 import V0ResourceWithStreamingResponse
 
-        return V1ResourceWithStreamingResponse(self._client.v1)
+        return V0ResourceWithStreamingResponse(self._client.v0)
 
 
 class AsyncEverMemOSWithStreamedResponse:
@@ -440,10 +440,10 @@ class AsyncEverMemOSWithStreamedResponse:
         self._client = client
 
     @cached_property
-    def v1(self) -> v1.AsyncV1ResourceWithStreamingResponse:
-        from .resources.v1 import AsyncV1ResourceWithStreamingResponse
+    def v0(self) -> v0.AsyncV0ResourceWithStreamingResponse:
+        from .resources.v0 import AsyncV0ResourceWithStreamingResponse
 
-        return AsyncV1ResourceWithStreamingResponse(self._client.v1)
+        return AsyncV0ResourceWithStreamingResponse(self._client.v0)
 
 
 Client = EverMemOS

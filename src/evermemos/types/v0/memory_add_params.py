@@ -15,7 +15,7 @@ class MemoryAddParams(TypedDict, total=False):
     """Message content"""
 
     create_time: Required[str]
-    """Message creation time (ISO 8601 format)"""
+    """Message creation time (ISO 8601 format with Timezone is required)"""
 
     message_id: Required[str]
     """Message unique identifier"""

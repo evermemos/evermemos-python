@@ -17,8 +17,8 @@ from ...._response import (
     async_to_streamed_response_wrapper,
 )
 from ...._base_client import make_request_options
-from ....types.v1.status import request_get_params
-from ....types.v1.status.request_get_response import RequestGetResponse
+from ....types.v0.status import request_get_params
+from ....types.v0.status.request_get_response import RequestGetResponse
 
 __all__ = ["RequestResource", "AsyncRequestResource"]
 
@@ -69,7 +69,7 @@ class RequestResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get(
-            "/api/v1/status/request",
+            "/api/v0/status/request",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -127,7 +127,7 @@ class AsyncRequestResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._get(
-            "/api/v1/status/request",
+            "/api/v0/status/request",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
