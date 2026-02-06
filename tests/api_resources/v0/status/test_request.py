@@ -9,7 +9,7 @@ import pytest
 
 from evermemos import EverMemOS, AsyncEverMemOS
 from tests.utils import assert_matches_type
-from evermemos.types.v1.status import RequestGetResponse
+from evermemos.types.v0.status import RequestGetResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -20,7 +20,7 @@ class TestRequest:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_method_get(self, client: EverMemOS) -> None:
-        request = client.v1.status.request.get(
+        request = client.v0.status.request.get(
             request_id="request_id",
         )
         assert_matches_type(RequestGetResponse, request, path=["response"])
@@ -28,7 +28,7 @@ class TestRequest:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: EverMemOS) -> None:
-        response = client.v1.status.request.with_raw_response.get(
+        response = client.v0.status.request.with_raw_response.get(
             request_id="request_id",
         )
 
@@ -40,7 +40,7 @@ class TestRequest:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: EverMemOS) -> None:
-        with client.v1.status.request.with_streaming_response.get(
+        with client.v0.status.request.with_streaming_response.get(
             request_id="request_id",
         ) as response:
             assert not response.is_closed
@@ -60,7 +60,7 @@ class TestAsyncRequest:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncEverMemOS) -> None:
-        request = await async_client.v1.status.request.get(
+        request = await async_client.v0.status.request.get(
             request_id="request_id",
         )
         assert_matches_type(RequestGetResponse, request, path=["response"])
@@ -68,7 +68,7 @@ class TestAsyncRequest:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncEverMemOS) -> None:
-        response = await async_client.v1.status.request.with_raw_response.get(
+        response = await async_client.v0.status.request.with_raw_response.get(
             request_id="request_id",
         )
 
@@ -80,7 +80,7 @@ class TestAsyncRequest:
     @pytest.mark.skip(reason="Prism tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncEverMemOS) -> None:
-        async with async_client.v1.status.request.with_streaming_response.get(
+        async with async_client.v0.status.request.with_streaming_response.get(
             request_id="request_id",
         ) as response:
             assert not response.is_closed

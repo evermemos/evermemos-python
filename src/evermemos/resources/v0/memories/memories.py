@@ -9,7 +9,7 @@ import httpx
 from ...._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from ...._utils import maybe_transform, async_maybe_transform
 from ...._compat import cached_property
-from ....types.v1 import memory_add_params, memory_delete_params
+from ....types.v0 import memory_add_params, memory_delete_params
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from ...._response import (
     to_raw_response_wrapper,
@@ -26,10 +26,10 @@ from .conversation_meta import (
     ConversationMetaResourceWithStreamingResponse,
     AsyncConversationMetaResourceWithStreamingResponse,
 )
-from ....types.v1.memory_add_response import MemoryAddResponse
-from ....types.v1.memory_get_response import MemoryGetResponse
-from ....types.v1.memory_delete_response import MemoryDeleteResponse
-from ....types.v1.memory_search_response import MemorySearchResponse
+from ....types.v0.memory_add_response import MemoryAddResponse
+from ....types.v0.memory_get_response import MemoryGetResponse
+from ....types.v0.memory_delete_response import MemoryDeleteResponse
+from ....types.v0.memory_search_response import MemorySearchResponse
 
 __all__ = ["MemoriesResource", "AsyncMemoriesResource"]
 
@@ -96,7 +96,7 @@ class MemoriesResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._delete(
-            "/api/v1/memories",
+            "/api/v0/memories",
             body=maybe_transform(
                 {
                     "id": id,
@@ -173,7 +173,7 @@ class MemoriesResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._post(
-            "/api/v1/memories",
+            "/api/v0/memories",
             body=maybe_transform(
                 {
                     "content": content,
@@ -207,7 +207,7 @@ class MemoriesResource(SyncAPIResource):
     ) -> MemoryGetResponse:
         """Retrieve memory records by memory_type with optional filters"""
         return self._get(
-            "/api/v1/memories",
+            "/api/v0/memories",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -229,7 +229,7 @@ class MemoriesResource(SyncAPIResource):
         methods
         """
         return self._get(
-            "/api/v1/memories/search",
+            "/api/v0/memories/search",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -299,7 +299,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._delete(
-            "/api/v1/memories",
+            "/api/v0/memories",
             body=await async_maybe_transform(
                 {
                     "id": id,
@@ -376,7 +376,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._post(
-            "/api/v1/memories",
+            "/api/v0/memories",
             body=await async_maybe_transform(
                 {
                     "content": content,
@@ -410,7 +410,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
     ) -> MemoryGetResponse:
         """Retrieve memory records by memory_type with optional filters"""
         return await self._get(
-            "/api/v1/memories",
+            "/api/v0/memories",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -432,7 +432,7 @@ class AsyncMemoriesResource(AsyncAPIResource):
         methods
         """
         return await self._get(
-            "/api/v1/memories/search",
+            "/api/v0/memories/search",
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
