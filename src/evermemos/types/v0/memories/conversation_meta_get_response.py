@@ -40,7 +40,7 @@ class ResultLlmCustomSettingExtraction(BaseModel):
 
 
 class ResultLlmCustomSetting(BaseModel):
-    """LLM custom settings (only for global config)"""
+    """LLM custom settings"""
 
     boundary: Optional[ResultLlmCustomSettingBoundary] = None
     """LLM config for boundary detection (fast, cheap model recommended)"""
@@ -70,23 +70,17 @@ class Result(BaseModel):
     description: Optional[str] = None
     """Description"""
 
-    group_id: Optional[str] = None
-    """Group ID (null for global config)"""
-
     is_default: Optional[bool] = None
     """Whether this is the global (default) config"""
 
     llm_custom_setting: Optional[ResultLlmCustomSetting] = None
-    """LLM custom settings (only for global config)"""
-
-    name: Optional[str] = None
-    """Group/conversation name (only for group config)"""
+    """LLM custom settings"""
 
     scene: Optional[str] = None
-    """Scene identifier (only for global config)"""
+    """Scene identifier"""
 
     scene_desc: Optional[Dict[str, object]] = None
-    """Scene description (only for global config)"""
+    """Scene description"""
 
     tags: Optional[List[str]] = None
     """Tags"""

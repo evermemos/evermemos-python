@@ -26,6 +26,7 @@ class TestConversationMeta:
     def test_method_create(self, client: EverMemOS) -> None:
         conversation_meta = client.v0.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
+            scene="group_chat",
         )
         assert_matches_type(ConversationMetaCreateResponse, conversation_meta, path=["response"])
 
@@ -34,12 +35,12 @@ class TestConversationMeta:
     def test_method_create_with_all_params(self, client: EverMemOS) -> None:
         conversation_meta = client.v0.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
+            scene="group_chat",
             default_timezone="UTC",
             description="Technical discussion for new feature development",
-            group_id="group_123",
             llm_custom_setting={
                 "boundary": {
-                    "model": "gpt-4o-mini",
+                    "model": "gpt-4.1-mini",
                     "provider": "openai",
                     "extra": {
                         "max_tokens": "bar",
@@ -48,16 +49,14 @@ class TestConversationMeta:
                 },
                 "extra": {"foo": "bar"},
                 "extraction": {
-                    "model": "gpt-4o",
-                    "provider": "openai",
+                    "model": "qwen/qwen3-235b-a22b-2507",
+                    "provider": "openrouter",
                     "extra": {
                         "max_tokens": "bar",
                         "temperature": "bar",
                     },
                 },
             },
-            name="Project Discussion Group",
-            scene="group_chat",
             scene_desc={
                 "description": "bar",
                 "type": "bar",
@@ -85,6 +84,7 @@ class TestConversationMeta:
     def test_raw_response_create(self, client: EverMemOS) -> None:
         response = client.v0.memories.conversation_meta.with_raw_response.create(
             created_at="2025-01-15T10:00:00+00:00",
+            scene="group_chat",
         )
 
         assert response.is_closed is True
@@ -97,6 +97,7 @@ class TestConversationMeta:
     def test_streaming_response_create(self, client: EverMemOS) -> None:
         with client.v0.memories.conversation_meta.with_streaming_response.create(
             created_at="2025-01-15T10:00:00+00:00",
+            scene="group_chat",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -118,10 +119,9 @@ class TestConversationMeta:
         conversation_meta = client.v0.memories.conversation_meta.update(
             default_timezone="Asia/Shanghai",
             description="Updated description",
-            group_id="group_123",
             llm_custom_setting={
                 "boundary": {
-                    "model": "gpt-4o-mini",
+                    "model": "gpt-4.1-mini",
                     "provider": "openai",
                     "extra": {
                         "max_tokens": "bar",
@@ -130,15 +130,14 @@ class TestConversationMeta:
                 },
                 "extra": {"foo": "bar"},
                 "extraction": {
-                    "model": "gpt-4o",
-                    "provider": "openai",
+                    "model": "qwen/qwen3-235b-a22b-2507",
+                    "provider": "openrouter",
                     "extra": {
                         "max_tokens": "bar",
                         "temperature": "bar",
                     },
                 },
             },
-            name="New Group Name",
             scene_desc={"description": "bar"},
             tags=["tag1", "tag2"],
             user_details={
@@ -213,6 +212,7 @@ class TestAsyncConversationMeta:
     async def test_method_create(self, async_client: AsyncEverMemOS) -> None:
         conversation_meta = await async_client.v0.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
+            scene="group_chat",
         )
         assert_matches_type(ConversationMetaCreateResponse, conversation_meta, path=["response"])
 
@@ -221,12 +221,12 @@ class TestAsyncConversationMeta:
     async def test_method_create_with_all_params(self, async_client: AsyncEverMemOS) -> None:
         conversation_meta = await async_client.v0.memories.conversation_meta.create(
             created_at="2025-01-15T10:00:00+00:00",
+            scene="group_chat",
             default_timezone="UTC",
             description="Technical discussion for new feature development",
-            group_id="group_123",
             llm_custom_setting={
                 "boundary": {
-                    "model": "gpt-4o-mini",
+                    "model": "gpt-4.1-mini",
                     "provider": "openai",
                     "extra": {
                         "max_tokens": "bar",
@@ -235,16 +235,14 @@ class TestAsyncConversationMeta:
                 },
                 "extra": {"foo": "bar"},
                 "extraction": {
-                    "model": "gpt-4o",
-                    "provider": "openai",
+                    "model": "qwen/qwen3-235b-a22b-2507",
+                    "provider": "openrouter",
                     "extra": {
                         "max_tokens": "bar",
                         "temperature": "bar",
                     },
                 },
             },
-            name="Project Discussion Group",
-            scene="group_chat",
             scene_desc={
                 "description": "bar",
                 "type": "bar",
@@ -272,6 +270,7 @@ class TestAsyncConversationMeta:
     async def test_raw_response_create(self, async_client: AsyncEverMemOS) -> None:
         response = await async_client.v0.memories.conversation_meta.with_raw_response.create(
             created_at="2025-01-15T10:00:00+00:00",
+            scene="group_chat",
         )
 
         assert response.is_closed is True
@@ -284,6 +283,7 @@ class TestAsyncConversationMeta:
     async def test_streaming_response_create(self, async_client: AsyncEverMemOS) -> None:
         async with async_client.v0.memories.conversation_meta.with_streaming_response.create(
             created_at="2025-01-15T10:00:00+00:00",
+            scene="group_chat",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -305,10 +305,9 @@ class TestAsyncConversationMeta:
         conversation_meta = await async_client.v0.memories.conversation_meta.update(
             default_timezone="Asia/Shanghai",
             description="Updated description",
-            group_id="group_123",
             llm_custom_setting={
                 "boundary": {
-                    "model": "gpt-4o-mini",
+                    "model": "gpt-4.1-mini",
                     "provider": "openai",
                     "extra": {
                         "max_tokens": "bar",
@@ -317,15 +316,14 @@ class TestAsyncConversationMeta:
                 },
                 "extra": {"foo": "bar"},
                 "extraction": {
-                    "model": "gpt-4o",
-                    "provider": "openai",
+                    "model": "qwen/qwen3-235b-a22b-2507",
+                    "provider": "openrouter",
                     "extra": {
                         "max_tokens": "bar",
                         "temperature": "bar",
                     },
                 },
             },
-            name="New Group Name",
             scene_desc={"description": "bar"},
             tags=["tag1", "tag2"],
             user_details={
