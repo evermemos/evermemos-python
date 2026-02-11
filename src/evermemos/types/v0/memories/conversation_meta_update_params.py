@@ -23,29 +23,11 @@ class ConversationMetaUpdateParams(TypedDict, total=False):
     description: Optional[str]
     """New description"""
 
-    group_id: Optional[str]
-    """Group ID to update. When null, updates the global (default) config."""
-
     llm_custom_setting: Optional[LlmCustomSetting]
-    """New LLM custom settings.
-
-    **Only allowed for global config (group_id=null). Not allowed for group config
-    (inherited from global config).**
-    """
-
-    name: Optional[str]
-    """New group/conversation name.
-
-    **Only allowed for group config (group_id provided). Not allowed for global
-    config.**
-    """
+    """New LLM custom settings."""
 
     scene_desc: Optional[Dict[str, object]]
-    """New scene description.
-
-    **Only allowed for global config (group_id=null). Not allowed for group config
-    (inherited from global config).**
-    """
+    """New scene description."""
 
     tags: Optional[SequenceNotStr[str]]
     """New tag list"""
@@ -81,11 +63,7 @@ class LlmCustomSettingExtraction(TypedDict, total=False):
 
 
 class LlmCustomSetting(TypedDict, total=False):
-    """New LLM custom settings.
-
-    **Only allowed for global config (group_id=null).
-    Not allowed for group config (inherited from global config).**
-    """
+    """New LLM custom settings."""
 
     boundary: Optional[LlmCustomSettingBoundary]
     """LLM config for boundary detection (fast, cheap model recommended)"""

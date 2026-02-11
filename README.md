@@ -132,14 +132,15 @@ client = EverMemOS()
 
 conversation_meta = client.v0.memories.conversation_meta.create(
     created_at="2025-01-15T10:00:00+00:00",
+    scene="group_chat",
     llm_custom_setting={
         "boundary": {
-            "model": "gpt-4o-mini",
+            "model": "gpt-4.1-mini",
             "provider": "openai",
         },
         "extraction": {
-            "model": "gpt-4o",
-            "provider": "openai",
+            "model": "qwen/qwen3-235b-a22b-2507",
+            "provider": "openrouter",
         },
     },
 )

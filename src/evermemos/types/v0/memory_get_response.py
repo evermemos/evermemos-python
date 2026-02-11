@@ -69,6 +69,8 @@ class ResultMemoryEpisodicMemoryModel(BaseModel):
 
     metadata: Optional[Metadata] = None
 
+    original_data: Optional[List[Dict[str, object]]] = None
+
     parent_id: Optional[str] = None
 
     parent_type: Optional[str] = None
@@ -111,6 +113,8 @@ class ResultMemoryEventLogModel(BaseModel):
 
     metadata: Optional[Metadata] = None
 
+    original_data: Optional[List[Dict[str, object]]] = None
+
     participants: Optional[List[str]] = None
 
     updated_at: Optional[datetime] = None
@@ -149,6 +153,8 @@ class ResultMemoryForesightModel(BaseModel):
 
     metadata: Optional[Metadata] = None
 
+    original_data: Optional[List[Dict[str, object]]] = None
+
     participants: Optional[List[str]] = None
 
     start_time: Optional[str] = None
@@ -172,13 +178,15 @@ ResultMemory: TypeAlias = Union[
 class Result(BaseModel):
     """Memory fetch result"""
 
-    has_more: Optional[bool] = None
+    count: Optional[int] = None
+    """Number of records in current page (length of memories array)"""
 
     memories: Optional[List[ResultMemory]] = None
 
     metadata: Optional[Metadata] = None
 
     total_count: Optional[int] = None
+    """Total number of records matching query conditions (for pagination calculation)"""
 
 
 class MemoryGetResponse(BaseModel):

@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Optional
+from typing import List, Optional
 
 from ..._models import BaseModel
 
@@ -8,7 +8,7 @@ __all__ = ["Metadata"]
 
 
 class Metadata(BaseModel):
-    memory_type: str
+    memory_types: List[str]
 
     source: str
 
@@ -18,8 +18,6 @@ class Metadata(BaseModel):
 
     full_name: Optional[str] = None
 
-    group_id: Optional[str] = None
-
-    limit: Optional[int] = None
+    group_ids: Optional[List[str]] = None
 
     phone: Optional[str] = None
