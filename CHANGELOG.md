@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.12 (2026-02-11)
+
+Full Changelog: [v0.3.11...v0.3.12](https://github.com/evermemos/evermemos-python/compare/v0.3.11...v0.3.12)
+
+### Features
+
+* **api:** api update ([6474a06](https://github.com/evermemos/evermemos-python/commit/6474a06e99093960ffecfdb8fc8bc932c677dc7c))
+
+
+### Chores
+
+* **internal:** bump dependencies ([dd71dc0](https://github.com/evermemos/evermemos-python/commit/dd71dc09c0b401fc21435919e5084cb160bcc274))
+
 ## 0.3.11 (2026-02-06)
 
 Full Changelog: [v0.4.0...v0.3.11](https://github.com/evermemos/evermemos-python/compare/v0.4.0...v0.3.11)
