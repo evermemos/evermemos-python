@@ -49,12 +49,10 @@ class ConversationMetaResource(SyncAPIResource):
         self,
         *,
         created_at: str,
+        scene: Optional[str],
         default_timezone: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
-        group_id: Optional[str] | Omit = omit,
         llm_custom_setting: Optional[conversation_meta_create_params.LlmCustomSetting] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        scene: Optional[str] | Omit = omit,
         scene_desc: Optional[Dict[str, object]] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
         user_details: Optional[Dict[str, conversation_meta_create_params.UserDetails]] | Omit = omit,
@@ -72,24 +70,7 @@ class ConversationMetaResource(SyncAPIResource):
         Args:
           created_at: Conversation creation time (ISO 8601 format with Timezone is required)
 
-          default_timezone: Default timezone
-
-          description: Conversation description
-
-          group_id: Group unique identifier. When null/not provided, represents default settings for
-              this scene.
-
-          llm_custom_setting: LLM custom settings for algorithm control. **Only for global config
-              (group_id=null), not allowed for group config (group_id provided).**
-
-              Allows configuring different LLM providers/models for different tasks like
-              boundary detection and memory extraction.
-
-          name: Group/conversation name. **Required for group config (group_id provided), not
-              allowed for global config (group_id=null).**
-
-          scene: Scene identifier. **Required for global config (group_id=null), not allowed for
-              group config (group_id provided).**
+          scene: Scene identifier.
 
               Enum values from ScenarioType:
 
@@ -98,8 +79,16 @@ class ConversationMetaResource(SyncAPIResource):
               - assistant: assistant scenario, suitable for one-on-one AI assistant
                 conversations
 
-          scene_desc: Scene description object. **Required for global config (group_id=null), not
-              allowed for group config (group_id provided).**
+          default_timezone: Default timezone
+
+          description: Conversation description
+
+          llm_custom_setting: LLM custom settings for algorithm control.
+
+              Allows configuring different LLM providers/models for different tasks like
+              boundary detection and memory extraction.
+
+          scene_desc: Scene description object.
 
               Can include fields like description, type, etc.
 
@@ -120,12 +109,10 @@ class ConversationMetaResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "created_at": created_at,
+                    "scene": scene,
                     "default_timezone": default_timezone,
                     "description": description,
-                    "group_id": group_id,
                     "llm_custom_setting": llm_custom_setting,
-                    "name": name,
-                    "scene": scene,
                     "scene_desc": scene_desc,
                     "tags": tags,
                     "user_details": user_details,
@@ -143,9 +130,7 @@ class ConversationMetaResource(SyncAPIResource):
         *,
         default_timezone: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
-        group_id: Optional[str] | Omit = omit,
         llm_custom_setting: Optional[conversation_meta_update_params.LlmCustomSetting] | Omit = omit,
-        name: Optional[str] | Omit = omit,
         scene_desc: Optional[Dict[str, object]] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
         user_details: Optional[Dict[str, conversation_meta_update_params.UserDetails]] | Omit = omit,
@@ -164,16 +149,9 @@ class ConversationMetaResource(SyncAPIResource):
 
           description: New description
 
-          group_id: Group ID to update. When null, updates the global (default) config.
+          llm_custom_setting: New LLM custom settings.
 
-          llm_custom_setting: New LLM custom settings. **Only allowed for global config (group_id=null). Not
-              allowed for group config (inherited from global config).**
-
-          name: New group/conversation name. **Only allowed for group config (group_id
-              provided). Not allowed for global config.**
-
-          scene_desc: New scene description. **Only allowed for global config (group_id=null). Not
-              allowed for group config (inherited from global config).**
+          scene_desc: New scene description.
 
           tags: New tag list
 
@@ -193,9 +171,7 @@ class ConversationMetaResource(SyncAPIResource):
                 {
                     "default_timezone": default_timezone,
                     "description": description,
-                    "group_id": group_id,
                     "llm_custom_setting": llm_custom_setting,
-                    "name": name,
                     "scene_desc": scene_desc,
                     "tags": tags,
                     "user_details": user_details,
@@ -252,12 +228,10 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         self,
         *,
         created_at: str,
+        scene: Optional[str],
         default_timezone: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
-        group_id: Optional[str] | Omit = omit,
         llm_custom_setting: Optional[conversation_meta_create_params.LlmCustomSetting] | Omit = omit,
-        name: Optional[str] | Omit = omit,
-        scene: Optional[str] | Omit = omit,
         scene_desc: Optional[Dict[str, object]] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
         user_details: Optional[Dict[str, conversation_meta_create_params.UserDetails]] | Omit = omit,
@@ -275,24 +249,7 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         Args:
           created_at: Conversation creation time (ISO 8601 format with Timezone is required)
 
-          default_timezone: Default timezone
-
-          description: Conversation description
-
-          group_id: Group unique identifier. When null/not provided, represents default settings for
-              this scene.
-
-          llm_custom_setting: LLM custom settings for algorithm control. **Only for global config
-              (group_id=null), not allowed for group config (group_id provided).**
-
-              Allows configuring different LLM providers/models for different tasks like
-              boundary detection and memory extraction.
-
-          name: Group/conversation name. **Required for group config (group_id provided), not
-              allowed for global config (group_id=null).**
-
-          scene: Scene identifier. **Required for global config (group_id=null), not allowed for
-              group config (group_id provided).**
+          scene: Scene identifier.
 
               Enum values from ScenarioType:
 
@@ -301,8 +258,16 @@ class AsyncConversationMetaResource(AsyncAPIResource):
               - assistant: assistant scenario, suitable for one-on-one AI assistant
                 conversations
 
-          scene_desc: Scene description object. **Required for global config (group_id=null), not
-              allowed for group config (group_id provided).**
+          default_timezone: Default timezone
+
+          description: Conversation description
+
+          llm_custom_setting: LLM custom settings for algorithm control.
+
+              Allows configuring different LLM providers/models for different tasks like
+              boundary detection and memory extraction.
+
+          scene_desc: Scene description object.
 
               Can include fields like description, type, etc.
 
@@ -323,12 +288,10 @@ class AsyncConversationMetaResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "created_at": created_at,
+                    "scene": scene,
                     "default_timezone": default_timezone,
                     "description": description,
-                    "group_id": group_id,
                     "llm_custom_setting": llm_custom_setting,
-                    "name": name,
-                    "scene": scene,
                     "scene_desc": scene_desc,
                     "tags": tags,
                     "user_details": user_details,
@@ -346,9 +309,7 @@ class AsyncConversationMetaResource(AsyncAPIResource):
         *,
         default_timezone: Optional[str] | Omit = omit,
         description: Optional[str] | Omit = omit,
-        group_id: Optional[str] | Omit = omit,
         llm_custom_setting: Optional[conversation_meta_update_params.LlmCustomSetting] | Omit = omit,
-        name: Optional[str] | Omit = omit,
         scene_desc: Optional[Dict[str, object]] | Omit = omit,
         tags: Optional[SequenceNotStr[str]] | Omit = omit,
         user_details: Optional[Dict[str, conversation_meta_update_params.UserDetails]] | Omit = omit,
@@ -367,16 +328,9 @@ class AsyncConversationMetaResource(AsyncAPIResource):
 
           description: New description
 
-          group_id: Group ID to update. When null, updates the global (default) config.
+          llm_custom_setting: New LLM custom settings.
 
-          llm_custom_setting: New LLM custom settings. **Only allowed for global config (group_id=null). Not
-              allowed for group config (inherited from global config).**
-
-          name: New group/conversation name. **Only allowed for group config (group_id
-              provided). Not allowed for global config.**
-
-          scene_desc: New scene description. **Only allowed for global config (group_id=null). Not
-              allowed for group config (inherited from global config).**
+          scene_desc: New scene description.
 
           tags: New tag list
 
@@ -396,9 +350,7 @@ class AsyncConversationMetaResource(AsyncAPIResource):
                 {
                     "default_timezone": default_timezone,
                     "description": description,
-                    "group_id": group_id,
                     "llm_custom_setting": llm_custom_setting,
-                    "name": name,
                     "scene_desc": scene_desc,
                     "tags": tags,
                     "user_details": user_details,

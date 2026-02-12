@@ -20,40 +20,8 @@ class ConversationMetaCreateParams(TypedDict, total=False):
     created_at: Required[str]
     """Conversation creation time (ISO 8601 format with Timezone is required)"""
 
-    default_timezone: Optional[str]
-    """Default timezone"""
-
-    description: Optional[str]
-    """Conversation description"""
-
-    group_id: Optional[str]
-    """Group unique identifier.
-
-    When null/not provided, represents default settings for this scene.
-    """
-
-    llm_custom_setting: Optional[LlmCustomSetting]
-    """LLM custom settings for algorithm control.
-
-    **Only for global config (group_id=null), not allowed for group config (group_id
-    provided).**
-
-    Allows configuring different LLM providers/models for different tasks like
-    boundary detection and memory extraction.
-    """
-
-    name: Optional[str]
-    """Group/conversation name.
-
-    **Required for group config (group_id provided), not allowed for global config
-    (group_id=null).**
-    """
-
-    scene: Optional[str]
+    scene: Required[Optional[str]]
     """Scene identifier.
-
-    **Required for global config (group_id=null), not allowed for group config
-    (group_id provided).**
 
     Enum values from ScenarioType:
 
@@ -63,11 +31,21 @@ class ConversationMetaCreateParams(TypedDict, total=False):
       conversations
     """
 
+    default_timezone: Optional[str]
+    """Default timezone"""
+
+    description: Optional[str]
+    """Conversation description"""
+
+    llm_custom_setting: Optional[LlmCustomSetting]
+    """LLM custom settings for algorithm control.
+
+    Allows configuring different LLM providers/models for different tasks like
+    boundary detection and memory extraction.
+    """
+
     scene_desc: Optional[Dict[str, object]]
     """Scene description object.
-
-    **Required for global config (group_id=null), not allowed for group config
-    (group_id provided).**
 
     Can include fields like description, type, etc.
     """
@@ -107,9 +85,6 @@ class LlmCustomSettingExtraction(TypedDict, total=False):
 
 class LlmCustomSetting(TypedDict, total=False):
     """LLM custom settings for algorithm control.
-
-    **Only for global config (group_id=null),
-    not allowed for group config (group_id provided).**
 
     Allows configuring different LLM providers/models for different tasks like boundary detection and memory extraction.
     """
