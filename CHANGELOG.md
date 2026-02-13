@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.13 (2026-02-13)
+
+Full Changelog: [v0.3.12...v0.3.13](https://github.com/evermemos/evermemos-python/compare/v0.3.12...v0.3.13)
+
+### Features
+
+* **api:** api update ([3e2055c](https://github.com/evermemos/evermemos-python/commit/3e2055c7c7264f7192e147cba95ff8a4b00c3e6c))
+
+
+### Chores
+
+* format all `api.md` files ([334f048](https://github.com/evermemos/evermemos-python/commit/334f0482a42ba7aa443da7f76da45d4d75b56e77))
+* **internal:** fix lint error on Python 3.14 ([7025e9a](https://github.com/evermemos/evermemos-python/commit/7025e9ab9c47bde3f1add8a522b69d22cd73af32))
+
 ## 0.3.12 (2026-02-11)
 
 Full Changelog: [v0.3.11...v0.3.12](https://github.com/evermemos/evermemos-python/compare/v0.3.11...v0.3.12)
