@@ -17,7 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestRequest:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_get(self, client: EverMemOS) -> None:
         request = client.v0.status.request.get(
@@ -25,7 +25,7 @@ class TestRequest:
         )
         assert_matches_type(RequestGetResponse, request, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: EverMemOS) -> None:
         response = client.v0.status.request.with_raw_response.get(
@@ -37,7 +37,7 @@ class TestRequest:
         request = response.parse()
         assert_matches_type(RequestGetResponse, request, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: EverMemOS) -> None:
         with client.v0.status.request.with_streaming_response.get(
@@ -57,7 +57,7 @@ class TestAsyncRequest:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncEverMemOS) -> None:
         request = await async_client.v0.status.request.get(
@@ -65,7 +65,7 @@ class TestAsyncRequest:
         )
         assert_matches_type(RequestGetResponse, request, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncEverMemOS) -> None:
         response = await async_client.v0.status.request.with_raw_response.get(
@@ -77,7 +77,7 @@ class TestAsyncRequest:
         request = await response.parse()
         assert_matches_type(RequestGetResponse, request, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncEverMemOS) -> None:
         async with async_client.v0.status.request.with_streaming_response.get(
