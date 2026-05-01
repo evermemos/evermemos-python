@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.4.0 (2026-05-01)
+
+Full Changelog: [v0.3.13...v0.4.0](https://github.com/evermemos/evermemos-python/compare/v0.3.13...v0.4.0)
+
+### Features
+
+* **internal:** implement indices array format for query and form serialization ([460be41](https://github.com/evermemos/evermemos-python/commit/460be416108fee108d093d482207208d771b6f4b))
+
+
+### Bug Fixes
+
+* **client:** preserve hardcoded query params when merging with user params ([9b7222d](https://github.com/evermemos/evermemos-python/commit/9b7222def8abac2970bcc4a73371e779075deb60))
+* **deps:** bump minimum typing-extensions version ([d28913f](https://github.com/evermemos/evermemos-python/commit/d28913f882fc326c0996b93c347a4d39e23b681e))
+* ensure file data are only sent as 1 parameter ([5a6ad09](https://github.com/evermemos/evermemos-python/commit/5a6ad09a54d7fd0e6d805c86eb12246cef469863))
+* **pydantic:** do not pass `by_alias` unless set ([9786776](https://github.com/evermemos/evermemos-python/commit/97867769c90346476b205f8e42fdef295f712b0b))
+* sanitize endpoint path params ([5a8377f](https://github.com/evermemos/evermemos-python/commit/5a8377f2b2c6620ae4baf3cd091638cac1116a78))
+
+
+### Chores
+
+* **ci:** bump uv version ([da041d5](https://github.com/evermemos/evermemos-python/commit/da041d5677f9cd0273554515329c8aad11ee8e46))
+* **ci:** skip lint on metadata-only changes ([5c190ea](https://github.com/evermemos/evermemos-python/commit/5c190ea3b710d4d5074cac810ed4920609512ce0))
+* **ci:** skip uploading artifacts on stainless-internal branches ([721abc8](https://github.com/evermemos/evermemos-python/commit/721abc8a7ae2a386bbadc0b55e5e5caab1211759))
+* **internal:** add request options to SSE classes ([3d9a5d8](https://github.com/evermemos/evermemos-python/commit/3d9a5d842819e938a9b91e2228caa5820e5f8ab4))
+* **internal:** codegen related update ([118d6b1](https://github.com/evermemos/evermemos-python/commit/118d6b152673d3e583cfc6baa9b7aefe51e95e01))
+* **internal:** codegen related update ([67e0217](https://github.com/evermemos/evermemos-python/commit/67e02174360ef983ab9b9d2e3e030b7d0f3fa75e))
+* **internal:** codegen related update ([4af43ee](https://github.com/evermemos/evermemos-python/commit/4af43ee961f0dda38a7391607776558c5996e858))
+* **internal:** codegen related update ([b743f30](https://github.com/evermemos/evermemos-python/commit/b743f30bc21a2adc20b80eaa3bf7a36e448481df))
+* **internal:** make `test_proxy_environment_variables` more resilient ([b75db1c](https://github.com/evermemos/evermemos-python/commit/b75db1cf66897f85bb4e96b0c2fe37649ec4c7ef))
+* **internal:** make `test_proxy_environment_variables` more resilient to env ([e90baf7](https://github.com/evermemos/evermemos-python/commit/e90baf7a239546f50667af8d67aaf80bba256e5f))
+* **internal:** remove mock server code ([fcbe761](https://github.com/evermemos/evermemos-python/commit/fcbe7615195686bb09fcbf3fda208d954fe9daaa))
+* **internal:** tweak CI branches ([ff8dcc9](https://github.com/evermemos/evermemos-python/commit/ff8dcc9ea080079828a0323df7265b5776bc625d))
+* **internal:** update gitignore ([c4581ec](https://github.com/evermemos/evermemos-python/commit/c4581ec2c38d0bc62b4e9a522599c483788376d7))
+* update mock server docs ([f09c77f](https://github.com/evermemos/evermemos-python/commit/f09c77f977f05ac11659589785538c7566e1eeca))
+
 ## 0.3.13 (2026-02-13)
 
 Full Changelog: [v0.3.12...v0.3.13](https://github.com/evermemos/evermemos-python/compare/v0.3.12...v0.3.13)
