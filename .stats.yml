@@ -1,4 +1,4 @@
 configured_endpoints: 8
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/evermind%2FEverMemOS-a34fcfc22d8531314d0573d2f65d67fff0a668fba89f7cd1031e8e79dfd93295.yml
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/evermind/EverMemOS-9c1bf302db0266dee18e8cd83746c53601b196ce529a5923ea8cdc59b2bddbf3.yml
 openapi_spec_hash: 2dd34dcdb394e5be4cf491a8379869b5
 config_hash: e314e6089e466e0a21c661dbe2b90e58
